@@ -5,6 +5,7 @@ let dealer_choices = [0,1];
 let your_cards = [];
 let dealer_cards = [];
 let dealer_first_card = 0;
+let dealer_second_card = 0;
 let first_card = 0;
 let second_card = 0;
 let current_score = 0;
@@ -13,7 +14,14 @@ let dealer_choice = 0;
 let final_hand = "";
 let computer_final_hand = "";
 
-//the dealer gets their cards
+//establish button for dealing the cards
+const button = document.getElementById('deal');
+const yourcards = document.getElementById('your_cards');
+const currentscore = document.getElementById('current_score');
+const dealerfirstcard = document.getElementById('dealer_first_card');
+
+function onButtonClick() {
+    //the dealer gets their cards
 let dealer_index1 = Math.floor(Math.random() * cards.length);
 dealer_first_card = cards[dealer_index1];
 cards.splice(dealer_index1,1);
@@ -31,6 +39,19 @@ second_card = cards[random_index2];
 cards.splice(random_index2, 1);
 your_cards.push(first_card, second_card);
 
+//update scores
 current_score = first_card + second_card;
+dealer_score = dealer_first_card + dealer_second_card;
+
+//update our display
+currentscore.textContent = `Current Score: ${current_score}`;
+yourcards.textContent = `Your Cards: ${your_cards.join(',')}`;
+dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
 console.log("Your cards:", your_cards);
+console.log("Dealer's first card:",dealer_first_card);
 console.log("Current Score:", current_score);
+console.log("Dealer's Score:", dealer_score);
+}
+
+button.addEventListener('click', onButtonClick);
+
