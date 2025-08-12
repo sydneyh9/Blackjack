@@ -92,19 +92,19 @@ function dealerTurn() {
                     win_or_lose = "You both went over but the dealer has the better hand! Dealer wins.";
                 }
             }
-            else if (dealer_score > 21 && current_score <= 21) {
+                else if (dealer_score > 21 && current_score <= 21) {
                 win_or_lose = "Dealer went over. You win!";
-            } else if (current_score > 21 && dealer_score <= 21) {
+                } else if (current_score > 21 && dealer_score <= 21) {
                 win_or_lose = "You went over! Dealer wins.";
-            } else if (dealer_score === current_score) {
+                } else if (dealer_score === current_score) {
                 win_or_lose = "Looks like you tied. It's a draw.";
-            } else if (current_score == 21) {
+                } else if (current_score == 21) {
                 win_or_lose = "A perfect 21. You win!";
-            }  else if (dealer_score > current_score) {
+                }  else if (dealer_score > current_score) {
                 win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
-            } else {
+                } else {
                 win_or_lose = "You have a better hand! You win!";
-            }
+                }
             blackjackState = "done";
             button.textContent = "Restart";
             updateDisplay(true);
@@ -140,6 +140,9 @@ function onButtonClick() {
         drawCard();
     } else if (blackjackState === "done") {
         resetGame();
+        setTimeout(() => {
+            startGame();
+        }, 300);
     }
 }
 
