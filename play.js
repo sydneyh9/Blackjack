@@ -27,7 +27,7 @@ const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
 function resetGame() {
-    cards = [11,2,3,4,5,6,7,8,9,10,10,10];
+    cards = [11,2,3,4,5,6,7,8,9,10,10,10,10];
     your_cards = [];
     dealer_cards = [];
     current_score = 0;
@@ -40,6 +40,7 @@ function resetGame() {
     dealerscore.textContent = "";
     winorlose.textContent = "";
     button.textContent = "Deal";
+    button.disabled = false;
     //stay button should not be available at the start of the game
     buttonStay.disabled = true;
 }
@@ -72,13 +73,14 @@ function dealerTurn() {
     blackjackState = "dealer-turn";
     button.disabled = true;
     buttonStay.disabled = true;
-    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
     
     function dealerDraw() {
+        //add up the dealer_score
+        dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+        //if the dealer's score is less than 17, it'll automatically draw another card
         if(dealer_score < 17) {
             let card = draw();
             dealer_cards.push(card);
-            dealer_score += card;
             updateDisplay(true);
 
             //setting the drawing the next card for a 1 second delay
@@ -91,23 +93,55 @@ function dealerTurn() {
                 else if (current_score > dealer_score) {
                     win_or_lose = "You both went over but the dealer has the better hand! Dealer wins.";
                 }
+                blackjackState = "done";
+                button.textContent = "Restart";
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true);
             }
                 else if (dealer_score > 21 && current_score <= 21) {
-                win_or_lose = "Dealer went over. You win!";
+                    win_or_lose = "Dealer went over. You win!";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    button.disabled = false;
+                    buttonStay.disabled = true;
+                    updateDisplay(true);
                 } else if (current_score > 21 && dealer_score <= 21) {
-                win_or_lose = "You went over! Dealer wins.";
+                    win_or_lose = "You went over! Dealer wins.";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    button.disabled = false;
+                    buttonStay.disabled = true;
+                    updateDisplay(true);
                 } else if (dealer_score === current_score) {
-                win_or_lose = "Looks like you tied. It's a draw.";
+                    win_or_lose = "Looks like you tied. It's a draw.";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    buttonStay.disabled = true;
+                    button.disabled = false;
+                    updateDisplay(true);
                 } else if (current_score == 21) {
-                win_or_lose = "A perfect 21. You win!";
+                    win_or_lose = "A perfect 21. You win!";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    button.disabled = false;
+                    buttonStay.disabled = true;
+                    updateDisplay(true);
                 }  else if (dealer_score > current_score) {
-                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
+                    win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    button.disabled = false;
+                    buttonStay.disabled = true;
+                    updateDisplay(true);
                 } else {
-                win_or_lose = "You have a better hand! You win!";
+                    win_or_lose = "You have a better hand! You win!";
+                    blackjackState = "done";
+                    button.textContent = "Restart";
+                    button.disabled = false;
+                    buttonStay.disabled = true;
+                    updateDisplay(true);
                 }
-            blackjackState = "done";
-            button.textContent = "Restart";
-            updateDisplay(true);
 
         }
     }
@@ -155,7 +189,6 @@ function onStayClick() {
 
 //function for starting the game
 function startGame() {
-    resetGame();
     blackjackState = "in-game";
     button.textContent = "Deal";
     button.disabled = false;
