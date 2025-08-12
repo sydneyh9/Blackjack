@@ -84,12 +84,24 @@ function dealerTurn() {
             //setting the drawing the next card for a 1 second delay
             setTimeout(dealerDraw, 1000);
         } else {
-            if (dealer_score > 21) {
+            if (dealer_score > 21 && current_score > 21) {
+                if (current_score < dealer_score) {
+                    win_or_lose = "You both went over but you have the better hand! You win!";
+                }
+                else if (current_score > dealer_score) {
+                    win_or_lose = "You both went over but the dealer has the better hand! Dealer wins.";
+                }
+            }
+            else if (dealer_score > 21 && current_score <= 21) {
                 win_or_lose = "Dealer went over. You win!";
+            } else if (current_score > 21 && dealer_score <= 21) {
+                win_or_lose = "You went over! Dealer wins.";
             } else if (dealer_score === current_score) {
-                win_or_lose = "Looks like you tied. It's a draw!";
-            } else if (dealer_score > current_score) {
-                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins!";
+                win_or_lose = "Looks like you tied. It's a draw.";
+            } else if (current_score == 21) {
+                win_or_lose = "A perfect 21. You win!";
+            }  else if (dealer_score > current_score) {
+                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
             } else {
                 win_or_lose = "You have a better hand! You win!";
             }
