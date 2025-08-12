@@ -14,6 +14,7 @@ let dealer_choice = 0;
 let final_hand = "";
 let computer_final_hand = "";
 let win_or_lose = "";
+let blackjackState = "start";
 
 //establish button for dealing the cards
 const button = document.getElementById('deal');
@@ -22,48 +23,105 @@ const currentscore = document.getElementById('current_score');
 const dealerfirstcard = document.getElementById('dealer_first_card');
 const winorlose = document.getElementById('win_or_lose');
 
+//resetting game function for every new round
+function resetGame() {
+    cards = [11,2,3,4,5,6,7,8,9,10,10,10];
+    your_cards = [];
+    dealer_cards = [];
+    current_score = 0;
+    dealer_score = 0;
+    win_or_lose = "";
+    blackjackState = "start";
+    yourcards.textContent = "";
+    currentscore.textContent = "";
+    dealerfirstcard.textContent = "";
+    winorlose.textContent = "";
+    button.textContent = "Deal";
+}
+
+//draw card from the deck function
+//pulls a random card from the pile and removes it from the deck as per house rules
+function draw() {
+    if (cards.length === 0) {
+        return 0;
+    }
+    let index = Math.floor(Math.random() * cards.length);
+    return cards.splice(index, 1)[0];
+}
+
+//pulls new cards
+function drawCard() {
+    let newCard = draw();
+    your_cards.push(newCard);
+    current_score += newCard;
+    if (current_score > 21) {
+        win_or_lose = "You went over. You Lose!";
+        blackjackState = "done";
+        button.textContent = "Restart";
+    }
+    updateDisplay();
+}
+//updating the display 
+function updateDisplay() {
+    yourcards.textContent = `Your Cards: ${your_cards.join(',')}`;
+    currentscore.textContent = `Current Score: ${current_score}`;
+    dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
+    winorlose.textContent = `Result: ${win_or_lose}`;
+    console.log("Your cards:", your_cards);
+    console.log("Result:", win_or_lose);
+    console.log("Dealer's first card:",dealer_first_card);
+    console.log("Current Score:", current_score);
+    console.log("Dealer's Score:", dealer_score);
+}
+
+//function for the deal button click
 function onButtonClick() {
+    if(blackjackState === "start") {
+        startGame();
+    } else if (blackjackState === "in-game") {
+        drawCard();
+    } else if (blackjackState === "done") {
+        resetGame();
+    }
+}
+
+//function for starting the game
+function startGame() {
+    resetGame();
+    blackjackState = "in-game";
+    button.textContent = "Deal";
     //the dealer gets their cards
-let dealer_index1 = Math.floor(Math.random() * cards.length);
-dealer_first_card = cards[dealer_index1];
-cards.splice(dealer_index1,1);
-let dealer_index2 = Math.floor(Math.random() * cards.length);
-dealer_second_card = cards[dealer_index2];
-cards.splice(dealer_index2,1);
-dealer_cards.push(dealer_first_card, dealer_second_card);
+    dealer_first_card = draw();
+    dealer_second_card = draw();
+    dealer_cards.push(dealer_first_card, dealer_second_card);
+    
 
-//you get your cards
-let random_index1 = Math.floor(Math.random() * cards.length);
-first_card = cards[random_index1];
-cards.splice(random_index1, 1);
-let random_index2 = Math.floor(Math.random() * cards.length);
-second_card = cards[random_index2];
-cards.splice(random_index2, 1);
-your_cards.push(first_card, second_card);
+    //you get your cards
+    first_card = draw();
+    second_card = draw();
+    your_cards.push(first_card, second_card);
 
-//update scores
-current_score = first_card + second_card;
+    //update scores
+    current_score = first_card + second_card;
 
-dealer_score = dealer_first_card + dealer_second_card;
+    updateDisplay();
 
-//win or lose skeleton
-if (current_score > 21) {
-    win_or_lose = "You went over. You lose!";
-    console.log("Your Final Hand: ", your_cards);
-    console.log("Your Final Score: ", current_score);
-    console.log("You went over. You lose!");
+    //win or lose skeleton
+    if (current_score > 21) {
+        win_or_lose = "You went over. You lose!";
+        console.log("Your Final Hand: ", your_cards);
+        console.log("Your Final Score: ", current_score);
+        console.log("You went over. You lose!");
+        blackjackState = "done";
+        button.textContent = "Restart";
+        updateDisplay();
+    }
 }
 
-//update our display
-currentscore.textContent = `Current Score: ${current_score}`;
-yourcards.textContent = `Your Cards: ${your_cards.join(',')}`;
-dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
-winorlose.textContent = `Result: ${win_or_lose}`;
-console.log("Your cards:", your_cards);
-console.log("Dealer's first card:",dealer_first_card);
-console.log("Current Score:", current_score);
-console.log("Dealer's Score:", dealer_score);
-}
 
+//listener for button
 button.addEventListener('click', onButtonClick);
+
+//Initialize First Round
+resetGame();
 
