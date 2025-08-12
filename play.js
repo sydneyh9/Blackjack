@@ -18,9 +18,11 @@ let blackjackState = "start";
 
 //establish button for dealing the cards
 const button = document.getElementById('deal');
+const buttonStay = document.getElementById('stay');
 const yourcards = document.getElementById('your_cards');
 const currentscore = document.getElementById('current_score');
 const dealerfirstcard = document.getElementById('dealer_first_card');
+const dealerscore = document.getElementById('dealer_score');
 const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
@@ -35,8 +37,11 @@ function resetGame() {
     yourcards.textContent = "";
     currentscore.textContent = "";
     dealerfirstcard.textContent = "";
+    dealerscore.textContent = "";
     winorlose.textContent = "";
     button.textContent = "Deal";
+    //stay button should not be available at the start of the game
+    buttonStay.disabled = true;
 }
 
 //draw card from the deck function
@@ -61,11 +66,52 @@ function drawCard() {
     }
     updateDisplay();
 }
+
+//dealer continues to hit until they hit a score of >= 17
+function dealerTurn() {
+    blackjackState = "dealer-turn";
+    button.disabled = true;
+    buttonStay.disabled = true;
+    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+    
+    function dealerDraw() {
+        if(dealer_score < 17) {
+            let card = draw();
+            dealer_cards.push(card);
+            dealer_score += card;
+            updateDisplay(true);
+
+            //setting the drawing the next card for a 1 second delay
+            setTimeout(dealerDraw, 1000);
+        } else {
+            if (dealer_score > 21) {
+                win_or_lose = "Dealer went over. You win!";
+            } else if (dealer_score === current_score) {
+                win_or_lose = "Looks like you tied. It's a draw!";
+            } else if (dealer_score > current_score) {
+                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins!";
+            } else {
+                win_or_lose = "You have a better hand! You win!";
+            }
+            blackjackState = "done";
+            button.textContent = "Restart";
+            updateDisplay(true);
+
+        }
+    }
+    dealerDraw();
+
+}
 //updating the display 
-function updateDisplay() {
+function updateDisplay(showDealer = false) {
     yourcards.textContent = `Your Cards: ${your_cards.join(',')}`;
     currentscore.textContent = `Current Score: ${current_score}`;
-    dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
+    if (showDealer) {
+        dealerfirstcard.textContent =  `Dealer's Cards: ${dealer_cards.join(', ')}`;
+        dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
+    } else {
+        dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
+    }
     winorlose.textContent = `Result: ${win_or_lose}`;
     console.log("Your cards:", your_cards);
     console.log("Result:", win_or_lose);
@@ -85,11 +131,20 @@ function onButtonClick() {
     }
 }
 
+//function for the player to have a stay option
+function onStayClick() {
+    if (blackjackState === "in-game") {
+        dealerTurn();
+    }
+}
+
 //function for starting the game
 function startGame() {
     resetGame();
     blackjackState = "in-game";
     button.textContent = "Deal";
+    button.disabled = false;
+    buttonStay.disabled = false;
     //the dealer gets their cards
     dealer_first_card = draw();
     dealer_second_card = draw();
@@ -114,6 +169,7 @@ function startGame() {
         console.log("You went over. You lose!");
         blackjackState = "done";
         button.textContent = "Restart";
+        buttonStay.disabled = true;
         updateDisplay();
     }
 }
@@ -121,6 +177,7 @@ function startGame() {
 
 //listener for button
 button.addEventListener('click', onButtonClick);
+buttonStay.addEventListener('click', onStayClick);
 
 //Initialize First Round
 resetGame();
