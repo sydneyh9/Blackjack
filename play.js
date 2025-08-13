@@ -40,6 +40,8 @@ function resetGame() {
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
+    first_card = 0;
+    second_card = 0;
     dealer_first_card = 0;
     dealer_second_card = 0;
     current_score = 0;
@@ -55,7 +57,6 @@ function resetGame() {
     button.disabled = false;
     //stay button should not be available at the start of the game
     buttonStay.disabled = true;
-    updateDisplay(false);
 }
 
 //draw card from the deck function
@@ -102,12 +103,54 @@ function dealerTurn() {
             dealer_cards.push(card);
             //update the display for the dealer cards
             updateDisplay(true);
+            //animation new dealer card 
+            const cards = dealercards.querySelectorAll('.card');
+            const lastCard = cards[cards.length - 1];
+            if (lastCard) {
+                lastCard.classList.add('swipe-in');
+                lastCard.addEventListener('animationend', () => {
+                    lastCardc.classList.remove('swipe-in');
+                    setTimeout(dealerDraw, 500);
+                }, { once: true });
+            } else {
+                 //after animation is done, 500ms delay before next card is draw
+                setTimeout(dealerDraw, 500);
+            }
+        } else {
+            //when the dealer is done drawing, calculate result
+            finalizeDealerTurn();
+        }
+    } dealerDraw();
+    }
+
+    function animateLastDealerCard(callback) {
+        //show all of the dealer's cards 
+        updateDisplay(true);
+        //get last dealer card element
+        const cards = dealercards.querySelectorAll('.card');
+        if (cards.length === 0) {
+            if (callback) callback();
+            return;
+        }
+        const lastCard = cards[cards.length - 1];
+        //add animation class to the last card
+        lastCard.classList.add('swipe-in');
+
+        //animation event listener end
+        lastCard.addEventListener('animationend', () => {
+            lastCard.classList.remove('swipe-in');
+            if (callback) callback();
+        }, { once: true});
+
+    }
+            //updateDisplay(true);
             //play the dealer card draw animation
-            DealerCardAnimation(card);
 
             //setting the drawing the next card for a 2 second delay
-            setTimeout(dealerDraw, 2000);
-        } else {
+            //setTimeout(dealerDraw, 2000);
+        function finalizeDealerTurn() {
+            dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+        
             if (dealer_score > 21 && current_score > 21) {
                 if (current_score < dealer_score) {
                     win_or_lose = "You both went over but you have the better hand! You win!";
@@ -164,12 +207,7 @@ function dealerTurn() {
                     buttonStay.disabled = true;
                     updateDisplay(true);
                 }
-
-        }
-    }
-    dealerDraw();
-
-}
+            }
 //updating the display 
 function updateDisplay(showDealer = false) {
     //empty container to house cards animation
@@ -196,6 +234,9 @@ function updateDisplay(showDealer = false) {
             cardElement.dataset.value = cardValue;
             if (index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
                 cardElement.classList.add('swipe-in');
+                cardElement.addEventListener('animationend', () => {
+                    cardElement.classList.remove('match-animate');
+                }, { once: true });
             }
             dealercards.appendChild(cardElement);
         });
@@ -237,9 +278,7 @@ function onButtonClick() {
         drawCard();
     } else if (blackjackState === "done") {
         resetGame();
-        setTimeout(() => {
-            startGame();
-        }, 300);
+        startGame();
     }
 }
 
@@ -300,7 +339,7 @@ function CardAnimation(matchedValue) {
 }
 
 //starts the animation for the dealer pulling a card during the dealer's turn
-function DealerCardAnimation(matchedValue) {
+/*function DealerCardAnimation(matchedValue) {
     const cards = document.querySelectorAll('#dealer_cards .card');
     cards.forEach(card => {
         if(parseInt(card.dataset.value) === matchedValue) {
@@ -311,7 +350,7 @@ function DealerCardAnimation(matchedValue) {
             }, { once:true });
         }
     });
-}
+}*/
 
 //listener for button
 button.addEventListener('click', onButtonClick);
