@@ -30,6 +30,7 @@ const button = document.getElementById('deal');
 const buttonStay = document.getElementById('stay');
 const yourcards = document.getElementById('your_cards');
 const currentscore = document.getElementById('current_score');
+const dealercards = document.getElementById('dealer_cards');
 const dealerfirstcard = document.getElementById('dealer_first_card');
 const dealerscore = document.getElementById('dealer_score');
 const winorlose = document.getElementById('win_or_lose');
@@ -39,6 +40,8 @@ function resetGame() {
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
+    dealer_first_card = 0;
+    dealer_second_card = 0;
     current_score = 0;
     dealer_score = 0;
     win_or_lose = "";
@@ -52,6 +55,7 @@ function resetGame() {
     button.disabled = false;
     //stay button should not be available at the start of the game
     buttonStay.disabled = true;
+    updateDisplay(false);
 }
 
 //draw card from the deck function
@@ -96,7 +100,10 @@ function dealerTurn() {
         if(dealer_score < 17) {
             let card = draw();
             dealer_cards.push(card);
+            //update the display for the dealer cards
             updateDisplay(true);
+            //play the dealer card draw animation
+            DealerCardAnimation(card);
 
             //setting the drawing the next card for a 2 second delay
             setTimeout(dealerDraw, 2000);
@@ -165,25 +172,53 @@ function dealerTurn() {
 }
 //updating the display 
 function updateDisplay(showDealer = false) {
+    //empty container to house cards animation
     yourcards.innerHTML = '';
+    //create the cards based on what is drawn
     your_cards.forEach((cardValue, index) => {
         const cardElement = document.createElement('span');
         cardElement.className = 'card';
         cardElement.textContent = cardValue;
         cardElement.dataset.value = cardValue;
+        if (index === your_cards.length - 1 && blackjackState !== "start") {
+            cardElement.classList.add('swipe-in');
+        }
         yourcards.appendChild(cardElement);
     });
     currentscore.textContent = `Current Score: ${current_score}`;
+    //empty container to house dealer cards animation
+    dealercards.innerHTML = '';
     if (showDealer) {
-        dealerfirstcard.textContent =  `Dealer's Cards: ${dealer_cards.join(', ')}`;
+        dealer_cards.forEach((cardValue, index) => {
+            const cardElement = document.createElement('span');
+            cardElement.className = 'card';
+            cardElement.textContent = cardValue;
+            cardElement.dataset.value = cardValue;
+            if (index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+                cardElement.classList.add('swipe-in');
+            }
+            dealercards.appendChild(cardElement);
+        });
         dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
         dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
-        console.log(dealer_score);
     } else {
+
+        //show the hidden card 
+        const hiddenCard = document.createElement('span');
+        hiddenCard.className = 'card';
+        hiddenCard.textContent = '?';
+        dealercards.appendChild(hiddenCard);
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
+        visibleCards.forEach(cardValue => {
+            const cardElement = document.createElement('span');
+            cardElement.className = 'card';
+            cardElement.textContent = cardValue;
+            cardElement.dataset.value = cardValue;
+            dealercards.appendChild(cardElement);
+        });
         const visibleScore = visibleCards.reduce((a,b) => a + b, 0);
-        dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
+        //dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
     winorlose.textContent = `Result: ${win_or_lose}`;
@@ -264,6 +299,19 @@ function CardAnimation(matchedValue) {
     });
 }
 
+//starts the animation for the dealer pulling a card during the dealer's turn
+function DealerCardAnimation(matchedValue) {
+    const cards = document.querySelectorAll('#dealer_cards .card');
+    cards.forEach(card => {
+        if(parseInt(card.dataset.value) === matchedValue) {
+            card.classList.add('match-animate');
+            //when the animation ends, remove the animation so it can be restarted
+            card.addEventListener('animationend',() => {
+                card.classList.remove('match-animate');
+            }, { once:true });
+        }
+    });
+}
 
 //listener for button
 button.addEventListener('click', onButtonClick);

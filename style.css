@@ -73,3 +73,21 @@ button span {
     right: 10px;
     transform: translateY(-50%);
 }
+
+@keyframes swipeIn {
+    0% {
+        transform: translateX(-200%) rotate(-15deg);
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(10%) rotate(2deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0) rotate(0);
+        opacity: 1;
+    }
+}
+.card.swipe-in {
+    animation: swipeIn 0.6s ease-out;
+}
