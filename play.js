@@ -338,20 +338,6 @@ function CardAnimation(matchedValue) {
     });
 }
 
-//starts the animation for the dealer pulling a card during the dealer's turn
-/*function DealerCardAnimation(matchedValue) {
-    const cards = document.querySelectorAll('#dealer_cards .card');
-    cards.forEach(card => {
-        if(parseInt(card.dataset.value) === matchedValue) {
-            card.classList.add('match-animate');
-            //when the animation ends, remove the animation so it can be restarted
-            card.addEventListener('animationend',() => {
-                card.classList.remove('match-animate');
-            }, { once:true });
-        }
-    });
-}*/
-
 //listener for button
 button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
