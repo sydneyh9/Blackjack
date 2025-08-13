@@ -165,7 +165,14 @@ function dealerTurn() {
 }
 //updating the display 
 function updateDisplay(showDealer = false) {
-    yourcards.textContent = `Your Cards: ${your_cards.join(',')}`;
+    yourcards.innerHTML = '';
+    your_cards.forEach((cardValue, index) => {
+        const cardElement = document.createElement('span');
+        cardElement.className = 'card';
+        cardElement.textContent = cardValue;
+        cardElement.dataset.value = cardValue;
+        yourcards.appendChild(cardElement);
+    });
     currentscore.textContent = `Current Score: ${current_score}`;
     if (showDealer) {
         dealerfirstcard.textContent =  `Dealer's Cards: ${dealer_cards.join(', ')}`;
@@ -241,6 +248,20 @@ function startGame() {
         buttonStay.disabled = true;
         updateDisplay(true);
     }
+}
+
+//starts the animation for pulling a card after deal button is pressed
+function CardAnimation(matchedValue) {
+    const cards = document.querySelectorAll('#your_cards .card');
+    cards.forEach(card => {
+        if(parseInt(card.dataset.value) === matchedValue) {
+            card.classList.add('match-animate');
+            //when the animation ends, remove the animation so it can be restarted
+            card.addEventListener('animationend',() => {
+                card.classList.remove('match-animate');
+            }, { once:true });
+        }
+    });
 }
 
 
