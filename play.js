@@ -1,4 +1,5 @@
-//my card deck
+document.addEventListener('DOMContentLoaded', () => {
+    //my card deck
 function createDeck() {
     //funtion to create a new deck out of the following values to use for a new round
     const newDeck = [];
@@ -109,7 +110,7 @@ function dealerTurn() {
             if (lastCard) {
                 lastCard.classList.add('swipe-in');
                 lastCard.addEventListener('animationend', () => {
-                    lastCardc.classList.remove('swipe-in');
+                    lastCard.classList.remove('swipe-in');
                     setTimeout(dealerDraw, 500);
                 }, { once: true });
             } else {
@@ -272,6 +273,12 @@ function updateDisplay(showDealer = false) {
 
 //function for the deal button click
 function onButtonClick() {
+    //fun spin animation for when buttons are clicked
+    button.classList.add('spin');
+    button.addEventListener('animationend', () => {
+        button.classList.remove('spin');
+    }, { once: true });
+
     if(blackjackState === "start") {
         startGame();
     } else if (blackjackState === "in-game") {
@@ -284,6 +291,11 @@ function onButtonClick() {
 
 //function for the player to have a stay option
 function onStayClick() {
+    //fun spin animation for when buttons are clicked
+    buttonStay.classList.add('spin');
+    buttonStay.addEventListener('animationend', () => {
+        buttonStay.classList.remove('spin');
+    }, { once: true });
     if (blackjackState === "in-game") {
         dealerTurn();
     }
@@ -345,3 +357,4 @@ buttonStay.addEventListener('click', onStayClick);
 //Initialize First Round
 resetGame();
 
+});
