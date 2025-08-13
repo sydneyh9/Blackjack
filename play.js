@@ -1,7 +1,16 @@
 //my card deck
-let cards = [11,2,3,4,5,6,7,8,9,10,10,10,10];
-
-let dealer_choices = [0,1];
+function createDeck() {
+    //funtion to create a new deck out of the following values to use for a new round
+    const newDeck = [];
+    const cardValues = [2,3,4,5,6,7,8,9,10,10,10,10,11];
+    for (let i = 0; i < 4; i++) {
+        for (let card of cardValues) {
+            newDeck.push(card);
+        }
+    }
+    return newDeck;
+}
+let cards = createDeck();
 let your_cards = [];
 let dealer_cards = [];
 let dealer_first_card = 0;
@@ -27,7 +36,7 @@ const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
 function resetGame() {
-    cards = [11,2,3,4,5,6,7,8,9,10,10,10,10];
+    cards = createDeck();
     your_cards = [];
     dealer_cards = [];
     current_score = 0;
@@ -64,7 +73,13 @@ function drawCard() {
         win_or_lose = "You went over. You Lose!";
         blackjackState = "done";
         button.textContent = "Restart";
+        button.disabled = false;
+        buttonStay.disabled = true;
+        //round is over, reveal the dealer's cards
+        updateDisplay(true);
+        return;
     }
+    //keep them hidden
     updateDisplay();
 }
 
@@ -83,8 +98,8 @@ function dealerTurn() {
             dealer_cards.push(card);
             updateDisplay(true);
 
-            //setting the drawing the next card for a 1 second delay
-            setTimeout(dealerDraw, 1000);
+            //setting the drawing the next card for a 2 second delay
+            setTimeout(dealerDraw, 2000);
         } else {
             if (dealer_score > 21 && current_score > 21) {
                 if (current_score < dealer_score) {
@@ -154,9 +169,15 @@ function updateDisplay(showDealer = false) {
     currentscore.textContent = `Current Score: ${current_score}`;
     if (showDealer) {
         dealerfirstcard.textContent =  `Dealer's Cards: ${dealer_cards.join(', ')}`;
+        dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
         dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
+        console.log(dealer_score);
     } else {
-        dealerfirstcard.textContent = `Dealer's First Card: ${dealer_first_card}`;
+        //hides the first card in the dealer's cards from the player
+        const visibleCards = dealer_cards.slice(1);
+        const visibleScore = visibleCards.reduce((a,b) => a + b, 0);
+        dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
+        dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
     winorlose.textContent = `Result: ${win_or_lose}`;
     console.log("Your cards:", your_cards);
@@ -218,7 +239,7 @@ function startGame() {
         blackjackState = "done";
         button.textContent = "Restart";
         buttonStay.disabled = true;
-        updateDisplay();
+        updateDisplay(true);
     }
 }
 
