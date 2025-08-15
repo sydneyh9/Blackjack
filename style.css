@@ -68,15 +68,21 @@ button div {
 /* creation of the card used for the animation */
 .card {
     display: inline-block;
-    margin: 0 5px;
-    padding: 10px 15px;
+    margin: 10px;
+    width: 100px;
+    height: 140px;
+    padding: 10px;
     background: white;
     border: 2px solid black;
-    border-radius: 5px;
+    border-radius: 10px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 28px;
     position: relative;
     transition: transform 0.3s ease;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    color: black;
+    padding: 10px;
+    text-align: left;
 }
 
 .card.match-animate {
