@@ -17,7 +17,26 @@ button#stay[disabled] {
     /*hides stay button when disabled */
     visibility: hidden;
 }
-button#deal, button#stay {
+
+button#stay {
+    padding: 0;
+    font-weight: bold;
+    background: 
+    radial-gradient(circle at center, #800080 100%);
+    border: none;
+    transition: transform 0.6 ease;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+}
+button#deal {
     padding: 0;
     font-weight: bold;
     background: 
