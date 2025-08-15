@@ -254,30 +254,29 @@ function updateDisplay(showDealer = false) {
             cardContainer.className = 'card-container swipe-in';
             const card = document.createElement('div');
             card.className = 'card';
-
+            //card front
             const front = document.createElement('div');
             front.className = 'card-front';
             front.textContent = cardValue;
-
+            //card back
             const back = document.createElement('div');
             back.className = 'card-back';
             back.textContent = '?';
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-            dealercards.appendChild(cardContainer);
+            //dealercards.appendChild(cardContainer);
+            //when the slide in ends, add flipped animation
             cardContainer.addEventListener('animationend', () => {
-                card.classList.add('flipped');
                 cardContainer.classList.remove('swipe-in');
             }, { once: true });
+            //if it's the dealer's turn, do the same to its animations
             if (index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
                 card.classList.add('swipe-in');
                 card.addEventListener('animationend', () => {
                     card.classList.remove('swipe-in');
-                    card.classList.add('flipped');
                 }, { once: true });
             } else {
-                card.classList.add('flipped');
             }
             dealercards.appendChild(cardContainer);
         });
@@ -285,7 +284,7 @@ function updateDisplay(showDealer = false) {
         dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
     } else {
 
-        //show the hidden card 
+        //creates dealer cards images
         dealer_cards.forEach((cardValue, index) => {
             const cardContainer = document.createElement('div');
             cardContainer.className = 'card-container';
@@ -305,7 +304,7 @@ function updateDisplay(showDealer = false) {
             cardContainer.appendChild(card);
 
             //the first card is hidden 
-            if (index === 0) {
+            if (index === 0 && !showDealer) {
                 card.classList.add('flipped');
             } else {
                 card.classList.remove('flipped');

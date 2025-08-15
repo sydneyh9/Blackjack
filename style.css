@@ -116,7 +116,7 @@ button div {
 
 /*back of the card when dealt in */
 .card-back {
-    background: radial-gradient(circle at center, #a30000 70%, transparent 70%);
+    background: #a30000;
     color: white;
     transform: rotateY(180deg);
     border: 4px solid white;
