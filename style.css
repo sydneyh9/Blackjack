@@ -23,6 +23,7 @@ button#deal, button#stay {
     background: 
     radial-gradient(circle at center, #a30000 100%);
     border: none;
+    transition: transform 0.6 ease;
     border-radius: 50%;
     width: 120px;
     height: 120px;
@@ -33,6 +34,13 @@ button#deal, button#stay {
     color: white;
     cursor: pointer;
     overflow: hidden;
+}
+
+/*animation to make the buttons pop up when pointer is hovering over them */
+button:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
 }
 
 button::before {
