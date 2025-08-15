@@ -58,6 +58,7 @@ function resetGame() {
     button.disabled = false;
     //stay button should not be available at the start of the game
     buttonStay.disabled = true;
+    updateDisplay();
 }
 
 //draw card from the deck function
@@ -215,50 +216,104 @@ function updateDisplay(showDealer = false) {
     yourcards.innerHTML = '';
     //create the cards based on what is drawn
     your_cards.forEach((cardValue, index) => {
-        const cardElement = document.createElement('span');
-        cardElement.className = 'card';
-        cardElement.textContent = cardValue;
-        cardElement.dataset.value = cardValue;
+        //container for card
+        const cardContainer = document.createElement('div');
+        cardContainer.className = 'card-container';
+        //creation of card
+        const card = document.createElement('div');
+        card.className = 'card';
+        //card text
+        const front = document.createElement('div');
+        front.className = 'card-front';
+        front.textContent = cardValue;
+
+        const back = document.createElement('div');
+        back.className = 'card-back';
+        back.textContent = '?';
+        //cardElement.className = 'card';
+        //cardElement.textContent = cardValue;
+        //cardElement.dataset.value = cardValue;
+
+        card.appendChild(front);
+        card.appendChild(back);
+        cardContainer.appendChild(card);
         if (index === your_cards.length - 1 && blackjackState !== "start") {
-            cardElement.classList.add('swipe-in');
+            card.classList.add('swipe-in');
         }
-        yourcards.appendChild(cardElement);
+        yourcards.appendChild(cardContainer);
     });
     currentscore.textContent = `Current Score: ${current_score}`;
     //empty container to house dealer cards animation
     dealercards.innerHTML = '';
-    if (showDealer) {
+    if (dealer_cards.length === 0) {
+        dealerscore.textContent = "";
+    } else if (showDealer) {
         dealer_cards.forEach((cardValue, index) => {
-            const cardElement = document.createElement('span');
-            cardElement.className = 'card';
-            cardElement.textContent = cardValue;
-            cardElement.dataset.value = cardValue;
+            const cardContainer = document.createElement('div');
+            //swipe in animation triggered
+            cardContainer.className = 'card-container swipe-in';
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const front = document.createElement('div');
+            front.className = 'card-front';
+            front.textContent = cardValue;
+
+            const back = document.createElement('div');
+            back.className = 'card-back';
+            back.textContent = '?';
+            card.appendChild(front);
+            card.appendChild(back);
+            cardContainer.appendChild(card);
+            dealercards.appendChild(cardContainer);
+            cardContainer.addEventListener('animationend', () => {
+                card.classList.add('flipped');
+                cardContainer.classList.remove('swipe-in');
+            }, { once: true });
             if (index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
-                cardElement.classList.add('swipe-in');
-                cardElement.addEventListener('animationend', () => {
-                    cardElement.classList.remove('match-animate');
+                card.classList.add('swipe-in');
+                card.addEventListener('animationend', () => {
+                    card.classList.remove('swipe-in');
+                    card.classList.add('flipped');
                 }, { once: true });
+            } else {
+                card.classList.add('flipped');
             }
-            dealercards.appendChild(cardElement);
+            dealercards.appendChild(cardContainer);
         });
         dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
         dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
     } else {
 
         //show the hidden card 
-        const hiddenCard = document.createElement('span');
-        hiddenCard.className = 'card';
-        hiddenCard.textContent = '?';
-        dealercards.appendChild(hiddenCard);
+        dealer_cards.forEach((cardValue, index) => {
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'card-container';
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const front = document.createElement('div');
+            front.className = 'card-front';
+            front.textContent = cardValue;
+
+            const back = document.createElement('div');
+            back.className = 'card-back';
+            back.textContent = '?';
+
+            card.appendChild(front);
+            card.appendChild(back);
+            cardContainer.appendChild(card);
+
+            //the first card is hidden 
+            if (index === 0) {
+                card.classList.add('flipped');
+            } else {
+                card.classList.remove('flipped');
+            }
+            dealercards.appendChild(cardContainer);
+        });
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
-        visibleCards.forEach(cardValue => {
-            const cardElement = document.createElement('span');
-            cardElement.className = 'card';
-            cardElement.textContent = cardValue;
-            cardElement.dataset.value = cardValue;
-            dealercards.appendChild(cardElement);
-        });
         const visibleScore = visibleCards.reduce((a,b) => a + b, 0);
         //dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
@@ -285,7 +340,6 @@ function onButtonClick() {
         drawCard();
     } else if (blackjackState === "done") {
         resetGame();
-        startGame();
     }
 }
 
