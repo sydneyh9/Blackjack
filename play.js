@@ -46,17 +46,22 @@ function resetGame() {
     dealer_score = 0;
     win_or_lose = "";
     blackjackState = "start";
-    yourcards.innerHTML = "";
-    dealercards.innerHTML = "";
-    currentscore.textContent = "";
-    dealerfirstcard.textContent = "";
-    dealerscore.textContent = "";
-    button.setAttribute('data-label', 'Deal');
-    button.disabled = false;
-    //stay button should not be available at the start of the game
-    buttonStay.disabled = true;
-    /*hide stay button when reset */
-    buttonStay.style.visibility = 'hidden';
+    if (yourcards) yourcards.innerHTML = "";
+    if (dealercards) dealercards.innerHTML = "";
+    if (currentscore) currentscore.textContent = "";
+    if (dealerfirstcard) dealerfirstcard.textContent = "";
+    if (dealerscore) dealerscore.textContent = "";
+    if (winorlose) winorlose.textContent = "";
+    if (button) {
+        button.setAttribute('data-label', 'Deal');
+        button.disabled = false;
+    }
+    if (buttonStay) {
+        //stay button should not be available at the start of the game
+        buttonStay.disabled = true;
+        /*hide stay button when reset */
+        buttonStay.style.visibility = 'hidden';
+    }
     updateDisplay();
 }
 
@@ -82,7 +87,7 @@ function drawCard() {
         button.disabled = false;
         buttonStay.disabled = true;
         //round is over, reveal the dealer's cards
-        updateDisplay(true);
+        updateDisplay(false, true);
         return;
     }
     //keep them hidden
@@ -102,20 +107,9 @@ function dealerTurn() {
         let card = draw();
         dealer_cards.push(card);
         //update the display for the dealer cards
-        updateDisplay(true);
-        //animation new dealer card 
-        const cards = dealercards.querySelectorAll('.card');
-        const lastCard = cards[cards.length - 1];
-        if (lastCard) {
-            lastCard.classList.add('swipe-in');
-            lastCard.addEventListener('animationend', () => {
-                lastCard.classList.remove('swipe-in');
-                setTimeout(finalizeDealerTurn, 3000);
-            }, { once: true });
-        } else {
-            //after animation is done, 500ms delay before next card is draw
-            setTimeout(finalizeDealerTurn, 3000);
-        }
+        updateDisplay(true, true);
+        //animate and then continue dealer turn
+        setTimeout(finalizeDealerTurn, 3000);
     } else {
         //when the dealer is done drawing, calculate result
         finalizeDealerTurn();
@@ -140,7 +134,7 @@ function dealerTurn() {
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true);
+                updateDisplay(true, false);
             }
                 else if (dealer_score > 21 && current_score <= 21) {
                     win_or_lose = "Dealer went over. You win!";
@@ -148,46 +142,46 @@ function dealerTurn() {
                     button.setAttribute('data-label', 'Restart');
                     button.disabled = false;
                     buttonStay.disabled = true;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 } else if (current_score > 21 && dealer_score <= 21) {
                     win_or_lose = "You went over! Dealer wins.";
                     blackjackState = "done";
                     button.setAttribute('data-label', 'Restart');
                     button.disabled = false;
                     buttonStay.disabled = true;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 } else if (dealer_score === current_score) {
                     win_or_lose = "Looks like you tied. It's a draw.";
                     blackjackState = "done";
                     button.setAttribute('data-label', 'Restart');
                     buttonStay.disabled = true;
                     button.disabled = false;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 } else if (current_score == 21) {
                     win_or_lose = "A perfect 21. You win!";
                     blackjackState = "done";
                     button.setAttribute('data-label', 'Restart');
                     button.disabled = false;
                     buttonStay.disabled = true;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 }  else if (dealer_score > current_score) {
                     win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
                     blackjackState = "done";
                     button.setAttribute('data-label', 'Restart');
                     button.disabled = false;
                     buttonStay.disabled = true;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 } else {
                     win_or_lose = "You have a better hand! You win!";
                     blackjackState = "done";
                     button.setAttribute('data-label', 'Restart');
                     button.disabled = false;
                     buttonStay.disabled = true;
-                    updateDisplay(true);
+                    updateDisplay(true, false);
                 }
             }
 //updating the display 
-function updateDisplay(showDealer = false) {
+function updateDisplay(showDealer = false, animate = false) {
     //empty container to house cards animation
     yourcards.innerHTML = '';
     //create the cards based on what is drawn
@@ -210,8 +204,11 @@ function updateDisplay(showDealer = false) {
         card.appendChild(front);
         card.appendChild(back);
         cardContainer.appendChild(card);
-        if (index === your_cards.length - 1 && blackjackState !== "start") {
+        if (animate && index === your_cards.length - 1) {
             card.classList.add('swipe-in');
+            card.addEventListener('animationend', () => {
+                card.classList.remove('swipe-in');
+            }, { once: true });
         }
         yourcards.appendChild(cardContainer);
     });
@@ -223,8 +220,8 @@ function updateDisplay(showDealer = false) {
     } else if (showDealer) {
         dealer_cards.forEach((cardValue, index) => {
             const cardContainer = document.createElement('div');
-            //swipe in animation triggered
-            cardContainer.className = 'card-container swipe-in';
+            //only plays if we're not finished the round
+            cardContainer.className = 'card-container';
             const card = document.createElement('div');
             card.className = 'card';
             //card front
@@ -238,19 +235,17 @@ function updateDisplay(showDealer = false) {
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-            //dealercards.appendChild(cardContainer);
-            //when the slide in ends, add flipped animation
-            cardContainer.addEventListener('animationend', () => {
-                cardContainer.classList.remove('swipe-in');
-            }, { once: true });
-            //if it's the dealer's turn, do the same to its animations
-            if (index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+            if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+                //swipe in animation triggered
                 card.classList.add('swipe-in');
                 card.addEventListener('animationend', () => {
                     card.classList.remove('swipe-in');
                 }, { once: true });
-            } else {
-            }
+            } 
+
+            //dealercards.appendChild(cardContainer);
+            //when the slide in ends, add flipped animation
+            //if it's the dealer's turn, do the same to its animations else {
             dealercards.appendChild(cardContainer);
         });
         dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
@@ -275,9 +270,16 @@ function updateDisplay(showDealer = false) {
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-
+            
+            //if it's the dealer's turn, do the same to its animations
+            if (animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+                card.classList.add('swipe-in');
+                card.addEventListener('animationend', () => {
+                    card.classList.remove('swipe-in');
+                }, { once: true });
+            }
             //the first card is hidden 
-            if (index === 0 && !showDealer) {
+            if (index === 0) {
                 card.classList.add('flipped');
             } else {
                 card.classList.remove('flipped');
@@ -354,7 +356,7 @@ function startGame() {
     //update scores
     current_score = first_card + second_card;
 
-    updateDisplay();
+    updateDisplay(true, true);
 
     //win or lose skeleton
     if (current_score > 21) {
@@ -365,7 +367,7 @@ function startGame() {
         blackjackState = "done";
         button.setAttribute('data-label', 'Deal');
         buttonStay.disabled = true;
-        updateDisplay(true);
+        updateDisplay(true, true);
     }
 }
 
