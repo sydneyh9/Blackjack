@@ -356,7 +356,7 @@ function startGame() {
     //update scores
     current_score = first_card + second_card;
 
-    updateDisplay(true, true);
+    updateDisplay(false, true);
 
     //win or lose skeleton
     if (current_score > 21) {
