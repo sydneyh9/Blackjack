@@ -5,6 +5,21 @@ body {
     text-align: center;
     padding: 30px;
 }
+
+button .inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #a30000 100%);
+    z-index: 0;
+}
+
+button#stay .inner {
+    background: radial-gradient(circle at center, #800080 100%);
+}
 .button-container{
     display: flex;
     flex-wrap: nowrap;
@@ -62,10 +77,11 @@ button:hover:not(:disabled) {
     cursor: pointer;
 }
 
-button::before {
+button#deal::before {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
     border-radius: 50%;
     background: 
     conic-gradient(
@@ -79,8 +95,31 @@ button::before {
         #ffeded 280deg 290deg, #a30000 290deg 300deg, #ffeded 300deg 310deg, #a30000 310deg 320deg, 
         #ffeded 320deg 330deg, #a30000 330deg 340deg, #ffeded 340deg 350deg, #a30000 350deg 360deg
     );
-    mask: radial-gradient(circle, transparent 0% 70%, black 70% 100%);
-    -webkit-mask: radial-gradient(circle, transparent 0% 70%, black 70% 100%);
+    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    pointer-events: none;
+}
+
+button#stay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 50%;
+    background: 
+    conic-gradient(
+        #ffeded 0deg 10deg, #800080 10deg 20deg, #ffeded 20deg 30deg, #800080 30deg 40deg,
+        #ffeded 40deg 50deg, #800080 50deg 60deg, #ffeded 60deg 70deg, #800080 70deg 80deg,
+        #ffeded 80deg 90deg, #800080 90deg 100deg, #ffeded 100deg 110deg, #800080 110deg 120deg,
+        #ffeded 120deg 130deg, #800080 130deg 140deg, #ffeded 140deg 150deg, #800080 150deg 160deg, 
+        #ffeded 160deg 170deg, #800080 170deg 180deg, #ffeded 180deg 190deg, #800080 190deg 200deg,
+        #ffeded 200deg 210deg, #800080 210deg 220deg,  #ffeded 220deg 230deg, #800080 230deg 240deg,  
+        #ffeded 240deg 250deg, #800080 250deg 260deg, #ffeded 260deg 270deg, #800080 270deg 280deg, 
+        #ffeded 280deg 290deg, #800080 290deg 300deg, #ffeded 300deg 310deg, #800080 310deg 320deg, 
+        #ffeded 320deg 330deg, #800080 330deg 340deg, #ffeded 340deg 350deg, #800080 350deg 360deg
+    );
+    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
     pointer-events: none;
 }
 button::after {
@@ -92,7 +131,7 @@ button::after {
     color: white;
     font-weight: bold;
     font-size: 18px;
-    z-index: 1;
+    z-index: 2;
     text-shadow: 0 0 2px black;
     /*clicking on the button should go to the button */
     pointer-events: none;
