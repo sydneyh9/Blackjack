@@ -49,7 +49,8 @@ function resetGame() {
     dealer_score = 0;
     win_or_lose = "";
     blackjackState = "start";
-    yourcards.textContent = "";
+    yourcards.innerHTML = "";
+    dealercards.innerHTML = "";
     currentscore.textContent = "";
     dealerfirstcard.textContent = "";
     dealerscore.textContent = "";
