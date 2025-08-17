@@ -298,6 +298,22 @@ function updateDisplay(showDealer = false, animate = false) {
     console.log("Dealer's first card:",dealer_first_card);
     console.log("Current Score:", current_score);
     console.log("Dealer's Score:", dealer_score);
+
+    const turn = document.getElementById('turn');
+    if (turn) {
+        if (blackjackState === "start") {
+            turn.textContent = "Press Deal to begin!";
+        } else if (blackjackState === "in-game") {
+            turn.textContent = "Your turn.";
+        } else if (blackjackState === "dealer-turn") {
+            turn.textContent = "Dealer's turn.";
+        } else if (blackjackState === "done") {
+            turn.textContent = "Game over.";
+        } else {
+            turn.textContent = "";
+        }
+        
+    }
 }
 
 //function for the deal button click
