@@ -95,34 +95,32 @@ function dealerTurn() {
     button.disabled = true;
     buttonStay.disabled = true;
     
-    function dealerDraw() {
-        //add up the dealer_score
-        dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
-        //if the dealer's score is less than 17, it'll automatically draw another card
-        if(dealer_score < 17) {
-            let card = draw();
-            dealer_cards.push(card);
-            //update the display for the dealer cards
-            updateDisplay(true);
-            //animation new dealer card 
-            const cards = dealercards.querySelectorAll('.card');
-            const lastCard = cards[cards.length - 1];
-            if (lastCard) {
-                lastCard.classList.add('swipe-in');
-                lastCard.addEventListener('animationend', () => {
-                    lastCard.classList.remove('swipe-in');
-                    setTimeout(dealerDraw, 500);
-                }, { once: true });
-            } else {
-                 //after animation is done, 500ms delay before next card is draw
-                setTimeout(dealerDraw, 500);
-            }
+    //add up the dealer_score
+    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+    //if the dealer's score is less than 17, it'll automatically draw another card
+     if(dealer_score < 17) {
+        let card = draw();
+        dealer_cards.push(card);
+        //update the display for the dealer cards
+        updateDisplay(true);
+        //animation new dealer card 
+        const cards = dealercards.querySelectorAll('.card');
+        const lastCard = cards[cards.length - 1];
+        if (lastCard) {
+            lastCard.classList.add('swipe-in');
+            lastCard.addEventListener('animationend', () => {
+                lastCard.classList.remove('swipe-in');
+                setTimeout(finalizeDealerTurn, 3000);
+            }, { once: true });
         } else {
-            //when the dealer is done drawing, calculate result
-            finalizeDealerTurn();
+            //after animation is done, 500ms delay before next card is draw
+            setTimeout(finalizeDealerTurn, 3000);
         }
-    } dealerDraw();
+    } else {
+        //when the dealer is done drawing, calculate result
+        finalizeDealerTurn();
     }
+}
 
             //updateDisplay(true);
             //play the dealer card draw animation
@@ -313,6 +311,9 @@ function onButtonClick() {
         buttonStay.style.visibility = 'visible';
     } else if (blackjackState === "in-game") {
         drawCard();
+        if (blackjackState !== "done") {
+            dealerTurn();
+        }
     } else if (blackjackState === "done") {
         resetGame();
         startGame();
