@@ -20,9 +20,6 @@ let first_card = 0;
 let second_card = 0;
 let current_score = 0;
 let dealer_score = 0;
-let dealer_choice = 0;
-let final_hand = "";
-let computer_final_hand = "";
 let win_or_lose = "";
 let blackjackState = "start";
 
@@ -54,7 +51,6 @@ function resetGame() {
     currentscore.textContent = "";
     dealerfirstcard.textContent = "";
     dealerscore.textContent = "";
-    winorlose.textContent = "";
     button.setAttribute('data-label', 'Deal');
     button.disabled = false;
     //stay button should not be available at the start of the game
@@ -152,7 +148,6 @@ function dealerTurn() {
             //play the dealer card draw animation
 
             //setting the drawing the next card for a 2 second delay
-            //setTimeout(dealerDraw, 2000);
         function finalizeDealerTurn() {
             dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
         
@@ -320,7 +315,7 @@ function updateDisplay(showDealer = false) {
         //dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
-    winorlose.textContent = `Result: ${win_or_lose}`;
+    winorlose.textContent = win_or_lose ? `Result: ${win_or_lose}` : '';
     console.log("Your cards:", your_cards);
     console.log("Result:", win_or_lose);
     console.log("Dealer's first card:",dealer_first_card);
@@ -343,6 +338,8 @@ function onButtonClick() {
         drawCard();
     } else if (blackjackState === "done") {
         resetGame();
+        startGame();
+        buttonStay.style.visibility = 'visible';
     }
 }
 
@@ -364,6 +361,7 @@ function startGame() {
     button.setAttribute('data-label', 'Deal');
     button.disabled = false;
     buttonStay.disabled = false;
+    buttonStay.style.visibility = 'visible';
     //the dealer gets their cards
     dealer_first_card = draw();
     dealer_second_card = draw();
@@ -387,7 +385,7 @@ function startGame() {
         console.log("Your Final Score: ", current_score);
         console.log("You went over. You lose!");
         blackjackState = "done";
-        button.textContent = "Restart";
+        button.setAttribute('data-label', 'Deal');
         buttonStay.disabled = true;
         updateDisplay(true);
     }
