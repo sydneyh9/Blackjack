@@ -124,26 +124,6 @@ function dealerTurn() {
     } dealerDraw();
     }
 
-    function animateLastDealerCard(callback) {
-        //show all of the dealer's cards 
-        updateDisplay(true);
-        //get last dealer card element
-        const cards = dealercards.querySelectorAll('.card');
-        if (cards.length === 0) {
-            if (callback) callback();
-            return;
-        }
-        const lastCard = cards[cards.length - 1];
-        //add animation class to the last card
-        lastCard.classList.add('swipe-in');
-
-        //animation event listener end
-        lastCard.addEventListener('animationend', () => {
-            lastCard.classList.remove('swipe-in');
-            if (callback) callback();
-        }, { once: true});
-
-    }
             //updateDisplay(true);
             //play the dealer card draw animation
 
@@ -228,9 +208,6 @@ function updateDisplay(showDealer = false) {
         const back = document.createElement('div');
         back.className = 'card-back';
         back.textContent = '?';
-        //cardElement.className = 'card';
-        //cardElement.textContent = cardValue;
-        //cardElement.dataset.value = cardValue;
 
         card.appendChild(front);
         card.appendChild(back);
@@ -389,20 +366,6 @@ function startGame() {
         buttonStay.disabled = true;
         updateDisplay(true);
     }
-}
-
-//starts the animation for pulling a card after deal button is pressed
-function CardAnimation(matchedValue) {
-    const cards = document.querySelectorAll('#your_cards .card');
-    cards.forEach(card => {
-        if(parseInt(card.dataset.value) === matchedValue) {
-            card.classList.add('match-animate');
-            //when the animation ends, remove the animation so it can be restarted
-            card.addEventListener('animationend',() => {
-                card.classList.remove('match-animate');
-            }, { once:true });
-        }
-    });
 }
 
 //listener for button
