@@ -92,6 +92,7 @@ function resetGame() {
     current_score = 0;
     dealer_score = 0;
     win_or_lose = "";
+    button.classList.add('centered');
     blackjackState = "start";
     if (yourcards) yourcards.innerHTML = "";
     if (dealercards) dealercards.innerHTML = "";
@@ -353,11 +354,6 @@ function updateDisplay(showDealer = false, animate = false) {
             back.className = 'card-back';
             back.textContent = '?';
 
-            //the first card is hidden 
-            //if (index === 0) {
-               // card.classList.add('flipped');
-           // } 
-
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
@@ -444,6 +440,7 @@ function startGame() {
     button.setAttribute('data-label', 'Deal');
     button.disabled = false;
     buttonStay.disabled = false;
+    button.classList.remove('centered');
     buttonStay.style.visibility = 'visible';
     //the dealer gets their cards
     dealer_first_card = draw();
