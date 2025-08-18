@@ -1,4 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const countdown = document.getElementById('countdown');
+
+    function startCountDown() {
+        let timeLeft = 3;
+        countdown.textContent = `${timeLeft}`;
+        countdown.style.visibility = 'visible';
+        countdown.style.opacity = '0.6';
+
+        button.disabled = true;
+        buttonStay.disabled = true;
+
+        const gameInformation = document.getElementById('game_information');
+        //hide the game information until the countdown ends
+        if (gameInformation) gameInformation.style.visibility = 'hidden';
+        //timer for countdown set up
+        const timerId = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                countdown.textContent = `${timeLeft}`;
+            } else {
+                clearInterval(timerId);
+                countdown.textContent = "Let's play!";
+                setTimeout(() => {
+                    countdown.style.opacity = '0';
+                    setTimeout(() => {
+                    countdown.style.visibility = 'hidden';
+                    countdown.textContent = "";
+                    countdown.style.opacity = '0.6';
+
+                    //unhide game information
+                    if (gameInformation) gameInformation.style.visibility = 'visible';
+                    //start the game and undisable the buttons
+                    startGame();
+                    button.disabled = false;
+                    buttonStay.disabled = false;
+                }, 300);
+            }, 1000);
+        }
+        }, 1000);
+    }
     //my card deck
 function createDeck() {
     //funtion to create a new deck out of the following values to use for a new round
@@ -13,6 +53,8 @@ function createDeck() {
 }
 let cards = createDeck();
 let your_cards = [];
+let playerStay = false;
+let dealerStay = false;
 let dealer_cards = [];
 let dealer_first_card = 0;
 let dealer_second_card = 0;
@@ -35,12 +77,17 @@ const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
 function resetGame() {
+
+    const gameInformation = document.getElementById('game_information');
+    if(gameInformation) gameInformation.style.visibility = 'hidden';
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
     first_card = 0;
     second_card = 0;
     dealer_first_card = 0;
+    playerStay = false;
+    dealerStay = false;
     dealer_second_card = 0;
     current_score = 0;
     dealer_score = 0;
@@ -77,6 +124,9 @@ function draw() {
 
 //pulls new cards
 function drawCard() {
+    if (blackjackState !== "in-game") {
+        return;
+    }
     let newCard = draw();
     your_cards.push(newCard);
     current_score += newCard;
@@ -87,15 +137,20 @@ function drawCard() {
         button.disabled = false;
         buttonStay.disabled = true;
         //round is over, reveal the dealer's cards
-        updateDisplay(false, true);
+        finalizeDealerTurn();
         return;
     }
     //keep them hidden
     updateDisplay();
+
+    //dealer gets to take another turn after player draws
+    dealerTurn();
 }
 
 //dealer continues to hit until they hit a score of >= 17
 function dealerTurn() {
+
+    if (blackjackState === "done") return;
     blackjackState = "dealer-turn";
     button.disabled = true;
     buttonStay.disabled = true;
@@ -107,79 +162,111 @@ function dealerTurn() {
         let card = draw();
         dealer_cards.push(card);
         //update the display for the dealer cards
-        updateDisplay(true, true);
+        updateDisplay(true,true);
         //animate and then continue dealer turn
-        setTimeout(finalizeDealerTurn, 3000);
+        //waits before the player gets their turn again to reduce abruptness
+        setTimeout(() => {
+            if (!playerStay) {
+                blackjackState = "in-game";
+                button.disabled = false;
+                buttonStay.disabled = false;
+                updateDisplay(blackjackState === "done", false);
+            } else {
+                //continue to have the dealer draw until they hit >= 17
+                dealerTurn();
+            }
+            }, 1000);
     } else {
-        //when the dealer is done drawing, calculate result
-        finalizeDealerTurn();
+        //when the dealer is done drawing and player is done drawing, calculate result
+        dealerStay = true;
+        if (playerStay) {
+            finalizeDealerTurn();
+        } else {
+            blackjackState = "in-game";
+            button.disabled = false;
+            buttonStay.disabled = false;
+            updateDisplay(true, false);
+        }
     }
 }
 
-            //updateDisplay(true);
             //play the dealer card draw animation
-
             //setting the drawing the next card for a 2 second delay
         function finalizeDealerTurn() {
             dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+
+            updateDisplay(true,true);
+
+            const dealerCardElement = dealercards.querySelectorAll('.card');
+            const firstDealerCard = dealerCardElement[0];
         
+            if (firstDealerCard) {
+                    firstDealerCard.classList.remove('flipped');
+                    setTimeout(() => {
+                        calculateGameResult();
+                    }, 650);
+            } else {
+                calculateGameResult();
+            }
+        }
+
+        function calculateGameResult() {
             if (dealer_score > 21 && current_score > 21) {
                 if (current_score < dealer_score) {
                     win_or_lose = "You both went over but you have the better hand! You win!";
-                }
-                else if (current_score > dealer_score) {
+                } else {
                     win_or_lose = "You both went over but the dealer has the better hand! Dealer wins.";
                 }
+            } else if (dealer_score > 21 && current_score <= 21) {
+                win_or_lose = "Dealer went over. You win!";
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+            } else if (current_score > 21 && dealer_score <= 21) {
+                win_or_lose = "You went over! Dealer wins.";
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+            } else if (dealer_score === current_score) {
+                win_or_lose = "Looks like you tied. It's a draw.";
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+            } else if (current_score == 21) {
+                win_or_lose = "A perfect 21. You win!";
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+            }  else if (dealer_score > current_score) {
+                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+            } else {
+                win_or_lose = "You have a better hand! You win!";
                 blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
                 updateDisplay(true, false);
             }
-                else if (dealer_score > 21 && current_score <= 21) {
-                    win_or_lose = "Dealer went over. You win!";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    button.disabled = false;
-                    buttonStay.disabled = true;
-                    updateDisplay(true, false);
-                } else if (current_score > 21 && dealer_score <= 21) {
-                    win_or_lose = "You went over! Dealer wins.";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    button.disabled = false;
-                    buttonStay.disabled = true;
-                    updateDisplay(true, false);
-                } else if (dealer_score === current_score) {
-                    win_or_lose = "Looks like you tied. It's a draw.";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    buttonStay.disabled = true;
-                    button.disabled = false;
-                    updateDisplay(true, false);
-                } else if (current_score == 21) {
-                    win_or_lose = "A perfect 21. You win!";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    button.disabled = false;
-                    buttonStay.disabled = true;
-                    updateDisplay(true, false);
-                }  else if (dealer_score > current_score) {
-                    win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    button.disabled = false;
-                    buttonStay.disabled = true;
-                    updateDisplay(true, false);
-                } else {
-                    win_or_lose = "You have a better hand! You win!";
-                    blackjackState = "done";
-                    button.setAttribute('data-label', 'Restart');
-                    button.disabled = false;
-                    buttonStay.disabled = true;
-                    updateDisplay(true, false);
-                }
-            }
+                blackjackState = "done";
+                button.setAttribute('data-label', 'Restart');
+                button.disabled = false;
+                buttonStay.disabled = true;
+                updateDisplay(true, false);
+        }
+            
 //updating the display 
 function updateDisplay(showDealer = false, animate = false) {
     //empty container to house cards animation
@@ -205,9 +292,9 @@ function updateDisplay(showDealer = false, animate = false) {
         card.appendChild(back);
         cardContainer.appendChild(card);
         if (animate && index === your_cards.length - 1) {
-            card.classList.add('swipe-in');
-            card.addEventListener('animationend', () => {
-                card.classList.remove('swipe-in');
+            cardContainer.classList.add('swipe-in');
+            cardContainer.addEventListener('animationend', () => {
+                cardContainer.classList.remove('swipe-in');
             }, { once: true });
         }
         yourcards.appendChild(cardContainer);
@@ -235,15 +322,14 @@ function updateDisplay(showDealer = false, animate = false) {
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-            if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+            if(animate && dealer_cards.length - 1 && (blackjackState === "dealer-turn" || blackjackState === "in-game" && dealer_cards.length === 2)) {
                 //swipe in animation triggered
-                card.classList.add('swipe-in');
-                card.addEventListener('animationend', () => {
-                    card.classList.remove('swipe-in');
+                cardContainer.classList.add('swipe-in');
+                cardContainer.addEventListener('animationend', () => {
+                    cardContainer.classList.remove('swipe-in');
                 }, { once: true });
             } 
 
-            //dealercards.appendChild(cardContainer);
             //when the slide in ends, add flipped animation
             //if it's the dealer's turn, do the same to its animations else {
             dealercards.appendChild(cardContainer);
@@ -267,22 +353,25 @@ function updateDisplay(showDealer = false, animate = false) {
             back.className = 'card-back';
             back.textContent = '?';
 
+            //the first card is hidden 
+            //if (index === 0) {
+               // card.classList.add('flipped');
+           // } 
+
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
             
             //if it's the dealer's turn, do the same to its animations
-            if (animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
-                card.classList.add('swipe-in');
-                card.addEventListener('animationend', () => {
-                    card.classList.remove('swipe-in');
-                }, { once: true });
-            }
-            //the first card is hidden 
-            if (index === 0) {
+
+            if (index === 0 && blackjackState !== "done") {
                 card.classList.add('flipped');
-            } else {
-                card.classList.remove('flipped');
+            }
+            if (animate && blackjackState !== "done") {
+                cardContainer.classList.add('swipe-in');
+                cardContainer.addEventListener('animationend', () => {
+                    cardContainer.classList.remove('swipe-in');
+                }, { once: true });
             }
             dealercards.appendChild(cardContainer);
         });
@@ -325,16 +414,13 @@ function onButtonClick() {
     }, { once: true });
 
     if(blackjackState === "start") {
-        startGame();
+        startCountDown();
         buttonStay.style.visibility = 'visible';
     } else if (blackjackState === "in-game") {
         drawCard();
-        if (blackjackState !== "done") {
-            dealerTurn();
-        }
     } else if (blackjackState === "done") {
         resetGame();
-        startGame();
+        startCountDown();
         buttonStay.style.visibility = 'visible';
     }
 }
@@ -347,6 +433,7 @@ function onStayClick() {
         buttonStay.classList.remove('spin');
     }, { once: true });
     if (blackjackState === "in-game") {
+        playerStay = true;
         dealerTurn();
     }
 }
