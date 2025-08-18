@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
         button.disabled = true;
         buttonStay.disabled = true;
 
+        //buttons shouldn't be available during countdown
+        button.style.display = 'none';
+        buttonStay.style.display = 'none';
+
         const gameInformation = document.getElementById('game_information');
         //hide the game information until the countdown ends
         if (gameInformation) gameInformation.style.visibility = 'hidden';
@@ -30,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     //unhide game information
                     if (gameInformation) gameInformation.style.visibility = 'visible';
+
+                    //show and center deal button after countdown finishes
+                    button.style.display = 'inline-block';
+                    buttonStay.style.display = 'inline-block';
+                    button.classList.add('centered');
+                    button.disabled = false;
                     //start the game and undisable the buttons
                     startGame();
                     button.disabled = false;
@@ -411,13 +421,11 @@ function onButtonClick() {
 
     if(blackjackState === "start") {
         startCountDown();
-        buttonStay.style.visibility = 'visible';
     } else if (blackjackState === "in-game") {
         drawCard();
     } else if (blackjackState === "done") {
         resetGame();
         startCountDown();
-        buttonStay.style.visibility = 'visible';
     }
 }
 
