@@ -7,6 +7,8 @@ body {
     overflow-x: hidden;
     padding: 50px 0;
     position: relative;
+    padding-top: 20px;
+    padding-bottom: 40px;
 }
 
 
@@ -26,14 +28,14 @@ body::before{
 }
 
 /*casino style BLACKJACK title */
-.blackjack-title {
+.black-title {
     animation: glow 3s ease-in-out infinite;
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    transform: none;
     font-family: 'Neonderthaw', cursive;
-    font-size: 9rem;
+    font-size: 5rem;
     font-weight: normal;
     color: #ffd700;
     letter-spacing: 0.15em;
@@ -41,11 +43,30 @@ body::before{
     user-select: none;
     pointer-events: none;
     text-shadow: 0 0 10px #d4af37, 0 0 20px #ffd700, 0 0 30px #ffcc00, 0 0 40px #d4af37, 0 0 50px #ffd700, 0 0 60px #ffcc00, 0 0 70px #d4af37;
-    z-index: 12;
+    z-index: 5;
     opacity: 0.5;
     pointer-events: none;
 }
 
+.jack-title {
+    animation: glow 3s ease-in-out infinite;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: none;
+    font-family: 'Neonderthaw', cursive;
+    font-size: 5rem;
+    font-weight: normal;
+    color: #ffd700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    user-select: none;
+    pointer-events: none;
+    text-shadow: 0 0 10px #d4af37, 0 0 20px #ffd700, 0 0 30px #ffcc00, 0 0 40px #d4af37, 0 0 50px #ffd700, 0 0 60px #ffcc00, 0 0 70px #d4af37;
+    z-index: 5;
+    opacity: 0.5;
+    pointer-events: none;
+}
 /*decorations */
 
 .table-trim.bottom {
@@ -99,11 +120,12 @@ button .inner {
     height: 100%;
     border-radius: 50%;
     background: radial-gradient(circle at center, #a30000 100%);
-    z-index: 0;
+    z-index: 1;
 }
 
 button#stay .inner {
     background: radial-gradient(circle at center, #800080 100%);
+    z-index: 10;
 }
 .button-container{
     display: flex;
@@ -167,7 +189,7 @@ button#deal::before {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 15;
     border-radius: 50%;
     background: 
     conic-gradient(
@@ -190,7 +212,7 @@ button#stay::before {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 15;
     border-radius: 50%;
     background: 
     conic-gradient(
@@ -217,7 +239,7 @@ button::after {
     color: white;
     font-weight: bold;
     font-size: 18px;
-    z-index: 2;
+    z-index: 15;
     text-shadow: 0 0 2px black;
     /*clicking on the button should go to the button */
     pointer-events: none;
@@ -245,7 +267,7 @@ button div {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 10;
+    z-index: 15;
 }
 
 /* creation of the card used for the animation */
@@ -295,10 +317,12 @@ button div {
 }
 /*Styling for the front of the card when flipped over */
 .card-front {
-    background: rgba(255,255,255,0.9);
+    /*background: rgba(255,255,255,0.9);*/
+    background: #ffffff;
     color: black;
     z-index: 2;
 }
+
 
 /*back of the card when dealt in */
 .card-back {
@@ -307,6 +331,13 @@ button div {
     transform: rotateY(180deg);
     box-shadow: 0 0 10px #ff4c4c;
 }
+
+.card-container {
+    z-index: 10;
+}
+
+
+/*animations */
 .card.match-animate {
     animation: pulse 0.6s ease;
 }
@@ -330,7 +361,7 @@ button span {
 
 @keyframes swipeIn {
     0% {
-        transform: translateX(-200%) rotate(-15deg);
+        transform: translateX(-100vw) rotate(-15deg);
         opacity: 0;
     }
     60% {
