@@ -40,10 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttonStay.style.display = 'inline-block';
                     button.classList.add('centered');
                     button.disabled = false;
+                    buttonStay.disabled = false;
                     //start the game and undisable the buttons
                     startGame();
-                    button.disabled = false;
-                    buttonStay.disabled = false;
                 }, 300);
             }, 1000);
         }
