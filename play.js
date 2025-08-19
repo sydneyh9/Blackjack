@@ -89,7 +89,9 @@ const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
 function resetGame() {
-
+    const scoreBox = document.querySelector('.score-box');
+    if (scoreBox) scoreBox.style.display = 'none';
+    const cardLabels = document.querySelectorAll('.card-label');
     const gameInformation = document.getElementById('game_information');
     if(gameInformation) gameInformation.style.visibility = 'hidden';
     cards = createDeck();
@@ -455,6 +457,12 @@ function startGame() {
     });
     casino.play().catch(err => {
         console.log("Background ambience is not playing: ", err);
+    });
+    const scoreBox = document.querySelector('.score-box');
+    if(scoreBox) scoreBox.style.display = 'block';
+    const cardLabels = document.querySelectorAll('.card-label');
+    cardLabels.forEach(label => {
+        label.style.display = 'block';
     });
     blackjackState = "in-game";
     button.setAttribute('data-label', 'Deal');
