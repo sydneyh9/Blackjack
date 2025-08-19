@@ -454,7 +454,7 @@ function startGame() {
         console.log("Background music is not playing: ", err);
     });
     casino.play().catch(err => {
-        console.log("Background music is not playing: ", err);
+        console.log("Background ambience is not playing: ", err);
     });
     blackjackState = "in-game";
     button.setAttribute('data-label', 'Deal');

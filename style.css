@@ -215,6 +215,14 @@ button:hover:not(:disabled) {
     cursor: pointer;
 }
 
+.card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2 ease, box-shadow 0.2 ease;
+    z-index: 20;
+}
+
+
 button#deal::before {
     content: "";
     position: absolute;
