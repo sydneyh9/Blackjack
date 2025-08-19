@@ -11,7 +11,21 @@ body {
     padding-bottom: 40px;
 }
 
+.your_cards_container, .dealer_cards_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
 
+.dealer_score, .current_score {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffd700;
+    min-width: 70px;
+    user-select: none;
+}
 body::after {
     content: "";
 }
