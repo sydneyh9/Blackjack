@@ -68,6 +68,7 @@ let dealer_cards = [];
 let dealer_first_card = 0;
 const buttonSound = document.getElementById('button-sound');
 const backgroundMusic = document.getElementById('background-music');
+const casino = document.getElementById('casino');
 let dealer_second_card = 0;
 let first_card = 0;
 let second_card = 0;
@@ -450,6 +451,9 @@ function onStayClick() {
 //function for starting the game
 function startGame() {
     backgroundMusic.play().catch(err => {
+        console.log("Background music is not playing: ", err);
+    });
+    casino.play().catch(err => {
         console.log("Background music is not playing: ", err);
     });
     blackjackState = "in-game";
