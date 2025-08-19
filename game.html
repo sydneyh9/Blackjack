@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Welcome to Blackjack!</title>
+    <audio id="button-sound" src="sounds/buttons.mp3" preload="auto"></audio>
+    <audio id="background-music" src="sounds/jazz.mp3" loop preload="auto"></audio>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,21 +19,36 @@
 
     <div id="countdown" class="countdown-overlay"></div>
     <div id="turn"></div>
-    <div class="button-container"> 
-        <button id="deal" data-label="Deal"><div class="inner"></div></button>
-        <button id="stay" disabled data-label="Stay"><div class="inner"></div></button>
+    <div class="main-game-container">
+        <div class="button-container"> 
+            <button id="deal" data-label="Deal"><div class="inner"></div></button>
+            <button id="stay" disabled data-label="Stay"><div class="inner"></div></button>
+        </div>
+        <div id="game_information" class="game-layout">
+            <div class="cards-section">
+                <div class="card-row">
+                    <div class="card-label"><strong> Your Cards: </strong></div>
+                    <div class="your_cards_container">
+                        <div id="your_cards" class="cards"></div>
+                    </div>
+                </div>
+                <div class="card-row">
+                    <div class="card-label"><strong> Dealer's Cards: </strong></div>
+                    <div class="dealer_card_container">
+                        <div id="dealer_cards" class="cards"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="score-box">
+                <div class="score-row"> 
+                    <p id="current_score" class="current_score" ></p>
+                </div>
+                <div class="score-row"> 
+                    <p id="dealer_score" class="dealer_score"></p></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="game_information">
-    <div class="your_cards_container">
-        <strong> Your Cards: </strong>
-        <div id="your_cards" class="cards"></div>
-    </div>
-    <p id="current_score" class="current_score" > Current Score: </p>
-    <div class="dealer_card_container">
-        <strong> Dealer's Cards: </strong>
-        <div id="dealer_cards" class="cards"></div>
-    </div>
-    <p id="dealer_score" class="dealer_score"> Dealer Score: </p>
     <p id="win_or_lose"> Result: </p>
 </div>
     <script src="play.js"></script>

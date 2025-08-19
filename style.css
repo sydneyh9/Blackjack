@@ -1,14 +1,24 @@
 body {
-    background: radial-gradient(ellipse at center, #156615 0%, #0a3d0a 100%); /* green felt color */
+    /*background: radial-gradient(ellipse at center, #156615 0%, #0a3d0a 100%); /* green felt color */
+    background-image: radial-gradient(circle at center, #2b6e2b 0%, #144214 80%), radial-gradient(circle at center, rgba(255,255,255,0.03) 1px, transparent 1px), radial-gradient(circle at center, rgba(0,0,0,0.05) 1px, transparent 1px), radial-gradient(circle at center, rgba(255, 255,255,0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 20px 20px, 10px 10px;
+    background-repeat: no-repeat, repeat, repeat, repeat;
+    box-shadow: inset 0 0 100px 60px rgba(0,0,0,0.5);
     margin: 0;
     color: white;
     font-family: Helvetica, sans-serif;
     text-align: center;
     overflow-x: hidden;
-    padding: 50px 0;
     position: relative;
-    padding-top: 20px;
-    padding-bottom: 40px;
+}
+html, body {
+    height: 100%;
+}
+.main-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .your_cards_container, .dealer_cards_container {
@@ -30,6 +40,12 @@ body::after {
     content: "";
 }
 
+.cards-and-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
 body::before{
     content: "";
     position: fixed;
@@ -350,6 +366,70 @@ button div {
     z-index: 10;
 }
 
+.card-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-label {
+    font-size: 1.5rem;
+    color: #ffd700;
+    margin-bottom: 10px;
+    text-align: center;
+    user-select: none;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: nowrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 30px;
+}
+
+.cards-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-box {
+    background-color: rgba(255,215, 0, 0.1);
+    border: 2px solid #ffd700;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 200px;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 0 10px #ffd70099;
+}
+
+.current_score, .dealer_score {
+    font-size: 1.5rem;
+    color: white;
+}
 
 /*animations */
 .card.match-animate {

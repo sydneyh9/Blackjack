@@ -66,6 +66,8 @@ let playerStay = false;
 let dealerStay = false;
 let dealer_cards = [];
 let dealer_first_card = 0;
+const buttonSound = document.getElementById('button-sound');
+const backgroundMusic = document.getElementById('background-music');
 let dealer_second_card = 0;
 let first_card = 0;
 let second_card = 0;
@@ -412,6 +414,8 @@ function updateDisplay(showDealer = false, animate = false) {
 
 //function for the deal button click
 function onButtonClick() {
+    //fun wheel spin sound for buttons
+    buttonSound.play();
     //fun spin animation for when buttons are clicked
     button.classList.add('spin');
     button.addEventListener('animationend', () => {
@@ -430,6 +434,8 @@ function onButtonClick() {
 
 //function for the player to have a stay option
 function onStayClick() {
+    //fun wheel spin sound for buttons
+    buttonSound.play();
     //fun spin animation for when buttons are clicked
     buttonStay.classList.add('spin');
     buttonStay.addEventListener('animationend', () => {
@@ -443,6 +449,9 @@ function onStayClick() {
 
 //function for starting the game
 function startGame() {
+    backgroundMusic.play().catch(err => {
+        console.log("Background music is not playing: ", err);
+    });
     blackjackState = "in-game";
     button.setAttribute('data-label', 'Deal');
     button.disabled = false;
