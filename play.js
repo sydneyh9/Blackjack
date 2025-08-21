@@ -376,20 +376,29 @@ function updateDisplay(showDealer = false, animate = false) {
             
             //if it's the dealer's turn, do the same to its animations
 
-            if (index === 0 && blackjackState !== "done") {
-                card.classList.add('flipped');
-            }
-
             cardContainer.appendChild(card);
 
-            if (animate && blackjackState !== "done") {
+            if (index == 0) {
+                card.classList.add('flipped');
+            } else {
+                card.classList.remove('flipped');
+            }
+
+            if (animate) {
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
                     cardContainer.classList.remove('swipe-in');
-                }, { once: true });
+                    if (index === 0) {
+                        if (blackjackState ==="dealer-turn" || blackjackState ==="done") {
+                            card.classList.remove('flipped');
+            } else {
+                    card.classList.add('flipped');
+                }
             }
-            dealercards.appendChild(cardContainer);
-        });
+        }, {once:true});
+    } 
+        dealercards.appendChild(cardContainer);
+    });
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
         const visibleScore = visibleCards.reduce((a,b) => a + b, 0);
