@@ -20,6 +20,23 @@ html, body {
     justify-content: center;
 }
 
+/*result at the bottom of the screen */
+#win_or_lose {
+    font-family: 'Neonderthaw', cursive;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #ffd700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    user-select: none;
+    text-shadow: 0 0 10px #d4af37, 0 0 20px #ffd700, 0 0 30px #ffcc00, 0 0 40px #d4af37, 0 0 50px #ffd700, 0 0 60px #ffcc00, 0 0 70px #d4af37;
+    animation: glow 3s ease-in-out infinite;
+    margin-top: 20px;
+    pointer-events: none;
+    text-align: center;
+    width: 100%;
+}
+
 .your_cards_container, .dealer_cards_container {
     display: flex;
     align-items: center;
@@ -503,3 +520,5 @@ button span {
     50% { text-shadow: 0 0 20px #ffaa00, 0 0 30px #ff6600; }
     100% { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffcc00; }
 }
+
+

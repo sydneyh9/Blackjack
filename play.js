@@ -414,9 +414,7 @@ function updateDisplay(showDealer = false, animate = false) {
 
     const turn = document.getElementById('turn');
     if (turn) {
-        if (blackjackState === "start") {
-            turn.textContent = "Press Deal to begin!";
-        } else if (blackjackState === "in-game") {
+        if (blackjackState === "in-game") {
             turn.textContent = "Your turn.";
         } else if (blackjackState === "dealer-turn") {
             turn.textContent = "Dealer's turn.";
@@ -466,12 +464,12 @@ function onStayClick() {
 
 //function for starting the game
 function startGame() {
-    /*backgroundMusic.play().catch(err => {
+    backgroundMusic.play().catch(err => {
         console.log("Background music is not playing: ", err);
-    });*/
-    /*casino.play().catch(err => {
+    });
+    casino.play().catch(err => {
         console.log("Background ambience is not playing: ", err);
-    });*/
+    });
     const scoreBox = document.querySelector('.score-box');
     if(scoreBox) scoreBox.style.display = 'block';
     const cardLabels = document.querySelectorAll('.card-label');
