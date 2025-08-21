@@ -92,6 +92,9 @@ function resetGame() {
     const scoreBox = document.querySelector('.score-box');
     if (scoreBox) scoreBox.style.display = 'none';
     const cardLabels = document.querySelectorAll('.card-label');
+    cardLabels.forEach(label => {
+        label.style.display = 'none';
+    });
     const gameInformation = document.getElementById('game_information');
     if(gameInformation) gameInformation.style.visibility = 'hidden';
     cards = createDeck();
@@ -370,13 +373,15 @@ function updateDisplay(showDealer = false, animate = false) {
 
             card.appendChild(front);
             card.appendChild(back);
-            cardContainer.appendChild(card);
             
             //if it's the dealer's turn, do the same to its animations
 
             if (index === 0 && blackjackState !== "done") {
                 card.classList.add('flipped');
             }
+
+            cardContainer.appendChild(card);
+
             if (animate && blackjackState !== "done") {
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
@@ -452,12 +457,12 @@ function onStayClick() {
 
 //function for starting the game
 function startGame() {
-    backgroundMusic.play().catch(err => {
+    /*backgroundMusic.play().catch(err => {
         console.log("Background music is not playing: ", err);
-    });
-    casino.play().catch(err => {
+    });*/
+    /*casino.play().catch(err => {
         console.log("Background ambience is not playing: ", err);
-    });
+    });*/
     const scoreBox = document.querySelector('.score-box');
     if(scoreBox) scoreBox.style.display = 'block';
     const cardLabels = document.querySelectorAll('.card-label');
