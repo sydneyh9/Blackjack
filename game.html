@@ -23,10 +23,6 @@
     <div id="countdown" class="countdown-overlay"></div>
     <div id="turn"></div>
     <div class="main-game-container">
-        <div class="audio-control" style="margin-top: 20px;">
-            <button id="toggle-music" aria-pressed="false"> Toggle Music </button>
-            <button id="toggle-sound-effect" aria-pressed="false"> Toggle Sound Effects </button>
-        </div>
         <div class="button-container"> 
             <button id="deal" aria-label="Deal card" data-label="Deal"><div class="inner"></div></button>
             <button id="stay" aria-label="Stay" disabled data-label="Stay"><div class="inner"></div></button>
@@ -59,6 +55,13 @@
                     <p id="win_or_lose"> Result: </p>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="settings-container">
+        <button id="settings-button"> Settings </button>
+        <div id="settings-menu">
+                <button id="toggle-music" aria-pressed="false"> Toggle Music </button>
+                <button id="toggle-sound-effect" aria-pressed="false"> Toggle Sound Effects </button>
         </div>
     </div>
     <script src="play.js"></script>

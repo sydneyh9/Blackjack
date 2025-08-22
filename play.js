@@ -20,6 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const casino = document.getElementById('casino');
     const toggleMusicButton = document.getElementById('toggle-music');
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
+    const settingsButton = document.getElementById('settings-button');
+    const settingsMenu = document.getElementById('settings-menu');
+
+    //toggle visibility of the settings menu
+    settingsButton.addEventListener('click', () => {
+        settingsMenu.classList.toggle('show');
+    });
+
+    //if user clicks outside of the settings box, it disappears and goes back to main game
+    document.addEventListener('click', (event) => {
+        if (!settingsButton.contains(event.target) && !settingsMenu.contains(event.target)) {
+            settingsMenu.classList.remove('show');
+        }
+    });
 
 
     //making sure I don't play both at once
