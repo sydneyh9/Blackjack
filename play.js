@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let win_or_lose = "";
     let blackjackState = "start";
 
+    function endRound(message) {
+        win_or_lose = message;
+        blackjackState = "done";
+        button.setAttribute('data-label', 'Restart');
+        button.disabled = false;
+        buttonStay.disabled = true;
+        updateDisplay(true, false);
+    }
+
     function startCountDown() {
         let timeLeft = 3;
         countdown.textContent = `${timeLeft}`;
@@ -116,6 +125,7 @@ function resetGame() {
     win_or_lose = "";
     button.classList.add('centered');
     blackjackState = "start";
+
     if (yourcards) yourcards.innerHTML = "";
     if (dealercards) dealercards.innerHTML = "";
     if (currentscore) currentscore.textContent = "";
@@ -154,11 +164,8 @@ function drawCard() {
     your_cards.push(newCard);
     current_score += newCard;
     if (current_score > 21) {
-        win_or_lose = "You went over. You Lose!";
-        blackjackState = "done";
-        button.setAttribute('data-label', 'Restart');
-        button.disabled = false;
-        buttonStay.disabled = true;
+        //end the round and reveal the dealer's cards
+        endRound("You went over. You Lose!");
         //round is over, reveal the dealer's cards
         finalizeDealerTurn();
         return;
@@ -236,58 +243,58 @@ function dealerTurn() {
         function calculateGameResult() {
             if (dealer_score > 21 && current_score > 21) {
                 if (current_score < dealer_score) {
-                    win_or_lose = "You both went over but you have the better hand! You win!";
+                    endRound("You both went over but you have the better hand! You win!");
                 } else {
-                    win_or_lose = "You both went over but the dealer has the better hand! Dealer wins.";
+                    endRound("You both went over but the dealer has the better hand! Dealer wins.");
                 }
             } else if (dealer_score > 21 && current_score <= 21) {
-                win_or_lose = "Dealer went over. You win!";
-                blackjackState = "done";
+                endRound("Dealer went over. You win!");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             } else if (current_score > 21 && dealer_score <= 21) {
-                win_or_lose = "You went over! Dealer wins.";
-                blackjackState = "done";
+                endRound("You went over! Dealer wins.");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             } else if (dealer_score === current_score) {
-                win_or_lose = "Looks like you tied. It's a draw.";
-                blackjackState = "done";
+                endRound("Looks like you tied. It's a draw.");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             } else if (current_score == 21) {
-                win_or_lose = "A perfect 21. You win!";
-                blackjackState = "done";
+                endRound("A perfect 21. You win!");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             }  else if (dealer_score > current_score) {
-                win_or_lose = "Oh no! The dealer has a better hand. Dealer wins.";
-                blackjackState = "done";
+                endRound("Oh no! The dealer has a better hand. Dealer wins.");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             } else {
-                win_or_lose = "You have a better hand! You win!";
-                blackjackState = "done";
+                endRound("You have a better hand! You win!");
+                /*blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
             }
-                blackjackState = "done";
+               /* blackjackState = "done";
                 button.setAttribute('data-label', 'Restart');
                 button.disabled = false;
                 buttonStay.disabled = true;
-                updateDisplay(true, false);
+                updateDisplay(true, false);*/
         }
             
 //updating the display 
@@ -408,13 +415,12 @@ function updateDisplay(showDealer = false, animate = false) {
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
     winorlose.textContent = win_or_lose ? `Result: ${win_or_lose}` : '';
-    console.log("Your cards:", your_cards);
+    /*console.log("Your cards:", your_cards);
     console.log("Result:", win_or_lose);
     console.log("Dealer's first card:",dealer_first_card);
     console.log("Current Score:", current_score);
-    console.log("Dealer's Score:", dealer_score);
+    console.log("Dealer's Score:", dealer_score);*/
 
-    const turn = document.getElementById('turn');
     if (turn) {
         if (blackjackState === "in-game") {
             turn.textContent = "Your turn.";
