@@ -52,9 +52,6 @@ html, body {
     min-width: 70px;
     user-select: none;
 }
-body::after {
-    content: "";
-}
 
 .cards-and-buttons {
     display: flex;
@@ -74,7 +71,7 @@ body::before{
 }
 
 /*casino style BLACKJACK title */
-.black-title {
+.black-title, .jack-title {
     animation: glow 3s ease-in-out infinite;
     position: absolute;
     top: 0;
@@ -93,26 +90,9 @@ body::before{
     opacity: 0.5;
     pointer-events: none;
 }
+.black-title { left: 0; }
+.jack-title { right: 0; }
 
-.jack-title {
-    animation: glow 3s ease-in-out infinite;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transform: none;
-    font-family: 'Neonderthaw', cursive;
-    font-size: 5rem;
-    font-weight: normal;
-    color: #ffd700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    user-select: none;
-    pointer-events: none;
-    text-shadow: 0 0 10px #d4af37, 0 0 20px #ffd700, 0 0 30px #ffcc00, 0 0 40px #d4af37, 0 0 50px #ffd700, 0 0 60px #ffcc00, 0 0 70px #d4af37;
-    z-index: 5;
-    opacity: 0.5;
-    pointer-events: none;
-}
 /*decorations */
 
 .table-trim.bottom {
@@ -158,13 +138,7 @@ body::before{
     transition: opacity 0.3s ease;
 }
 
-button .inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+button#deal .inner {
     background: radial-gradient(circle at center, #a30000 100%);
     z-index: 1;
 }
@@ -186,30 +160,11 @@ button#stay[disabled] {
     visibility: hidden;
 }
 
-button#stay {
+button#stay, button#deal {
     padding: 0;
     font-weight: bold;
     background: 
     radial-gradient(circle at center, #800080 100%);
-    border: none;
-    transition: transform 0.6 ease;
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
-    text-transform: uppercase;
-    font-size: 16px;
-    color: white;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-button#deal {
-    padding: 0;
-    font-weight: bold;
-    background: 
-    radial-gradient(circle at center, #a30000 100%);
     border: none;
     transition: transform 0.6 ease;
     border-radius: 50%;
@@ -233,18 +188,24 @@ button:hover:not(:disabled) {
 
 .card:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     transition: transform 0.2 ease, box-shadow 0.2 ease;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     z-index: 20;
 }
 
 
-button#deal::before {
+button#deal::before, button#stay::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 15;
     border-radius: 50%;
+    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    pointer-events: none;
+}
+
+button#deal::before {
     background: 
     conic-gradient(
         #ffeded 0deg 10deg, #a30000 10deg 20deg, #ffeded 20deg 30deg, #a30000 30deg 40deg,
@@ -257,17 +218,8 @@ button#deal::before {
         #ffeded 280deg 290deg, #a30000 290deg 300deg, #ffeded 300deg 310deg, #a30000 310deg 320deg, 
         #ffeded 320deg 330deg, #a30000 330deg 340deg, #ffeded 340deg 350deg, #a30000 350deg 360deg
     );
-    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
-    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
-    pointer-events: none;
 }
-
 button#stay::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 15;
-    border-radius: 50%;
     background: 
     conic-gradient(
         #ffeded 0deg 10deg, #800080 10deg 20deg, #ffeded 20deg 30deg, #800080 30deg 40deg,
@@ -280,9 +232,6 @@ button#stay::before {
         #ffeded 280deg 290deg, #800080 290deg 300deg, #ffeded 300deg 310deg, #800080 310deg 320deg, 
         #ffeded 320deg 330deg, #800080 330deg 340deg, #ffeded 340deg 350deg, #800080 350deg 360deg
     );
-    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
-    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
-    pointer-events: none;
 }
 button::after {
     content: attr(data-label);
@@ -444,6 +393,19 @@ button div {
     align-items: center;
 }
 
+.result-box {
+    animation: glow 3s ease-in-out infinite;
+    background-color: rgba(255,215, 0, 0.1);
+    border: 2px solid #ffd700;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 200px;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 10px #ffd70099;
+}
 .score-box {
     animation: glow 3s ease-in-out infinite;
     background-color: rgba(255,215, 0, 0.1);
@@ -453,9 +415,15 @@ button div {
     min-width: 200px;
     margin-left: auto;
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    gap: 20px;
     box-shadow: 0 0 10px #ffd70099;
+}
+.score-and-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
 }
 
 .current_score, .dealer_score {
