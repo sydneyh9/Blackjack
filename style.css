@@ -75,7 +75,6 @@ body::before{
     animation: glow 3s ease-in-out infinite;
     position: absolute;
     top: 0;
-    left: 0;
     transform: none;
     font-family: 'Neonderthaw', cursive;
     font-size: 5rem;
@@ -147,6 +146,14 @@ button#stay .inner {
     background: radial-gradient(circle at center, #800080 100%);
     z-index: 10;
 }
+
+button .inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
 .button-container{
     display: flex;
     flex-wrap: nowrap;
@@ -163,9 +170,8 @@ button#stay[disabled] {
 button#stay, button#deal {
     padding: 0;
     font-weight: bold;
-    background: 
-    radial-gradient(circle at center, #800080 100%);
     border: none;
+    background: none;
     transition: transform 0.6 ease;
     border-radius: 50%;
     width: 120px;

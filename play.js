@@ -17,7 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttonSound = document.getElementById('button-sound');
     const backgroundMusic = document.getElementById('background-music');
     const casino = document.getElementById('casino');
+    const toggleMusicButton = document.getElementById('toggle-music');
+    const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
 
+    let musicEnabled = true;
+    let soundEffectEnabled = true;
+
+    toggleMusicButton.addEventListener('click', () => {
+        musicEnabled = !musicEnabled;
+        toggleMusicButton.setAttribute('aria-pressed', musicEnabled);
+        if (musicEnabled) {
+            backgroundMusic.play();
+            casino.play();
+            toggleMusicButton.textContent = "Music On";
+        } else {
+            backgroundMusic.pause();
+            casino.pause();
+            toggleMusicButton.textContent = "Music Off";
+        }
+    });
+    toggleSoundEffectButton.addEventListener('click', () => {
+        soundEffectEnabled = !soundEffectEnabled;
+        toggleSoundEffectButton.setAttribute('aria-pressed', soundEffectEnabled);
+        toggleSoundEffectButton.textContent = soundEffectEnabled ? "Sound On" : "Sound Off";
+    });
     let cards = [];
     let your_cards = [];
     let playerStay = false;
