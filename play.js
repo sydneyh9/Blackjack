@@ -1,5 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
+    //basic game elements declarations
+    const gameInformation = document.getElementById('game_information');
+    const scoreBox = document.querySelector('.score-box');
+    const cardLabels = document.querySelectorAll('.card-label');
+    const turn = document.getElementById('turn');
+    //establish button for dealing the cards
+    const button = document.getElementById('deal');
+    const buttonStay = document.getElementById('stay');
+    const yourcards = document.getElementById('your_cards');
+    const currentscore = document.getElementById('current_score');
+    const dealercards = document.getElementById('dealer_cards');
+    const dealerfirstcard = document.getElementById('dealer_first_card');
+    const dealerscore = document.getElementById('dealer_score');
+    const winorlose = document.getElementById('win_or_lose');
+    const buttonSound = document.getElementById('button-sound');
+    const backgroundMusic = document.getElementById('background-music');
+    const casino = document.getElementById('casino');
+
+    let cards = [];
+    let your_cards = [];
+    let playerStay = false;
+    let dealerStay = false;
+    let dealer_cards = [];
+    let current_score = 0;
+    let dealer_score = 0;
+    let win_or_lose = "";
+    let blackjackState = "start";
 
     function startCountDown() {
         let timeLeft = 3;
@@ -14,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.style.display = 'none';
         buttonStay.style.display = 'none';
 
-        const gameInformation = document.getElementById('game_information');
         //hide the game information until the countdown ends
         if (gameInformation) gameInformation.style.visibility = 'hidden';
         //timer for countdown set up
@@ -60,32 +86,11 @@ function createDeck() {
     }
     return newDeck;
 }
-let cards = createDeck();
-let your_cards = [];
-let playerStay = false;
-let dealerStay = false;
-let dealer_cards = [];
 let dealer_first_card = 0;
-const buttonSound = document.getElementById('button-sound');
-const backgroundMusic = document.getElementById('background-music');
-const casino = document.getElementById('casino');
 let dealer_second_card = 0;
 let first_card = 0;
 let second_card = 0;
-let current_score = 0;
-let dealer_score = 0;
-let win_or_lose = "";
-let blackjackState = "start";
 
-//establish button for dealing the cards
-const button = document.getElementById('deal');
-const buttonStay = document.getElementById('stay');
-const yourcards = document.getElementById('your_cards');
-const currentscore = document.getElementById('current_score');
-const dealercards = document.getElementById('dealer_cards');
-const dealerfirstcard = document.getElementById('dealer_first_card');
-const dealerscore = document.getElementById('dealer_score');
-const winorlose = document.getElementById('win_or_lose');
 
 //resetting game function for every new round
 function resetGame() {
