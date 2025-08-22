@@ -16,22 +16,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const winorlose = document.getElementById('win_or_lose');
     const buttonSound = document.getElementById('button-sound');
     const backgroundMusic = document.getElementById('background-music');
+    const backgroundMusicSecond = document.getElementById('background-music-second');
     const casino = document.getElementById('casino');
     const toggleMusicButton = document.getElementById('toggle-music');
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
 
+
+    //making sure I don't play both at once
+    backgroundMusicSecond.pause();
+    backgroundMusicSecond.currentTime = 0;
+
     let musicEnabled = true;
     let soundEffectEnabled = true;
 
+    //if the first track is finished, play the second one
+    backgroundMusic.addEventListener('ended', () => {
+        if (musicEnabled) {
+            backgroundMusicSecond.currentTime = 0;
+            backgroundMusicSecond.play();
+        }
+    });
+    //loop these two tracks
+    backgroundMusicSecond.addEventListener('ended', () => {
+        if (musicEnabled) {
+            backgroundMusic.currentTime = 0;
+            backgroundMusic.play();
+        }})
+
+    //buttons for the user to turn off music and ambience if they want
     toggleMusicButton.addEventListener('click', () => {
         musicEnabled = !musicEnabled;
         toggleMusicButton.setAttribute('aria-pressed', musicEnabled);
         if (musicEnabled) {
-            backgroundMusic.play();
-            casino.play();
+            if (backgroundMusic.currentTime > 0 && !backgroundMusic.ended) {
+                backgroundMusic.play(); 
+            } else if (backgroundMusicSecond.currentTime > 0 && !backgroundMusicSecond.ended) {
+                backgroundMusicSecond.play();
+            } else {
+                backgroundMusic.currentTime = 0;
+                backgroundMusic.play();
+            }
             toggleMusicButton.textContent = "Music On";
+            casino.play();
         } else {
             backgroundMusic.pause();
+            backgroundMusicSecond.pause();
             casino.pause();
             toggleMusicButton.textContent = "Music Off";
         }
@@ -40,6 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
         soundEffectEnabled = !soundEffectEnabled;
         toggleSoundEffectButton.setAttribute('aria-pressed', soundEffectEnabled);
         toggleSoundEffectButton.textContent = soundEffectEnabled ? "Sound On" : "Sound Off";
+
+        if (soundEffectEnabled) {
+            casino.play().catch(err => {
+                console.log("Failed to play casino ambience:", err);
+            });
+        } else {
+            casino.pause();
+        }
     });
     let cards = [];
     let your_cards = [];
