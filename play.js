@@ -384,22 +384,19 @@ function updateDisplay(showDealer = false, animate = false) {
             cardContainer.appendChild(card);
 
             if (index == 0) {
-                card.classList.add('flipped');
+                //only reveal the dealer's card once the round is done
+                if (blackjackState === "done") {
+                    card.classList.remove('flipped');
             } else {
-                card.classList.remove('flipped');
+                card.classList.add('flipped');
             }
-
+        } else {
+            card.classList.remove('flipped');
+        }
             if (animate) {
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
                     cardContainer.classList.remove('swipe-in');
-                    if (index === 0) {
-                        if (blackjackState ==="dealer-turn" || blackjackState ==="done") {
-                            card.classList.remove('flipped');
-            } else {
-                    card.classList.add('flipped');
-                }
-            }
         }, {once:true});
     } 
         dealercards.appendChild(cardContainer);
