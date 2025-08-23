@@ -419,13 +419,18 @@ button div {
 
 .result-box {
     animation: glow 3s ease-in-out infinite;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
     background-color: rgba(255,215, 0, 0.1);
     border: 2px solid #ffd700;
     border-radius: 12px;
-    padding: 20px;
+    width: 250px;
+    padding: 10px 20px;
     min-width: 200px;
-    margin-left: auto;
     display: flex;
+    z-index: 1;
     justify-content: center;
     flex-direction: column;
     box-shadow: 0 0 10px #ffd70099;
@@ -438,6 +443,7 @@ button div {
     border-radius: 12px;
     padding: 20px;
     min-width: 200px;
+    max-width: 250px;
     margin-left: auto;
     display: flex;
     justify-content: center;
@@ -447,7 +453,10 @@ button div {
 /*column positioning for score and result boxes */
 .score-and-result {
     display: flex;
+    overflow: visible;
+    position: relative;
     flex-direction: column;
+    width: fit-content;
     align-items: flex-end;
     gap: 20px;
 }

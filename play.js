@@ -544,8 +544,12 @@ function updateDisplay(showDealer = false, animate = false) {
 
 //function for the deal button click
 function onButtonClick() {
-    //fun wheel spin sound for buttons
-    buttonSound.play();
+    //if the sound effects are enabled, fun wheel spin sound for buttons
+    if (soundEffectEnabled) {
+        buttonSound.play().catch(err => {
+            console.log("Failed to play button sound:", err);
+        });
+    }
     //fun spin animation for when buttons are clicked
     button.classList.add('spin');
     button.addEventListener('animationend', () => {
@@ -564,8 +568,12 @@ function onButtonClick() {
 
 //function for the player to have a stay option
 function onStayClick() {
-    //fun wheel spin sound for buttons
-    buttonSound.play();
+    //if sound effects enabled, fun wheel spin sound for buttons
+    if (soundEffectEnabled) {
+        buttonSound.play().catch(err => {
+            console.log("Failed to play button sound:", err);
+        });
+    }
     //fun spin animation for when buttons are clicked
     buttonStay.classList.add('spin');
     buttonStay.addEventListener('animationend', () => {
