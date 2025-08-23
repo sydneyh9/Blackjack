@@ -356,52 +356,17 @@ function dealerTurn() {
                 }
             } else if (dealer_score > 21 && current_score <= 21) {
                 endRound("Dealer went over. You win!");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             } else if (current_score > 21 && dealer_score <= 21) {
                 endRound("You went over! Dealer wins.");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             } else if (dealer_score === current_score) {
                 endRound("Looks like you tied. It's a draw.");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             } else if (current_score == 21) {
                 endRound("A perfect 21. You win!");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             }  else if (dealer_score > current_score) {
                 endRound("Oh no! The dealer has a better hand. Dealer wins.");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             } else {
                 endRound("You have a better hand! You win!");
-                /*blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
             }
-               /* blackjackState = "done";
-                button.setAttribute('data-label', 'Restart');
-                button.disabled = false;
-                buttonStay.disabled = true;
-                updateDisplay(true, false);*/
         }
             
 //updating the display 
@@ -521,12 +486,7 @@ function updateDisplay(showDealer = false, animate = false) {
         //dealerfirstcard.textContent = `Dealer's Cards: ?, ${visibleCards.join(',')}`;
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
-    winorlose.textContent = win_or_lose ? `Result: ${win_or_lose}` : '';
-    /*console.log("Your cards:", your_cards);
-    console.log("Result:", win_or_lose);
-    console.log("Dealer's first card:",dealer_first_card);
-    console.log("Current Score:", current_score);
-    console.log("Dealer's Score:", dealer_score);*/
+    winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
 
     if (turn) {
         if (blackjackState === "in-game") {
@@ -585,6 +545,14 @@ function onStayClick() {
     }
 }
 
+//function for the player clicking settings
+function onSettingsClick() {
+    settingsButton.classList.add('spin');
+    settingsButton.addEventListener('animationend', () => {
+        settingsButton.classList.remove('spin');
+    }, { once: true});
+}
+
 //function for starting the game
 function startGame() {
     backgroundMusic.play().catch(err => {
@@ -627,9 +595,6 @@ function startGame() {
     //win or lose skeleton
     if (current_score > 21) {
         win_or_lose = "You went over. You lose!";
-        console.log("Your Final Hand: ", your_cards);
-        console.log("Your Final Score: ", current_score);
-        console.log("You went over. You lose!");
         blackjackState = "done";
         button.setAttribute('data-label', 'Deal');
         buttonStay.disabled = true;
@@ -640,6 +605,7 @@ function startGame() {
 //listener for button
 button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
+settingsButton.addEventListener('click', onSettingsClick);
 
 //Initialize First Round
 resetGame();
