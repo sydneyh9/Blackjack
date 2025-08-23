@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSoundEffectButton.classList.toggle('glow', soundEffectEnabled);
         toggleSoundEffectButton.setAttribute('aria-pressed', soundEffectEnabled);
         updateToggleButtonsGlow();
-        toggleSoundEffectButton.textContent = soundEffectEnabled ? "Sound On" : "Sound Off";
+        toggleSoundEffectButton.textContent = soundEffectEnabled ? "Sound Effects On" : "Sound Effects Off";
 
         if (soundEffectEnabled) {
             casino.play().catch(err => {
