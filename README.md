@@ -13,4 +13,4 @@ House Rules:
 
 - There is no surrender.
 
-- There is not splitting.
+- There is no splitting.

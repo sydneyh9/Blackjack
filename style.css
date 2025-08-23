@@ -167,11 +167,29 @@ button#stay[disabled] {
     visibility: hidden;
 }
 
-button#stay, button#deal {
+button#deal {
     padding: 0;
     font-weight: bold;
     border: none;
     background: none;
+    transition: transform 0.6 ease;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    background:radial-gradient(circle at center, #a30000 100%);
+}
+button#stay {
+    padding: 0;
+    font-weight: bold;
+    background: radial-gradient(circle at center, #800080 100%);
+    border: none;
     transition: transform 0.6 ease;
     border-radius: 50%;
     width: 120px;
@@ -412,6 +430,7 @@ button div {
     flex-direction: column;
     box-shadow: 0 0 10px #ffd70099;
 }
+/*glowing box that displays the score */
 .score-box {
     animation: glow 3s ease-in-out infinite;
     background-color: rgba(255,215, 0, 0.1);
@@ -425,6 +444,7 @@ button div {
     flex-direction: column;
     box-shadow: 0 0 10px #ffd70099;
 }
+/*column positioning for score and result boxes */
 .score-and-result {
     display: flex;
     flex-direction: column;
@@ -444,17 +464,75 @@ button div {
     right: 20px;
     z-index: 1000;
 }
-
+/*black jack chip style settings button */
 #settings-button {
-    background-color: #444;
+    font-weight: bold;
     color: white; 
     border: none;
+    background: radial-gradient(circle at center, #b8860b 100%);
+    overflow: hidden;
+    z-index: 1000;
+    bottom: 20px;
+    right: 20px;
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    transition: transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
+    text-transform: uppercase;
     border-radius: 50%;
-    padding: 12px 14px;
-    font-size: 16px;
+    padding: 0;
+    font-size: 14px;
     cursor: pointer;
 }
 
+/*if not disabled, hovering over it should make it pop up */
+#settings-button:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/*giving it those chip edges */
+#settings-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 50%;
+    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    pointer-events: none;
+    background:
+    conic-gradient(
+        #fff8dc 0deg 10deg, #b8860b 10deg 20deg, #fff8dc 20deg 30deg, #b8860b 30deg 40deg, #fff8dc 40deg 50deg, #b8860b 50deg 60deg, #fff8dc 60deg 70deg, #b8860b 70deg 80deg, #fff8dc 80deg 90deg, #b8860b 90deg 100deg, #fff8dc 100deg 110deg, #b8860b 110deg 120deg, #fff8dc 120deg 130deg, #b8860b 130deg 140deg, #fff8dc 140deg 150deg, #b8860b 150deg 160deg, #fff8dc 160deg 170deg, #b8860b 170deg 180deg, #fff8dc 180deg 190deg, #b8860b 190deg 200deg, #fff8dc 200deg 210deg,
+        #b8860b 210deg 220deg, #fff8dc 220deg 230deg, #b8860b 230deg 240deg, #fff8dc 240deg 250deg, #b8860b 250deg 260deg, #fff8dc 260deg 270deg, #b8860b 270deg 280deg, #fff8dc 280deg 290deg, #b8860b 290deg 300deg, #fff8dc 300deg 310deg, #b8860b 310deg 320deg, #fff8dc 320deg 330deg, #b8860b 330deg 340deg, #fff8dc 340deg 350deg, #b8860b 350deg 360deg
+    );
+}
+#settings-button .inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, #b8860b 100%);
+}
+
+#settings-button::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 2;
+    text-shadow: 0 0 2px black;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+/*styling for the semi-translucent settings menu that pops up */
 #settings-menu {
     display: none;
     margin-top: 10px;
@@ -473,42 +551,13 @@ button div {
     pointer-events: none;
 }
 
-/*black jack chip style settings button */
-.chip-button {
-    background: radial-gradient(circle, #c62828 40%, #8e0000);
-    border: 4px solid #fff;
-    border-radius: 50%;
-    color: white;
-    font-size: 20px;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.chip-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
-}
-
-.chip-button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
 #settings-menu.show {
     display: block;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
+/* button for settings menu */
 #settings-menu button {
     display: block;
     background-color: #555;
@@ -523,6 +572,39 @@ button div {
 #settings-menu button:hover {
     background-color: #666;
 }
+
+/*styling so that it pops up with a semi-translucent overlay */
+#settings-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    z-index: 9998; /*making it below the menu but above the rest of the UI */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#settings-overlay.show {
+    display: flex;
+}
+
+#settings-menu {
+    background: #222;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: auto;
+    opacity: 1;
+    transform: none;
+    position: relative; /* stays centered */
+}
+
 /*animations */
 .card.match-animate {
     animation: pulse 0.6s ease;

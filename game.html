@@ -58,10 +58,14 @@
         </div>
     </div>
     <div id="settings-container">
-        <button id="settings-button" class="chip-button" >Settings </button>
-        <div id="settings-menu">
-                <button id="toggle-music" aria-pressed="false"> Toggle Music </button>
-                <button id="toggle-sound-effect" aria-pressed="false"> Toggle Sound Effects </button>
+        <button id="settings-button" data-label="Settings">
+            <div class="inner"></div>
+        </button>
+        <div id="settings-overlay">
+            <div id="settings-menu">
+                    <button id="toggle-music" aria-pressed="false"> Toggle Music </button>
+                    <button id="toggle-sound-effect" aria-pressed="false"> Toggle Sound Effects </button>
+            </div>
         </div>
     </div>
     <script src="play.js"></script>

@@ -35,6 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.getElementById("settings-button").addEventListener("click", () => {
+        const overlay = document.getElementById("settings-overlay");
+        overlay.classList.toggle("show");
+    });
+
+    document.getElementById("settings-overlay").addEventListener("click", (e) => {
+        if (e.target.id === "settings-overlay") {
+            e.target.classList.remove("show");
+        }
+    });
 
     //making sure I don't play both at once
     backgroundMusicSecond.pause();
