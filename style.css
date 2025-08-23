@@ -525,7 +525,7 @@ button div {
     transform: translate(-50%, -50%);
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     z-index: 2;
     text-shadow: 0 0 2px black;
     pointer-events: none;
@@ -534,21 +534,45 @@ button div {
 }
 /*styling for the semi-translucent settings menu that pops up */
 #settings-menu {
-    display: none;
-    margin-top: 10px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3 ease, transform 0.3s ease;
-    background-color: #222;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    position: absolute;
-    bottom: 50px;
+    background: white;
+    color: black;
+    display: flex;
+    font-family: 'Georgia', serif;
+    padding: 60px 40px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    position: relative;
+    width: 300px;
+    height: 450px;
     z-index: 9999;
-    right: 0;
+    border: 3px solid black;
     flex-direction: column;
-    pointer-events: none;
+    pointer-events: auto;
+    opacity: 1;
+    transform: none;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+#settings-menu::before,
+#settings-menu::after {
+    content: "A♠️";
+    position: absolute;
+    font-size: 35px;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+}
+
+#settings-menu::before {
+    top: 10px;
+    left: 10px;
+}
+
+#settings-menu::after {
+    bottom: 10px;
+    right: 10px;
+    transform: rotate(180deg);
 }
 
 #settings-menu.show {
@@ -559,20 +583,39 @@ button div {
 }
 /* button for settings menu */
 #settings-menu button {
-    display: block;
-    background-color: #555;
-    color: white;
-    border: none;
-    margin: 5px 0;
-    padding: 8px 12px;
+    border: 20x solid black;
+    color: black;
+    width: 140px;
+    height: 80px;
+    margin: 10px 0;
+    align-items: center;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    font-family: 'Georgia', serif;
+    display: flex;
+    font-size: 16px;
+    position: relative;
     cursor: pointer;
-    border-radius: 4px;
+    transition: transform 0.2s ease;
 }
 
 #settings-menu button:hover {
-    background-color: #666;
+    transform: scale(1.05);
+}
+/*glowing when active */
+#settings-menu button.active {
+    box-shadow: 0 0 10px #ffd700;
 }
 
+#toggle-music {
+    background-color: #FFCCCB;
+}
+#toggle-music:hover {
+    background-color: #FFCCCB;
+}
+#toggle-sound-effect {
+    background-color: #FFCCCB;
+}
 /*styling so that it pops up with a semi-translucent overlay */
 #settings-overlay {
     position: fixed;
@@ -591,21 +634,18 @@ button div {
     display: flex;
 }
 
-#settings-menu {
-    background: #222;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    pointer-events: auto;
-    opacity: 1;
-    transform: none;
-    position: relative; /* stays centered */
-}
+
 
 /*animations */
+
+/*glow for settings buttons */
+.glow {
+    animation: button-glow 2s ease-in-out infinite;
+    box-shadow: 0 0 12px 4px rgba(255,215,0,0.8);
+    background-color: #1f1f1f;
+    color: #ffd700;
+    transition: all 0.3s ease;
+}
 .card.match-animate {
     animation: pulse 0.6s ease;
 }
