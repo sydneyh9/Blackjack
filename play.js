@@ -22,6 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
     const settingsButton = document.getElementById('settings-button');
     const settingsMenu = document.getElementById('settings-menu');
+    const musicVolumeSlider = document.getElementById('music-volume');
+    const EffectsVolumeSlider = document.getElementById('effects-volume');
+
+    //handle music volume
+    musicVolumeSlider.addEventListener('input', () => {
+        const volume = parseFloat(musicVolumeSlider.value);
+        backgroundMusic.volume = volume;
+        backgroundMusicSecond.volume = volume;
+    });
+
+    //handle sound effects volume
+    EffectsVolumeSlider.addEventListener('input', () => {
+        const volume = parseFloat(EffectsVolumeSlider.value);
+        buttonSound.volume = volume;
+        casino.volume = volume;
+    });
 
     //toggle visibility of the settings menu
     settingsButton.addEventListener('click', () => {

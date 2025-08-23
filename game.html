@@ -10,9 +10,8 @@
     <audio id="casino" src="sounds/casino.mp3" loop preload="auto"></audio>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1 class="black-title"> BLACK </h1>
@@ -68,6 +67,13 @@
                 <div id="audio-controls">
                     <button id="toggle-music" aria-pressed="false"> Music On </button>
                     <button id="toggle-sound-effect" aria-pressed="false"> Sound Effects On </button>
+
+                    <div class="volumne-controls">
+                        <label for="music-volume"> Music Volume </label>
+                        <input type="range" id="music-volume" min="0" max="1" step="0.1">
+                        <label for="sound-volume"> Sound Effects Volume </label>
+                        <input type="range" id="effects-volume" min="0" max="1" step="0.1">
+                    </div>
                 </div>
             </div>
         </div>
