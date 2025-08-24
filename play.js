@@ -172,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //hide the game information until the countdown ends
         if (gameInformation) gameInformation.style.visibility = 'hidden';
-        if (resultBox) resultBox.style.visibility = 'hidden';
         //timer for countdown set up
         const timerId = setInterval(() => {
             timeLeft--;
@@ -226,7 +225,7 @@ let second_card = 0;
 function resetGame() {
     const scoreBox = document.querySelector('.score-box');
     if (scoreBox) scoreBox.style.display = 'none';
-    const resultBox = document.getElementById('.result-box');
+    const resultBox = document.querySelector('.result-box');
     if (resultBox) resultBox.style.display = 'none';
     const cardLabels = document.querySelectorAll('.card-label');
     cardLabels.forEach(label => {
@@ -592,6 +591,8 @@ function startGame() {
         casino.pause();
     }
     const scoreBox = document.querySelector('.score-box');
+    const resultBox = document.querySelector('.result-box');
+    if(resultBox) resultBox.style.display = 'block';
     if(scoreBox) scoreBox.style.display = 'block';
     const cardLabels = document.querySelectorAll('.card-label');
     cardLabels.forEach(label => {
@@ -623,13 +624,13 @@ function startGame() {
     updateDisplay(false, true);
 
     //win or lose skeleton
-    if (current_score > 21) {
+    /*if (current_score > 21) {
         win_or_lose = "You went over. You lose!";
         blackjackState = "done";
         button.setAttribute('data-label', 'Deal');
         buttonStay.disabled = true;
         updateDisplay(true, true);
-    }
+    }*/
 }
 
 //listener for button
