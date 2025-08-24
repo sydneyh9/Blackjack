@@ -231,6 +231,14 @@ function resetGame() {
     });
     const gameInformation = document.getElementById('game_information');
     if(gameInformation) gameInformation.style.visibility = 'hidden';
+    const scoreAndResult = document.getElementById('score-and-result');
+    if (scoreAndResult) {
+        if (win_or_lose) {
+            scoreAndResult.style.visibility = 'visible';
+        } else {
+            scoreAndResult.style.visibility = 'hidden';
+        }
+    }
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
@@ -254,7 +262,9 @@ function resetGame() {
     if (currentscore) currentscore.textContent = "";
     if (dealerfirstcard) dealerfirstcard.textContent = "";
     if (dealerscore) dealerscore.textContent = "";
-    if (winorlose) winorlose.textContent = "";
+    if (winorlose) {
+        winorlose.textContent = "";
+    }
     if (button) {
         button.setAttribute('data-label', 'Deal');
         button.disabled = false;
@@ -440,7 +450,7 @@ function updateDisplay(showDealer = false, animate = false) {
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-            if(animate && dealer_cards.length - 1 && (blackjackState === "dealer-turn" || blackjackState === "in-game" && dealer_cards.length === 2)) {
+            if(animate && index === dealer_cards.length - 1 && (blackjackState === "dealer-turn" || (blackjackState === "in-game" && dealer_cards.length === 2))) {
                 //swipe in animation triggered
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
@@ -571,12 +581,21 @@ function onSettingsClick() {
 
 //function for starting the game
 function startGame() {
-    backgroundMusic.play().catch(err => {
-        console.log("Background music is not playing: ", err);
-    });
-    casino.play().catch(err => {
-        console.log("Background ambience is not playing: ", err);
-    });
+    if (musicEnabled) {
+        backgroundMusic.play().catch(err => {
+            console.log("Background music is not playing: ", err);
+        });
+    } else {
+        backgroundMusic.pause();
+    }
+
+    if (soundEffectEnabled) {
+        casino.play().catch(err => {
+            console.log("Background ambience is not playing: ", err);
+        });
+    } else {
+        casino.pause();
+    }
     const scoreBox = document.querySelector('.score-box');
     if(scoreBox) scoreBox.style.display = 'block';
     const cardLabels = document.querySelectorAll('.card-label');

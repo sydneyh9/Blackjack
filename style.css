@@ -444,7 +444,6 @@ button div {
     padding: 10px 20px;
     min-width: 200px;
     display: flex;
-    z-index: 9997;
     justify-content: center;
     flex-direction: column;
     box-shadow: 0 0 10px #ffd70099;
