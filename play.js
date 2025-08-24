@@ -623,14 +623,6 @@ function startGame() {
 
     updateDisplay(false, true);
 
-    //win or lose skeleton
-    /*if (current_score > 21) {
-        win_or_lose = "You went over. You lose!";
-        blackjackState = "done";
-        button.setAttribute('data-label', 'Deal');
-        buttonStay.disabled = true;
-        updateDisplay(true, true);
-    }*/
 }
 
 //listener for button

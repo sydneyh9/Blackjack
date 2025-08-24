@@ -435,7 +435,10 @@ button div {
     flex-direction: column;
     align-items: center;
 }
-
+#turn {
+    font-family: 'Neonderthaw', cursive;
+    font-size: 2rem;
+}
 .result-box {
     animation: glow 3s ease-in-out infinite;
     top: 80%;
