@@ -172,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //hide the game information until the countdown ends
         if (gameInformation) gameInformation.style.visibility = 'hidden';
+        if (resultBox) resultBox.style.visibility = 'hidden';
         //timer for countdown set up
         const timerId = setInterval(() => {
             timeLeft--;
@@ -225,20 +226,14 @@ let second_card = 0;
 function resetGame() {
     const scoreBox = document.querySelector('.score-box');
     if (scoreBox) scoreBox.style.display = 'none';
+    const resultBox = document.getElementById('.result-box');
+    if (resultBox) resultBox.style.display = 'none';
     const cardLabels = document.querySelectorAll('.card-label');
     cardLabels.forEach(label => {
         label.style.display = 'none';
     });
     const gameInformation = document.getElementById('game_information');
     if(gameInformation) gameInformation.style.visibility = 'hidden';
-    const scoreAndResult = document.getElementById('score-and-result');
-    if (scoreAndResult) {
-        if (win_or_lose) {
-            scoreAndResult.style.visibility = 'visible';
-        } else {
-            scoreAndResult.style.visibility = 'hidden';
-        }
-    }
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
