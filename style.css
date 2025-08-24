@@ -104,8 +104,8 @@ body::before{
     opacity: 0.5;
     pointer-events: none;
 }
-.black-title { left: 0; }
-.jack-title { right: 0; }
+.black-title { left: 4vw; }
+.jack-title { right: 5vw; } /* 55 of the viewport width to look good on all screen sizes */
 
 /*decorations */
 
