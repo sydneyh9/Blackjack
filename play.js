@@ -323,26 +323,17 @@ function dealerTurn() {
         //animate and then continue dealer turn
         //waits before the player gets their turn again to reduce abruptness
         setTimeout(() => {
-            if (!playerStay) {
+            dealerTurn(); //continue dealer's turn
+        }, 1000); //delay next card draw
+    } else {
+        dealerStay = true;
+        if (playerStay) {
+            finalizeDealerTurn(); //both stayed, so calculate the results
+        } else {
                 blackjackState = "in-game";
                 button.disabled = false;
                 buttonStay.disabled = false;
                 updateDisplay(blackjackState === "done", false);
-            } else {
-                //continue to have the dealer draw until they hit >= 17
-                dealerTurn();
-            }
-            }, 1000);
-    } else {
-        //when the dealer is done drawing and player is done drawing, calculate result
-        dealerStay = true;
-        if (playerStay) {
-            finalizeDealerTurn();
-        } else {
-            blackjackState = "in-game";
-            button.disabled = false;
-            buttonStay.disabled = false;
-            updateDisplay(true, false);
         }
     }
 }
