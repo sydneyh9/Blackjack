@@ -123,7 +123,95 @@ body::before{
     z-index: 10;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
 
+.instructions-box {
+    background: white;
+    color: black;
+    font-family: 'Georgia', serif;
+    padding: 40px 30px;
+    transform: scale(0.85);
+    transform-origin: center;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    position: relative;
+    width: 300px;
+    max-width: 90%;
+    border: 3px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 9999;
+    text-align: center;
+}
+
+.instructions-box::before,
+.instructions-box::after {
+    content: "Q♥️";
+    position: absolute;
+    font-size: 35px;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+}
+
+.instructions-box::before {
+    top: 10px;
+    left: 10px;
+}
+
+.instructions-box::after {
+    bottom: 10px;
+    right: 10px;
+    transform: rotate(180deg);
+}
+
+.instructions-box h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.instructions-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.instructions-box li {
+    margin: 0.3rem 0;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+#close-instructions {
+    background-color: #FFCCCB;
+    color: black;
+    font-family: 'Georgia', serif;
+    width: 140px;
+    height: 50px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+
+#close-instructions:hover {
+    transform: scale(1.05);
+}
 /*dashed border arcs */
 .arc-decoration {
     position: fixed;
@@ -833,3 +921,27 @@ button span {
     100% { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffcc00; }
 }
 
+/* media query for size adjustments and font */
+
+@media (max-width: 600px) {
+    .instructions-box {
+        width: 90%;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        transform: scale(0.85);
+    }
+
+    .instructions-box h2 {
+        font-size: 1.5rem;
+    }
+    
+    .instructions-box li {
+        font-size: 0.85rem;
+    }
+
+    #close-instructions {
+        width: 120px;
+        height: 40px;
+        font-size: 14px;
+    }
+}

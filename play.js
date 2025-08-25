@@ -24,6 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsMenu = document.getElementById('settings-menu');
     const musicVolumeSlider = document.getElementById('music-volume');
     const EffectsVolumeSlider = document.getElementById('effects-volume');
+    const instructionsOverlay = document.getElementById('instructions-overlay');
+    const closeInstructionsButton = document.getElementById('close-instructions');
+    
+    //show theh instructions when the page loads
+    instructionsOverlay.style.display = 'flex';
+
+    //hide it when the user clicks the close button
+    closeInstructionsButton.addEventListener('click', () => {
+        instructionsOverlay.style.display = 'none';
+    });
 
     //handle music volume
     musicVolumeSlider.addEventListener('input', () => {
