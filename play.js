@@ -35,6 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
         instructionsOverlay.style.display = 'none';
     });
 
+    //when clicking help button, open instructions
+    document.getElementById("help-button").addEventListener("click", () => {
+        const instructions = document.querySelector(".instructions-box");
+        if (instructions) {
+            instructions.classList.toggle("show");
+        }
+    });
+
     //handle music volume
     musicVolumeSlider.addEventListener('input', () => {
         const volume = parseFloat(musicVolumeSlider.value);

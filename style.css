@@ -136,6 +136,7 @@ body::before{
     z-index: 999;
 }
 
+/*instructions styling */
 .instructions-box {
     background: white;
     color: black;
@@ -207,7 +208,35 @@ body::before{
     font-size: 1rem;
     line-height: 1.2;
 }
+/*help button styling */
+#help-button {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.2);
+    border: 2px solid white;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
 
+#help-button:hover {
+    background-color: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+.instructions-box.show {
+    display: block;
+}
 
 #close-instructions {
     background-color: #FFCCCB;
