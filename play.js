@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
     const settingsButton = document.getElementById('settings-button');
     const settingsMenu = document.getElementById('settings-menu');
+    const helpButton = document.getElementById('help-button');
     const musicVolumeSlider = document.getElementById('music-volume');
     const EffectsVolumeSlider = document.getElementById('effects-volume');
     const instructionsOverlay = document.getElementById('instructions-overlay');
@@ -66,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         if (!settingsButton.contains(event.target) && !settingsMenu.contains(event.target)) {
             settingsMenu.classList.remove('show');
+        }
+    });
+
+    //if the user clicks outside of the instructions, it disappears and goes back to main game
+    //if user clicks outside of the settings box, it disappears and goes back to main game
+    instructionsOverlay.addEventListener('click', (event) => {
+        const instructionsBox = document.querySelector('.instructions-box');
+        if(instructionsOverlay.style.display === 'flex' && !instructionsBox.contains(event.target)) {
+            instructionsOverlay.style.display = 'none';
         }
     });
 
@@ -331,7 +341,7 @@ function drawCard() {
         return;
     }
     your_cards.push(newCard);
-    current_score += newCard;
+    current_score = calculateScore(your_cards);
     if (current_score > 21) {
         //end the round and reveal the dealer's cards
         endRound("You went over. You Lose!");
