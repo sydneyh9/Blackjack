@@ -417,7 +417,7 @@ function updateDisplay(showDealer = false, animate = false) {
     dealercards.innerHTML = '';
     if (dealer_cards.length === 0) {
         dealerscore.textContent = "";
-    } else if (showDealer) {
+    } else if (showDealer && blackjackState === "done") {
         dealer_cards.forEach((cardValue, index) => {
             const cardContainer = document.createElement('div');
             //only plays if we're not finished the round
