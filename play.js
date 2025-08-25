@@ -299,7 +299,6 @@ function drawCard() {
     }
     //keep them hidden
     updateDisplay();
-
     //dealer gets to take another turn after player draws
     dealerTurn();
 }
@@ -315,16 +314,17 @@ function dealerTurn() {
     //add up the dealer_score
     dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
     //if the dealer's score is less than 17, it'll automatically draw another card
+
      if(dealer_score < 17) {
-        let card = draw();
-        dealer_cards.push(card);
-        //update the display for the dealer cards
-        updateDisplay(true,true);
-        //animate and then continue dealer turn
-        //waits before the player gets their turn again to reduce abruptness
-        setTimeout(() => {
-            dealerTurn(); //continue dealer's turn
-        }, 1000); //delay next card draw
+            let card = draw();
+            dealer_cards.push(card);
+            //update the display for the dealer cards
+            updateDisplay(true,true);
+            //animate and then continue dealer turn
+            //waits before the player gets their turn again to reduce abruptness
+            setTimeout(() => {
+                dealerTurn(); //continue dealer's turn
+            }, 1000); //delay next card draw by a second
     } else {
         dealerStay = true;
         if (playerStay) {
@@ -435,7 +435,7 @@ function updateDisplay(showDealer = false, animate = false) {
             card.appendChild(front);
             card.appendChild(back);
             cardContainer.appendChild(card);
-            if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn") {
+            if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn" && blackjackState !== "done") {
                 //swipe in animation triggered
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
