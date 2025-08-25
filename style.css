@@ -478,15 +478,16 @@ button div {
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     backface-visibility: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 48px;
-    border-radius: 12px;
-    border: 1.5px solid black;
+    font-size: 18px;
+    font-family: 'Georgia', serif;
+    border-radius: 8px;
+    border: 1px solid black;
     user-select: none;
 }
 /* unhide the game information slowly */
@@ -500,7 +501,6 @@ button div {
     color: black;
     z-index: 2;
 }
-
 
 /*back of the card when dealt in */
 .card-back {
@@ -517,6 +517,35 @@ button div {
     /*background-blend-mode: overlay;*/
 }
 
+.red-card {
+    color: red;
+}
+
+.black-card {
+    color: black;
+}
+
+.card-corner {
+    position: absolute;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.top-left {
+    top: 4px;
+    left: 6px;
+}
+
+.bottom-right {
+    bottom: 4px;
+    right: 6px;
+    transform: rotate(180deg);
+}
+
+.card-center {
+    font-size: 28px;
+}
 .card-container {
     z-index: 10;
 }

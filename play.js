@@ -224,11 +224,32 @@ document.addEventListener('DOMContentLoaded', () => {
     //my card deck
 function createDeck() {
     //funtion to create a new deck out of the following values to use for a new round
+    //modified: deck now includes ranks and suits
+    const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+    const ranks = [
+        { rank: 'A', value: 11 },
+        { rank: '2', value: 2 },
+        { rank: '3', value: 3 },
+        { rank: '4', value: 4 },
+        { rank: '5', value: 5 },
+        { rank: '6', value: 6 },
+        { rank: '7', value: 7 },
+        { rank: '8', value: 8 },
+        { rank: '9', value: 9 },
+        { rank: '10', value: 10 },
+        { rank: 'J', value: 10 },
+        { rank: 'Q', value: 10 },
+        { rank: 'K', value: 10 }
+    ];
     const newDeck = [];
-    const cardValues = [2,3,4,5,6,7,8,9,10,10,10,10,11];
-    for (let i = 0; i < 4; i++) {
-        for (let card of cardValues) {
-            newDeck.push(card);
+    //deck is now constructed of suits and ranks like typical blackjack
+    for (let suit of suits) {
+        for (let rankObject of ranks) {
+            newDeck.push({
+                suit: suit,
+                rank: rankObject.rank,
+                value: rankObject.value
+            });
         }
     }
     return newDeck;
@@ -294,7 +315,7 @@ function resetGame() {
 //pulls a random card from the pile and removes it from the deck as per house rules
 function draw() {
     if (cards.length === 0) {
-        return 0;
+        return null;
     }
     let index = Math.floor(Math.random() * cards.length);
     return cards.splice(index, 1)[0];
@@ -306,6 +327,9 @@ function drawCard() {
         return;
     }
     let newCard = draw();
+    if (!newCard) {
+        return;
+    }
     your_cards.push(newCard);
     current_score += newCard;
     if (current_score > 21) {
@@ -356,72 +380,105 @@ function dealerTurn() {
     }
 }
 
-            //play the dealer card draw animation
-            //setting the drawing the next card for a 2 second delay
-        function finalizeDealerTurn() {
-            dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+//play the dealer card draw animation
+//setting the drawing the next card for a 2 second delay
+function finalizeDealerTurn() {
+    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
 
-            updateDisplay(true,true);
+    updateDisplay(true,true);
 
-            const dealerCardElement = dealercards.querySelectorAll('.card');
-            const firstDealerCard = dealerCardElement[0];
+    const dealerCardElement = dealercards.querySelectorAll('.card');
+    const firstDealerCard = dealerCardElement[0];
         
-            if (firstDealerCard) {
-                    firstDealerCard.classList.remove('flipped');
-                    setTimeout(() => {
-                        calculateGameResult();
-                    }, 650);
-            } else {
+    if (firstDealerCard) {
+            firstDealerCard.classList.remove('flipped');
+            setTimeout(() => {
                 calculateGameResult();
-            }
-        }
+            }, 650);
+    } else {
+        calculateGameResult();
+    }
+}
 
-        function calculateGameResult() {
-            if (dealer_score > 21 && current_score > 21) {
-                if (current_score < dealer_score) {
-                    endRound("You both went over but you have the better hand! You win!");
-                } else {
-                    endRound("You both went over but the dealer has the better hand! Dealer wins.");
-                }
-            } else if (dealer_score > 21 && current_score <= 21) {
-                endRound("Dealer went over. You win!");
-            } else if (current_score > 21 && dealer_score <= 21) {
-                endRound("You went over! Dealer wins.");
-            } else if (dealer_score === current_score) {
-                endRound("Looks like you tied. It's a draw.");
-            } else if (current_score == 21) {
-                endRound("A perfect 21. You win!");
-            }  else if (dealer_score > current_score) {
-                endRound("Oh no! The dealer has a better hand. Dealer wins.");
-            } else {
-                endRound("You have a better hand! You win!");
-            }
+function calculateGameResult() {
+    if (dealer_score > 21 && current_score > 21) {
+        if (current_score < dealer_score) {
+            endRound("You both went over but you have the better hand! You win!");
+        } else {
+            endRound("You both went over but the dealer has the better hand! Dealer wins.");
         }
-            
+    } else if (dealer_score > 21 && current_score <= 21) {
+        endRound("Dealer went over. You win!");
+    } else if (current_score > 21 && dealer_score <= 21) {
+        endRound("You went over! Dealer wins.");
+    } else if (dealer_score === current_score) {
+        endRound("Looks like you tied. It's a draw.");
+    } else if (current_score == 21) {
+        endRound("A perfect 21. You win!");
+    }  else if (dealer_score > current_score) {
+        endRound("Oh no! The dealer has a better hand. Dealer wins.");
+    } else {
+        endRound("You have a better hand! You win!");
+    }
+}
+//function for handling whether the Ace is treated as a 1 or 11 value      
+function calculateScore(hand) {
+    let score = 0;
+    let aces = 0;
+    for (let card of hand) {
+        score += card.value;
+        if (card.rank === 'A') {
+            aces++;
+        }
+    }
+    //If the score is over 21, treat it as a 1
+    while (score > 21 && aces > 0) {
+        score -= 10;
+        aces--;
+    }
+    return score;
+}
 //updating the display 
 function updateDisplay(showDealer = false, animate = false) {
     //empty container to house cards animation
     yourcards.innerHTML = '';
+
+    const suitSymbols = {
+        'Hearts': '♥️',
+        'Diamonds': '♦️',
+        'Clubs': '♣️',
+        'Spades': '♠️'
+    };
+
     //create the cards based on what is drawn
-    your_cards.forEach((cardValue, index) => {
+    your_cards.forEach((card, index) => {
         //container for card
         const cardContainer = document.createElement('div');
         cardContainer.className = 'card-container';
         //creation of card
-        const card = document.createElement('div');
-        card.className = 'card';
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
         //card text
         const front = document.createElement('div');
         front.className = 'card-front';
-        front.textContent = cardValue;
+
+        const suitSymbol = suitSymbols[card.suit];
+        const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
+
+        front.innerHTML = `
+        <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
+        <div class="card-center"> ${suitSymbol}</div>
+        <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
+
+        front.classList.add(isRed ? 'red-card' : 'black-card');
 
         const back = document.createElement('div');
         back.className = 'card-back';
         back.textContent = '?';
 
-        card.appendChild(front);
-        card.appendChild(back);
-        cardContainer.appendChild(card);
+        cardElement.appendChild(front);
+        cardElement.appendChild(back);
+        cardContainer.appendChild(cardElement);
         if (animate && index === your_cards.length - 1) {
             cardContainer.classList.add('swipe-in');
             cardContainer.addEventListener('animationend', () => {
@@ -430,29 +487,30 @@ function updateDisplay(showDealer = false, animate = false) {
         }
         yourcards.appendChild(cardContainer);
     });
+    current_score = calculateScore(your_cards);
     currentscore.textContent = `Current Score: ${current_score}`;
     //empty container to house dealer cards animation
     dealercards.innerHTML = '';
     if (dealer_cards.length === 0) {
         dealerscore.textContent = "";
     } else if (showDealer && blackjackState === "done") {
-        dealer_cards.forEach((cardValue, index) => {
+        dealer_cards.forEach((card, index) => {
             const cardContainer = document.createElement('div');
             //only plays if we're not finished the round
             cardContainer.className = 'card-container';
-            const card = document.createElement('div');
-            card.className = 'card';
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
             //card front
             const front = document.createElement('div');
             front.className = 'card-front';
-            front.textContent = cardValue;
+            front.textContent = `${card.rank} of ${card.suit}`;
             //card back
             const back = document.createElement('div');
             back.className = 'card-back';
             back.textContent = '?';
-            card.appendChild(front);
-            card.appendChild(back);
-            cardContainer.appendChild(card);
+            cardElement.appendChild(front);
+            cardElement.appendChild(back);
+            cardContainer.appendChild(cardElement);
             if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn" && blackjackState !== "done") {
                 //swipe in animation triggered
                 cardContainer.classList.add('swipe-in');
@@ -475,33 +533,42 @@ function updateDisplay(showDealer = false, animate = false) {
             }
         }
         //calculate and display dealer's score
-        dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+        dealer_score = calculateScore(dealer_cards);
         dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
     } else {
 
         //creates dealer cards images and only shows the second card onward
-        dealer_cards.forEach((cardValue, index) => {
+        dealer_cards.forEach((card, index) => {
             const cardContainer = document.createElement('div');
             cardContainer.className = 'card-container';
-            const card = document.createElement('div');
-            card.className = 'card';
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card';
 
             const front = document.createElement('div');
             front.className = 'card-front';
-            front.textContent = cardValue;
+            
+            const suitSymbol = suitSymbols[card.suit];
+            const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
+
+            front.innerHTML = `
+            <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
+            <div class="card-center"> ${suitSymbol}</div>
+            <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
+
+            front.classList.add(isRed ? 'red-card' : 'black-card');
 
             const back = document.createElement('div');
             back.className = 'card-back';
             back.textContent = '?';
 
-            card.appendChild(front);
-            card.appendChild(back);
+            cardElement.appendChild(front);
+            cardElement.appendChild(back);
             
             //if it's the dealer's turn, do the same to its animations
 
-            cardContainer.appendChild(card);
+            cardContainer.appendChild(cardElement);
             if (index == 0) {
-                card.classList.add('flipped');
+                cardElement.classList.add('flipped');
             }
             if (animate) {
                 cardContainer.classList.add('swipe-in');
@@ -513,7 +580,7 @@ function updateDisplay(showDealer = false, animate = false) {
     });
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
-        const visibleScore = visibleCards.reduce((a,b) => a + b, 0);
+        const visibleScore = calculateScore(visibleCards);
         dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
     }
     winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
