@@ -503,7 +503,16 @@ function updateDisplay(showDealer = false, animate = false) {
             //card front
             const front = document.createElement('div');
             front.className = 'card-front';
-            front.textContent = `${card.rank} of ${card.suit}`;
+            
+            const suitSymbol = suitSymbols[card.suit];
+            const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
+
+            front.innerHTML = `
+            <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
+            <div class="card-center"> ${suitSymbol}</div>
+            <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
+
+            front.classList.add(isRed ? 'red-card' : 'black-card');
             //card back
             const back = document.createElement('div');
             back.className = 'card-back';

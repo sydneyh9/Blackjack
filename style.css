@@ -162,6 +162,7 @@ body::before{
 .instructions-box::before,
 .instructions-box::after {
     content: "Q♥️";
+    color: #d1171b;
     position: absolute;
     font-size: 35px;
     font-family: 'Georgia', serif;
