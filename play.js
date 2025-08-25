@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleMusicButton.classList.toggle('active', musicEnabled);
         toggleMusicButton.classList.toggle('glow', musicEnabled);
         toggleMusicButton.setAttribute('aria-pressed', musicEnabled);
-        updateToggleButtonsGlow();
         if (musicEnabled) {
             if (backgroundMusic.currentTime > 0 && !backgroundMusic.ended) {
                 backgroundMusic.play(); 
@@ -147,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleSoundEffectButton.classList.toggle('active', soundEffectEnabled);
         toggleSoundEffectButton.classList.toggle('glow', soundEffectEnabled);
         toggleSoundEffectButton.setAttribute('aria-pressed', soundEffectEnabled);
-        updateToggleButtonsGlow();
         toggleSoundEffectButton.textContent = soundEffectEnabled ? "Sound Effects On" : "Sound Effects Off";
 
         if (soundEffectEnabled) {
@@ -158,12 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
             casino.pause();
         }
     });
-
-    function updateToggleButtonsGlow() {
-        toggleMusicButton.classList.toggle('glow', !toggleMusicButton.disabled && musicEnabled);
-        toggleSoundEffectButton.classList.toggle('glow', !toggleSoundEffectButton.disabled && soundEffectEnabled);
-        settingsButton.classList.toggle('glow', !settingsButton.disabled);
-    }
     let cards = [];
     let your_cards = [];
     let playerStay = false;
@@ -692,7 +684,6 @@ function startGame() {
     buttonStay.disabled = false;
     toggleMusicButton.disabled = false;
     toggleSoundEffectButton.disabled = false;
-    updateToggleButtonsGlow();
     button.classList.remove('centered');
     buttonStay.style.visibility = 'visible';
     //the dealer gets their cards
