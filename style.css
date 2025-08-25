@@ -234,7 +234,7 @@ body::before{
     transform: scale(1.1);
 }
 
-.instructions-box.show {
+#instructions-overlay.show {
     display: block;
 }
 

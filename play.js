@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //when clicking help button, open instructions
     document.getElementById("help-button").addEventListener("click", () => {
-        const instructions = document.querySelector(".instructions-box");
+        const instructions = document.getElementById("instructions-overlay");
         if (instructions) {
-            instructions.classList.toggle("show");
+            instructions.style.display = instructions.style.display === "flex" ? "none" : "flex";
         }
     });
 
