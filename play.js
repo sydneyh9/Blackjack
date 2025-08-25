@@ -263,8 +263,11 @@ function createDeck() {
 }
 
 //resetting game function for every new round
-function resetGame() {
-    const scoreBox = document.getElementById('score-box');
+function resetGame(isRestart = true) {
+    const gameInformation = document.getElementById('game_information');
+    if (isRestart) {
+        if(gameInformation) gameInformation.style.visibility = 'hidden';
+        const scoreBox = document.getElementById('score-box');
     if (scoreBox) scoreBox.style.display = 'none';
     const resultBox = document.getElementById('result-box');
     if (resultBox) resultBox.style.display = 'none';
@@ -272,8 +275,7 @@ function resetGame() {
     cardLabels.forEach(label => {
         label.style.display = 'none';
     });
-    const gameInformation = document.getElementById('game_information');
-    if(gameInformation) gameInformation.style.visibility = 'hidden';
+    }
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
@@ -294,7 +296,6 @@ function resetGame() {
     if (yourcards) yourcards.innerHTML = "";
     if (dealercards) dealercards.innerHTML = "";
     if (currentscore) currentscore.textContent = "";
-    if (dealerfirstcard) dealerfirstcard.textContent = "";
     if (dealerscore) dealerscore.textContent = "";
     if (winorlose) {
         winorlose.textContent = "";
@@ -628,7 +629,7 @@ function onButtonClick() {
     } else if (blackjackState === "in-game") {
         drawCard();
     } else if (blackjackState === "done") {
-        resetGame();
+        resetGame(true);
         startCountDown();
     }
 }
