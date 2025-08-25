@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
     const gameInformation = document.getElementById('game_information');
-    const scoreBox = document.querySelector('.score-box');
-    const cardLabels = document.querySelectorAll('.card-label');
     const turn = document.getElementById('turn');
     //establish button for dealing the cards
     const button = document.getElementById('deal');
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const yourcards = document.getElementById('your_cards');
     const currentscore = document.getElementById('current_score');
     const dealercards = document.getElementById('dealer_cards');
-    const dealerfirstcard = document.getElementById('dealer_first_card');
     const dealerscore = document.getElementById('dealer_score');
     const winorlose = document.getElementById('win_or_lose');
     const buttonSound = document.getElementById('button-sound');
@@ -22,11 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
     const settingsButton = document.getElementById('settings-button');
     const settingsMenu = document.getElementById('settings-menu');
-    const helpButton = document.getElementById('help-button');
     const musicVolumeSlider = document.getElementById('music-volume');
     const EffectsVolumeSlider = document.getElementById('effects-volume');
     const instructionsOverlay = document.getElementById('instructions-overlay');
     const closeInstructionsButton = document.getElementById('close-instructions');
+
+    button.classList.add('centered');
     
     //show theh instructions when the page loads
     instructionsOverlay.style.display = 'flex';
@@ -169,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let cards = [];
     let your_cards = [];
     let playerStay = false;
-    let dealerStay = false;
     let dealer_cards = [];
     let current_score = 0;
     let dealer_score = 0;
@@ -264,17 +261,12 @@ function createDeck() {
     }
     return newDeck;
 }
-let dealer_first_card = 0;
-let dealer_second_card = 0;
-let first_card = 0;
-let second_card = 0;
-
 
 //resetting game function for every new round
 function resetGame() {
-    const scoreBox = document.querySelector('.score-box');
+    const scoreBox = document.getElementById('score-box');
     if (scoreBox) scoreBox.style.display = 'none';
-    const resultBox = document.querySelector('.result-box');
+    const resultBox = document.getElementById('result-box');
     if (resultBox) resultBox.style.display = 'none';
     const cardLabels = document.querySelectorAll('.card-label');
     cardLabels.forEach(label => {
@@ -297,7 +289,6 @@ function resetGame() {
     current_score = 0;
     dealer_score = 0;
     win_or_lose = "";
-    button.classList.add('centered');
     blackjackState = "start";
 
     if (yourcards) yourcards.innerHTML = "";
@@ -686,9 +677,9 @@ function startGame() {
     } else {
         casino.pause();
     }
-    const scoreBox = document.querySelector('.score-box');
-    const resultBox = document.querySelector('.result-box');
+    const resultBox = document.getElementById('result-box');
     if(resultBox) resultBox.style.display = 'block';
+    const scoreBox = document.getElementById('score-box');
     if(scoreBox) scoreBox.style.display = 'block';
     const cardLabels = document.querySelectorAll('.card-label');
     cardLabels.forEach(label => {
@@ -704,15 +695,9 @@ function startGame() {
     button.classList.remove('centered');
     buttonStay.style.visibility = 'visible';
     //the dealer gets their cards
-    dealer_first_card = draw();
-    dealer_second_card = draw();
-    dealer_cards.push(dealer_first_card, dealer_second_card);
-    
-
     //you get your cards
-    first_card = draw();
-    second_card = draw();
-    your_cards.push(first_card, second_card);
+    dealer_cards.push(draw(), draw());
+    your_cards.push(draw(), draw());
 
     //update scores
     current_score = first_card + second_card;

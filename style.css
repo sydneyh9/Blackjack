@@ -603,7 +603,7 @@ button div {
     font-family: 'Neonderthaw', cursive;
     font-size: 2rem;
 }
-.result-box {
+#result-box {
     animation: glow 3s ease-in-out infinite;
     top: 80%;
     right: 0;
@@ -619,7 +619,7 @@ button div {
     box-shadow: 0 0 10px #ffd70099;
 }
 /*glowing box that displays the score */
-.score-box {
+#score-box {
     animation: glow 3s ease-in-out infinite;
     background-color: rgba(255,215, 0, 0.1);
     border: 2px solid #ffd700;
@@ -634,7 +634,7 @@ button div {
 }
 /*column positioning for score and result boxes */
 
-.score-box, .result-box {
+#score-box, #result-box {
     width: 100%;
     max-width: 350px;
     box-sizing: border-box;
