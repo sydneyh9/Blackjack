@@ -618,6 +618,7 @@ button div {
     flex-direction: column;
     box-shadow: 0 0 10px #ffd70099;
 }
+
 /*glowing box that displays the score */
 #score-box {
     animation: glow 3s ease-in-out infinite;
