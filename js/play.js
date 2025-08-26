@@ -318,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
             buttonStay.style.visibility = 'hidden';
         }
         updateDisplay();
+        startCountDown();
     }
 
     //pulls new cards
@@ -334,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (current_score > 21) {
             //end the round and reveal the dealer's cards
             endRound("You went over. You Lose!");
+            playerStay = true;
             //round is over, reveal the dealer's cards
             finalizeDealerTurn();
             return;
@@ -347,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //dealer continues to hit until they hit a score of >= 17
     function dealerTurn() {
 
-        if (blackjackState === "done") return;
+        if (blackjackState === "done" || dealerStay) return;
         blackjackState = "dealer-turn";
         button.disabled = true;
         buttonStay.disabled = true;
@@ -591,7 +593,6 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCard();
         } else if (blackjackState === "done") {
             resetGame(true);
-            startCountDown();
         }
     }
 
@@ -608,6 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
         buttonStay.addEventListener('animationend', () => {
             buttonStay.classList.remove('spin');
         }, { once: true });
+        console.log("Stay clicked, state is:", blackjackState);
         if (blackjackState === "in-game") {
             playerStay = true;
             dealerTurn();
