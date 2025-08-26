@@ -3,7 +3,7 @@
 Blackjack (21)
 Author: Sydney Holland
 
-This is an ongoing Blackjack game written in Javascript. 
+This is an ongoing Blackjack game written in Javascript, HTML, and CSS. 
 
 House Rules:
 

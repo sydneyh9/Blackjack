@@ -1,3 +1,4 @@
+import { calculateScore, calculateGameResult } from "./score.js";
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
@@ -181,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         countdown.style.opacity = '0.6';
 
         button.disabled = true;
+        console.log("Disabling button for countdown");
         buttonStay.disabled = true;
 
         //buttons shouldn't be available during countdown
@@ -205,7 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     countdown.style.opacity = '0.6';
 
                     //unhide game information
-                    if (gameInformation) gameInformation.style.visibility = 'visible';
+                    if (gameInformation) {
+                        console.log("Game information visible");
+                        gameInformation.style.visibility = 'visible';
+                    }
 
                     //show and center deal button after countdown finishes
                     button.style.display = 'inline-block';
@@ -265,240 +270,161 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-//resetting game function for every new round
-function resetGame(isRestart = true) {
-    const gameInformation = document.getElementById('game_information');
-    if (isRestart) {
-        if(gameInformation) gameInformation.style.visibility = 'hidden';
-        const scoreBox = document.getElementById('score-box');
-    if (scoreBox) scoreBox.style.display = 'none';
-    const resultBox = document.getElementById('result-box');
-    if (resultBox) resultBox.style.display = 'none';
-    const cardLabels = document.querySelectorAll('.card-label');
-    cardLabels.forEach(label => {
-        label.style.display = 'none';
-    });
-    }
-    cards = createDeck();
-    your_cards = [];
-    dealer_cards = [];
-    first_card = 0;
-    second_card = 0;
-    dealer_first_card = 0;
-    playerStay = false;
-    dealerStay = false;
-    toggleMusicButton.disabled = true;
-    toggleSoundEffectButton.disabled = true;
-    dealer_second_card = 0;
-    current_score = 0;
-    dealer_score = 0;
-    win_or_lose = "";
-    blackjackState = "start";
+        //resetting game function for every new round
+        function resetGame(isRestart = true) {
+            const gameInformation = document.getElementById('game_information');
+            if (isRestart) {
+                if(gameInformation) gameInformation.style.visibility = 'hidden';
+                const scoreBox = document.getElementById('score-box');
+                if (scoreBox) scoreBox.style.display = 'none';
+                const resultBox = document.getElementById('result-box');
+                if (resultBox) resultBox.style.display = 'none';
+                const cardLabels = document.querySelectorAll('.card-label');
+                cardLabels.forEach(label => {
+                    label.style.display = 'none';
+                });
+            }
+        cards = createDeck();
+        your_cards = [];
+        dealer_cards = [];
+        first_card = 0;
+        second_card = 0;
+        dealer_first_card = 0;
+        playerStay = false;
+        dealerStay = false;
+        toggleMusicButton.disabled = true;
+        toggleSoundEffectButton.disabled = true;
+        dealer_second_card = 0;
+        current_score = 0;
+        dealer_score = 0;
+        win_or_lose = "";
+        blackjackState = "start";
 
-    if (yourcards) yourcards.innerHTML = "";
-    if (dealercards) dealercards.innerHTML = "";
-    if (currentscore) currentscore.textContent = "";
-    if (dealerscore) dealerscore.textContent = "";
-    if (winorlose) {
-        winorlose.textContent = "";
+        if (yourcards) yourcards.innerHTML = "";
+        if (dealercards) dealercards.innerHTML = "";
+        if (currentscore) currentscore.textContent = "";
+        if (dealerscore) dealerscore.textContent = "";
+        if (winorlose) {
+            winorlose.textContent = "";
+        }
+        if (button) {
+            button.setAttribute('data-label', 'Deal');
+            button.disabled = false;
+        }
+        if (buttonStay) {
+            //stay button should not be available at the start of the game
+            buttonStay.disabled = true;
+            /*hide stay button when reset */
+            buttonStay.style.visibility = 'hidden';
+        }
+        updateDisplay();
     }
-    if (button) {
-        button.setAttribute('data-label', 'Deal');
-        button.disabled = false;
+
+    //pulls new cards
+    function drawCard() {
+        if (blackjackState !== "in-game") {
+            return;
+        }
+        let newCard = draw();
+        if (!newCard) {
+            return;
+        }
+        your_cards.push(newCard);
+        current_score = calculateScore(your_cards);
+        if (current_score > 21) {
+            //end the round and reveal the dealer's cards
+            endRound("You went over. You Lose!");
+            //round is over, reveal the dealer's cards
+            finalizeDealerTurn();
+            return;
+        }
+        //keep them hidden
+        updateDisplay();
+        //dealer gets to take another turn after player draws
+        dealerTurn();
     }
-    if (buttonStay) {
-        //stay button should not be available at the start of the game
+
+    //dealer continues to hit until they hit a score of >= 17
+    function dealerTurn() {
+
+        if (blackjackState === "done") return;
+        blackjackState = "dealer-turn";
+        button.disabled = true;
         buttonStay.disabled = true;
-        /*hide stay button when reset */
-        buttonStay.style.visibility = 'hidden';
-    }
-    updateDisplay();
-}
-
-//pulls new cards
-function drawCard() {
-    if (blackjackState !== "in-game") {
-        return;
-    }
-    let newCard = draw();
-    if (!newCard) {
-        return;
-    }
-    your_cards.push(newCard);
-    current_score = calculateScore(your_cards);
-    if (current_score > 21) {
-        //end the round and reveal the dealer's cards
-        endRound("You went over. You Lose!");
-        //round is over, reveal the dealer's cards
-        finalizeDealerTurn();
-        return;
-    }
-    //keep them hidden
-    updateDisplay();
-    //dealer gets to take another turn after player draws
-    dealerTurn();
-}
-
-//dealer continues to hit until they hit a score of >= 17
-function dealerTurn() {
-
-    if (blackjackState === "done") return;
-    blackjackState = "dealer-turn";
-    button.disabled = true;
-    buttonStay.disabled = true;
     
-    //add up the dealer_score
-    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
-    //if the dealer's score is less than 17, it'll automatically draw another card
+        //add up the dealer_score
+        dealer_score = calculateScore(dealer_cards);
+        //if the dealer's score is less than 17, it'll automatically draw another card
 
-     if(dealer_score < 17) {
-            let card = draw();
-            dealer_cards.push(card);
+        if(dealer_score < 17) {
+                let card = draw();
+                dealer_cards.push(card);
             //update the display for the dealer cards
-            updateDisplay(true,true);
+                updateDisplay(true,true);
             //animate and then continue dealer turn
             //waits before the player gets their turn again to reduce abruptness
-            setTimeout(() => {
-                dealerTurn(); //continue dealer's turn
-            }, 1000); //delay next card draw by a second
-    } else {
-        dealerStay = true;
-        if (playerStay) {
-            finalizeDealerTurn(); //both stayed, so calculate the results
+                setTimeout(() => {
+                    dealerTurn(); //continue dealer's turn
+                }, 1000); //delay next card draw by a second
         } else {
-                blackjackState = "in-game";
-                button.disabled = false;
-                buttonStay.disabled = false;
-                updateDisplay(blackjackState === "done", false);
+            dealerStay = true;
+            if (playerStay) {
+                finalizeDealerTurn(); //both stayed, so calculate the results
+            } else {
+                    blackjackState = "in-game";
+                    button.disabled = false;
+                    buttonStay.disabled = false;
+                    updateDisplay(blackjackState === "done", false);
+            }
         }
     }
-}
 
-//play the dealer card draw animation
-//setting the drawing the next card for a 2 second delay
-function finalizeDealerTurn() {
-    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+    //play the dealer card draw animation
+    //setting the drawing the next card for a 2 second delay
+    function finalizeDealerTurn() {
+        dealer_score = calculateScore(dealer_cards);
 
-    updateDisplay(true,true);
+        updateDisplay(true,true);
 
-    const dealerCardElement = dealercards.querySelectorAll('.card');
-    const firstDealerCard = dealerCardElement[0];
+        const dealerCardElement = dealercards.querySelectorAll('.card');
+        const firstDealerCard = dealerCardElement[0];
         
-    if (firstDealerCard) {
-            firstDealerCard.classList.remove('flipped');
-            setTimeout(() => {
-                calculateGameResult();
-            }, 650);
-    } else {
-        calculateGameResult();
-    }
-}
-//function for handling whether the Ace is treated as a 1 or 11 value      
-function calculateScore(hand) {
-    let score = 0;
-    let aces = 0;
-    for (let card of hand) {
-        score += card.value;
-        if (card.rank === 'A') {
-            aces++;
-        }
-    }
-    //If the score is over 21, treat it as a 1
-    while (score > 21 && aces > 0) {
-        score -= 10;
-        aces--;
-    }
-    return score;
-}
-
-function calculateGameResult() {
-    if (dealer_score > 21 && current_score > 21) {
-        if (current_score < dealer_score) {
-            endRound("You both went over but you have the better hand! You win!");
+        if (firstDealerCard) {
+                firstDealerCard.classList.remove('flipped');
+                setTimeout(() => {
+                    const resultMessage = calculateGameResult(current_score, dealer_score);
+                    endRound(resultMessage);
+                }, 650);
         } else {
-            endRound("You both went over but the dealer has the better hand! Dealer wins.");
+            const resultMessage = calculateGameResult(current_score, dealer_score);
+            endRound(resultMessage);
         }
-    } else if (dealer_score > 21 && current_score <= 21) {
-        endRound("Dealer went over. You win!");
-    } else if (current_score > 21 && dealer_score <= 21) {
-        endRound("You went over! Dealer wins.");
-    } else if (dealer_score === current_score) {
-        endRound("Looks like you tied. It's a draw.");
-    } else if (current_score == 21) {
-        endRound("A perfect 21. You win!");
-    }  else if (dealer_score > current_score) {
-        endRound("Oh no! The dealer has a better hand. Dealer wins.");
-    } else {
-        endRound("You have a better hand! You win!");
     }
-}
 
-//updating the display 
-function updateDisplay(showDealer = false, animate = false) {
-    //empty container to house cards animation
-    yourcards.innerHTML = '';
+    //updating the display 
+    function updateDisplay(showDealer = false, animate = false) {
+        //empty container to house cards animation
+        yourcards.innerHTML = '';
 
-    const suitSymbols = {
-        'Hearts': '♥️',
-        'Diamonds': '♦️',
-        'Clubs': '♣️',
-        'Spades': '♠️'
-    };
+        const suitSymbols = {
+            'Hearts': '♥️',
+            'Diamonds': '♦️',
+            'Clubs': '♣️',
+            'Spades': '♠️'
+        };
 
-    //create the cards based on what is drawn
-    your_cards.forEach((card, index) => {
-        //container for card
-        const cardContainer = document.createElement('div');
-        cardContainer.className = 'card-container';
-        //creation of card
-        const cardElement = document.createElement('div');
-        cardElement.className = 'card';
-        //card text
-        const front = document.createElement('div');
-        front.className = 'card-front';
-
-        const suitSymbol = suitSymbols[card.suit];
-        const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
-
-        front.innerHTML = `
-        <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
-        <div class="card-center"> ${suitSymbol}</div>
-        <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
-
-        front.classList.add(isRed ? 'red-card' : 'black-card');
-
-        const back = document.createElement('div');
-        back.className = 'card-back';
-        back.textContent = '?';
-
-        cardElement.appendChild(front);
-        cardElement.appendChild(back);
-        cardContainer.appendChild(cardElement);
-        if (animate && index === your_cards.length - 1) {
-            cardContainer.classList.add('swipe-in');
-            cardContainer.addEventListener('animationend', () => {
-                cardContainer.classList.remove('swipe-in');
-            }, { once: true });
-        }
-        yourcards.appendChild(cardContainer);
-    });
-    current_score = calculateScore(your_cards);
-    currentscore.textContent = `Current Score: ${current_score}`;
-    //empty container to house dealer cards animation
-    dealercards.innerHTML = '';
-    if (dealer_cards.length === 0) {
-        dealerscore.textContent = "";
-    } else if (showDealer && blackjackState === "done") {
-        dealer_cards.forEach((card, index) => {
+        //create the cards based on what is drawn
+        your_cards.forEach((card, index) => {
+            //container for card
             const cardContainer = document.createElement('div');
-            //only plays if we're not finished the round
             cardContainer.className = 'card-container';
+            //creation of card
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
-            //card front
+            //card text
             const front = document.createElement('div');
             front.className = 'card-front';
-            
+
             const suitSymbol = suitSymbols[card.suit];
             const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
 
@@ -508,203 +434,252 @@ function updateDisplay(showDealer = false, animate = false) {
             <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
 
             front.classList.add(isRed ? 'red-card' : 'black-card');
-            //card back
+
             const back = document.createElement('div');
             back.className = 'card-back';
             back.textContent = '?';
+
             cardElement.appendChild(front);
             cardElement.appendChild(back);
             cardContainer.appendChild(cardElement);
-            if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn" && blackjackState !== "done") {
-                //swipe in animation triggered
+            if (animate && index === your_cards.length - 1) {
                 cardContainer.classList.add('swipe-in');
                 cardContainer.addEventListener('animationend', () => {
                     cardContainer.classList.remove('swipe-in');
                 }, { once: true });
-            } 
+            }
+            yourcards.appendChild(cardContainer);
+        });
+        current_score = calculateScore(your_cards);
+        currentscore.textContent = `Current Score: ${current_score}`;
+        //empty container to house dealer cards animation
+        dealercards.innerHTML = '';
+        if (dealer_cards.length === 0) {
+            dealerscore.textContent = "";
+        } else if (showDealer && blackjackState === "done") {
+            dealer_cards.forEach((card, index) => {
+                const cardContainer = document.createElement('div');
+                //only plays if we're not finished the round
+                cardContainer.className = 'card-container';
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                //card front
+                const front = document.createElement('div');
+                front.className = 'card-front';
+            
+                const suitSymbol = suitSymbols[card.suit];
+                const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
 
-            //when the slide in ends, add flipped animation
-            //if it's the dealer's turn, do the same to its animations else {
+                front.innerHTML = `
+                <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
+                <div class="card-center"> ${suitSymbol}</div>
+                <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
+
+                front.classList.add(isRed ? 'red-card' : 'black-card');
+                //card back
+                const back = document.createElement('div');
+                back.className = 'card-back';
+                back.textContent = '?';
+                cardElement.appendChild(front);
+                cardElement.appendChild(back);
+                cardContainer.appendChild(cardElement);
+                if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn" && blackjackState !== "done") {
+                    //swipe in animation triggered
+                    cardContainer.classList.add('swipe-in');
+                    cardContainer.addEventListener('animationend', () => {
+                        cardContainer.classList.remove('swipe-in');
+                    }, { once: true });
+                } 
+
+                //when the slide in ends, add flipped animation
+                //if it's the dealer's turn, do the same to its animations else {
+                dealercards.appendChild(cardContainer);
+            });
+
+            //after the dealer's turn is over, show the first card
+            if (blackjackState === "done") {
+                const dealerCardElements = dealercards.querySelectorAll('.card');
+                const firstDealerCard = dealerCardElements[0];
+                if (firstDealerCard) {
+                    firstDealerCard.classList.remove('flipped'); ///reveal the first card
+                }
+            }
+            //calculate and display dealer's score
+            dealer_score = calculateScore(dealer_cards);
+            dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
+        } else {
+
+            //creates dealer cards images and only shows the second card onward
+            dealer_cards.forEach((card, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'card-container';
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+
+                const front = document.createElement('div');
+                front.className = 'card-front';
+            
+                const suitSymbol = suitSymbols[card.suit];
+                const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
+
+                front.innerHTML = `
+                <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
+                <div class="card-center"> ${suitSymbol}</div>
+                <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
+
+                front.classList.add(isRed ? 'red-card' : 'black-card');
+
+                const back = document.createElement('div');
+                back.className = 'card-back';
+                back.textContent = '?';
+
+                cardElement.appendChild(front);
+                cardElement.appendChild(back);
+            
+                //if it's the dealer's turn, do the same to its animations
+
+                cardContainer.appendChild(cardElement);
+                if (index == 0) {
+                    cardElement.classList.add('flipped');
+                }
+                if (animate) {
+                    cardContainer.classList.add('swipe-in');
+                    cardContainer.addEventListener('animationend', () => {
+                        cardContainer.classList.remove('swipe-in');
+            }, {once:true});
+        } 
             dealercards.appendChild(cardContainer);
         });
-
-        //after the dealer's turn is over, show the first card
-        if (blackjackState === "done") {
-            const dealerCardElements = dealercards.querySelectorAll('.card');
-            const firstDealerCard = dealerCardElements[0];
-            if (firstDealerCard) {
-                firstDealerCard.classList.remove('flipped'); ///reveal the first card
-            }
+            //hides the first card in the dealer's cards from the player
+            const visibleCards = dealer_cards.slice(1);
+            const visibleScore = calculateScore(visibleCards);
+            dealerscore.textContent = `Dealer's Score: ? + ${visibleScore}`;
         }
-        //calculate and display dealer's score
-        dealer_score = calculateScore(dealer_cards);
-        dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
-    } else {
+        winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
 
-        //creates dealer cards images and only shows the second card onward
-        dealer_cards.forEach((card, index) => {
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'card-container';
-            const cardElement = document.createElement('div');
-            cardElement.className = 'card';
-
-            const front = document.createElement('div');
-            front.className = 'card-front';
-            
-            const suitSymbol = suitSymbols[card.suit];
-            const isRed = card.suit === 'Hearts' || card.suit === 'Diamonds';
-
-            front.innerHTML = `
-            <div class="card-corner top-left"> ${card.rank} <br> ${suitSymbol}</div>
-            <div class="card-center"> ${suitSymbol}</div>
-            <div class="card-corner bottom-right"> ${card.rank}<br> ${suitSymbol}</div>`;
-
-            front.classList.add(isRed ? 'red-card' : 'black-card');
-
-            const back = document.createElement('div');
-            back.className = 'card-back';
-            back.textContent = '?';
-
-            cardElement.appendChild(front);
-            cardElement.appendChild(back);
-            
-            //if it's the dealer's turn, do the same to its animations
-
-            cardContainer.appendChild(cardElement);
-            if (index == 0) {
-                cardElement.classList.add('flipped');
+        if (turn) {
+            if (blackjackState === "in-game") {
+                turn.textContent = "Your turn.";
+            } else if (blackjackState === "dealer-turn") {
+                turn.textContent = "Dealer's turn.";
+            } else if (blackjackState === "done") {
+                turn.textContent = "Game over.";
+            } else {
+                turn.textContent = "";
             }
-            if (animate) {
-                cardContainer.classList.add('swipe-in');
-                cardContainer.addEventListener('animationend', () => {
-                    cardContainer.classList.remove('swipe-in');
-        }, {once:true});
-    } 
-        dealercards.appendChild(cardContainer);
-    });
-        //hides the first card in the dealer's cards from the player
-        const visibleCards = dealer_cards.slice(1);
-        const visibleScore = calculateScore(visibleCards);
-        dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
-    }
-    winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
-
-    if (turn) {
-        if (blackjackState === "in-game") {
-            turn.textContent = "Your turn.";
-        } else if (blackjackState === "dealer-turn") {
-            turn.textContent = "Dealer's turn.";
-        } else if (blackjackState === "done") {
-            turn.textContent = "Game over.";
-        } else {
-            turn.textContent = "";
-        }
         
+        }
     }
-}
 
-//function for the deal button click
-function onButtonClick() {
-    //if the sound effects are enabled, fun wheel spin sound for buttons
-    if (soundEffectEnabled) {
-        buttonSound.play().catch(err => {
-            console.log("Failed to play button sound:", err);
+    //function for the deal button click
+    function onButtonClick() {
+        //if the sound effects are enabled, fun wheel spin sound for buttons
+        if (soundEffectEnabled) {
+            buttonSound.play().catch(err => {
+                console.log("Failed to play button sound:", err);
+            });
+        }
+        //fun spin animation for when buttons are clicked
+        button.classList.add('spin');
+        button.addEventListener('animationend', () => {
+            button.classList.remove('spin');
+        }, { once: true });
+
+        if(blackjackState === "start") {
+            startCountDown();
+        } else if (blackjackState === "in-game") {
+            drawCard();
+        } else if (blackjackState === "done") {
+            resetGame(true);
+            startCountDown();
+        }
+    }
+
+    //function for the player to have a stay option
+    function onStayClick() {
+        //if sound effects enabled, fun wheel spin sound for buttons
+        if (soundEffectEnabled) {
+            buttonSound.play().catch(err => {
+                console.log("Failed to play button sound:", err);
+            });
+        }
+        //fun spin animation for when buttons are clicked
+        buttonStay.classList.add('spin');
+        buttonStay.addEventListener('animationend', () => {
+            buttonStay.classList.remove('spin');
+        }, { once: true });
+        if (blackjackState === "in-game") {
+            playerStay = true;
+            dealerTurn();
+        }
+    }
+
+    //function for the player clicking settings
+    function onSettingsClick() {
+        settingsButton.classList.add('spin');
+        settingsButton.addEventListener('animationend', () => {
+            settingsButton.classList.remove('spin');
+        }, { once: true});
+    }
+
+    //function for starting the game
+    function startGame() {
+        if (musicEnabled) {
+            backgroundMusic.play().catch(err => {
+                console.log("Background music is not playing: ", err);
+            });
+        } else {
+            backgroundMusic.pause();
+        }
+
+        if (soundEffectEnabled) {
+            casino.play().catch(err => {
+                console.log("Background ambience is not playing: ", err);
+            });
+        } else {
+            casino.pause();
+        }
+        const resultBox = document.getElementById('result-box');
+        if(resultBox) {
+            console.log("Result box displayed");
+            resultBox.style.display = 'block' ;
+        }
+        const scoreBox = document.getElementById('score-box');
+        if(scoreBox) {
+            console.log("Score box displayed");
+            scoreBox.style.display = 'block';
+        }
+        const cardLabels = document.querySelectorAll('.card-label');
+        cardLabels.forEach(label => {
+            label.style.display = 'block';
         });
-    }
-    //fun spin animation for when buttons are clicked
-    button.classList.add('spin');
-    button.addEventListener('animationend', () => {
-        button.classList.remove('spin');
-    }, { once: true });
+        blackjackState = "in-game";
+        button.setAttribute('data-label', 'Deal');
+        button.disabled = false;
+        buttonStay.disabled = false;
+        toggleMusicButton.disabled = false;
+        toggleSoundEffectButton.disabled = false;
+        button.classList.remove('centered');
+        buttonStay.style.visibility = 'visible';
+        //the dealer gets their cards
+        //you get your cards
+        dealer_cards.push(draw(), draw());
+        your_cards.push(draw(), draw());
 
-    if(blackjackState === "start") {
-        startCountDown();
-    } else if (blackjackState === "in-game") {
-        drawCard();
-    } else if (blackjackState === "done") {
-        resetGame(true);
-        startCountDown();
-    }
-}
+        //update scores
+        current_score = calculateScore(your_cards);
+        console.log(current_score);
 
-//function for the player to have a stay option
-function onStayClick() {
-    //if sound effects enabled, fun wheel spin sound for buttons
-    if (soundEffectEnabled) {
-        buttonSound.play().catch(err => {
-            console.log("Failed to play button sound:", err);
-        });
-    }
-    //fun spin animation for when buttons are clicked
-    buttonStay.classList.add('spin');
-    buttonStay.addEventListener('animationend', () => {
-        buttonStay.classList.remove('spin');
-    }, { once: true });
-    if (blackjackState === "in-game") {
-        playerStay = true;
-        dealerTurn();
-    }
-}
+        updateDisplay(false, true);
 
-//function for the player clicking settings
-function onSettingsClick() {
-    settingsButton.classList.add('spin');
-    settingsButton.addEventListener('animationend', () => {
-        settingsButton.classList.remove('spin');
-    }, { once: true});
-}
-
-//function for starting the game
-function startGame() {
-    if (musicEnabled) {
-        backgroundMusic.play().catch(err => {
-            console.log("Background music is not playing: ", err);
-        });
-    } else {
-        backgroundMusic.pause();
     }
 
-    if (soundEffectEnabled) {
-        casino.play().catch(err => {
-            console.log("Background ambience is not playing: ", err);
-        });
-    } else {
-        casino.pause();
-    }
-    const resultBox = document.getElementById('result-box');
-    if(resultBox) resultBox.style.display = 'block';
-    const scoreBox = document.getElementById('score-box');
-    if(scoreBox) scoreBox.style.display = 'block';
-    const cardLabels = document.querySelectorAll('.card-label');
-    cardLabels.forEach(label => {
-        label.style.display = 'block';
-    });
-    blackjackState = "in-game";
-    button.setAttribute('data-label', 'Deal');
-    button.disabled = false;
-    buttonStay.disabled = false;
-    toggleMusicButton.disabled = false;
-    toggleSoundEffectButton.disabled = false;
-    button.classList.remove('centered');
-    buttonStay.style.visibility = 'visible';
-    //the dealer gets their cards
-    //you get your cards
-    dealer_cards.push(draw(), draw());
-    your_cards.push(draw(), draw());
+    //listener for button
+    button.addEventListener('click', onButtonClick);
+    buttonStay.addEventListener('click', onStayClick);
+    settingsButton.addEventListener('click', onSettingsClick);
 
-    //update scores
-    current_score = first_card + second_card;
-
-    updateDisplay(false, true);
-
-}
-
-//listener for button
-button.addEventListener('click', onButtonClick);
-buttonStay.addEventListener('click', onStayClick);
-settingsButton.addEventListener('click', onSettingsClick);
-
-//Initialize First Round
-resetGame();
+    //Initialize First Round
+    resetGame();
 
 });
