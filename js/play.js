@@ -1,49 +1,26 @@
+//play.js
 import { calculateScore, calculateGameResult } from "./score.js";
 import {initialAudioSettings} from './settings.js';
+import {initialInstructions} from './instructions.js';
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
     const gameInformation = document.getElementById('game_information');
     const turn = document.getElementById('turn');
-    //establish button for dealing the cards
-    const button = document.getElementById('deal');
     const buttonStay = document.getElementById('stay');
     const yourcards = document.getElementById('your_cards');
     const currentscore = document.getElementById('current_score');
     const dealercards = document.getElementById('dealer_cards');
     const dealerscore = document.getElementById('dealer_score');
     const winorlose = document.getElementById('win_or_lose');
-    const instructionsOverlay = document.getElementById('instructions-overlay');
-    const closeInstructionsButton = document.getElementById('close-instructions');
+    const button = document.getElementById('deal');
 
-    button.classList.add('centered');
-    
-    //show theh instructions when the page loads
-    instructionsOverlay.style.display = 'flex';
-
-    //hide it when the user clicks the close button
-    closeInstructionsButton.addEventListener('click', () => {
-        instructionsOverlay.style.display = 'none';
-    });
-
-    //when clicking help button, open instructions
-    document.getElementById("help-button").addEventListener("click", () => {
-        const instructions = document.getElementById("instructions-overlay");
-        if (instructions) {
-            instructions.style.display = instructions.style.display === "flex" ? "none" : "flex";
-        }
-    });
+    //instructions/help
+    initialInstructions();
 
     //initial audio and settings logic
     initialAudioSettings();
-    //if the user clicks outside of the instructions, it disappears and goes back to main game
-    //if user clicks outside of the settings box, it disappears and goes back to main game
-    instructionsOverlay.addEventListener('click', (event) => {
-        const instructionsBox = document.querySelector('.instructions-box');
-        if(instructionsOverlay.style.display === 'flex' && !instructionsBox.contains(event.target)) {
-            instructionsOverlay.style.display = 'none';
-        }
-    });
+
 
     document.getElementById("settings-button").addEventListener("click", () => {
         const overlay = document.getElementById("settings-overlay");
@@ -474,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //function for the deal button click
     function onButtonClick() {
+
         //if the sound effects are enabled, fun wheel spin sound for buttons
         if (soundEffectEnabled) {
             buttonSound.play().catch(err => {
