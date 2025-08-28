@@ -1,7 +1,7 @@
 //settings.js
 
-let musicEnabled = true;
-let soundEffectEnabled = true;
+export let musicEnabled = true;
+export let soundEffectEnabled = true;
 
 export function initialAudioSettings() {
     const backgroundMusic = document.getElementById('background-music');
@@ -109,4 +109,11 @@ export function initialAudioSettings() {
     });
 
 
+}
+//function for the player clicking settings
+export function onSettingsClick() {
+    settingsButton.classList.add('spin');
+    settingsButton.addEventListener('animationend', () => {
+        settingsButton.classList.remove('spin');
+    }, { once: true});
 }

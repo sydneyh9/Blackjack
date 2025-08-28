@@ -1,7 +1,8 @@
 //play.js
 import { calculateScore, calculateGameResult } from "./score.js";
-import {initialAudioSettings} from './settings.js';
+import {initialAudioSettings, soundEffectEnabled, musicEnabled, onSettingsClick} from './settings.js';
 import {initialInstructions} from './instructions.js';
+import { intializeButtons, button, buttonStay } from "./buttons.js";
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dealerscore = document.getElementById('dealer_score');
     const winorlose = document.getElementById('win_or_lose');
     const button = document.getElementById('deal');
+    const settingsButton = document.getElementById('settings-button');
 
     //instructions/help
     initialInstructions();
@@ -493,13 +495,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    //function for the player clicking settings
-    function onSettingsClick() {
-        settingsButton.classList.add('spin');
-        settingsButton.addEventListener('animationend', () => {
-            settingsButton.classList.remove('spin');
-        }, { once: true});
-    }
 
     //function for starting the game
     function startGame() {
