@@ -1,0 +1,152 @@
+/*instructions.css */
+
+/*Instructions overlay style */
+#instructions-overlay {
+    display: none;
+}
+
+
+#instructions-overlay.show {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/*help button style */
+/*help button styling */
+#help-button {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.2);
+    border: 2px solid white;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#help-button:hover {
+    background-color: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+/*Instructions box style */
+/*instructions styling */
+.instructions-box {
+    background: white;
+    color: black;
+    font-family: 'Georgia', serif;
+    padding: 40px 30px;
+    transform: scale(0.85);
+    transform-origin: center;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    position: relative;
+    width: 300px;
+    max-width: 90%;
+    border: 3px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 9999;
+    text-align: center;
+}
+
+.instructions-box::before,
+.instructions-box::after {
+    content: "Q♥️";
+    color: #d1171b;
+    position: absolute;
+    font-size: 35px;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+}
+
+.instructions-box::before {
+    top: 10px;
+    left: 10px;
+}
+
+.instructions-box::after {
+    bottom: 10px;
+    right: 10px;
+    transform: rotate(180deg);
+}
+
+.instructions-box h2 {
+    font-size: 1.8rem;
+    font-family: 'Neonderthaw', cursive;
+    margin-bottom: 0.5rem;
+}
+
+.instructions-box h3, .instructions-box h4 {
+    font-size: 1.4rem;
+    font-family: 'Neonderthaw', cursive;
+    margin-bottom: 0.1rem;
+}
+
+.instructions-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.instructions-box li {
+    margin: 0.3rem 0;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+/*Close Instructions Button style */
+/*For Mobile */
+#close-instructions {
+    background-color: #FFCCCB;
+    color: black;
+    font-family: 'Georgia', serif;
+    width: 140px;
+    height: 50px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+
+#close-instructions:hover {
+    transform: scale(1.05);
+}
+/* media query for size adjustments and font */
+
+@media (max-width: 600px) {
+    .instructions-box {
+        width: 90%;
+        padding: 30px 20px;
+        font-size: 0.9rem;
+        transform: scale(0.85);
+    }
+
+    .instructions-box h2 {
+        font-size: 1.5rem;
+    }
+    
+    .instructions-box li {
+        font-size: 0.85rem;
+    }
+
+    #close-instructions {
+        width: 120px;
+        height: 40px;
+        font-size: 14px;
+    }
+}

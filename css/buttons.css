@@ -1,0 +1,169 @@
+/*buttons.css */
+
+/*Button styling */
+button#deal .inner {
+    background: radial-gradient(circle at center, #a30000 100%);
+    z-index: 1;
+}
+
+button#stay .inner {
+    background: radial-gradient(circle at center, #800080 100%);
+    z-index: 10;
+}
+
+button .inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+.button-container{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+button#stay[disabled] {
+    /*hides stay button when disabled */
+    visibility: hidden;
+}
+
+button#deal {
+    padding: 0;
+    font-weight: bold;
+    border: none;
+    background: none;
+    transition: transform 0.6 ease;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    background:radial-gradient(circle at center, #a30000 100%);
+}
+button#stay {
+    padding: 0;
+    font-weight: bold;
+    background: radial-gradient(circle at center, #800080 100%);
+    border: none;
+    transition: transform 0.6 ease;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 0 0 10px #fff3;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/*animation to make the buttons pop up when pointer is hovering over them */
+button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+#deal:hover:not(:disabled) {
+    background-color: #f0c040;
+    cursor: pointer;
+}
+
+button#deal::before, button#stay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    border-radius: 50%;
+    mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
+    pointer-events: none;
+}
+
+button#deal::before {
+    background: 
+    conic-gradient(
+        #ffeded 0deg 10deg, #a30000 10deg 20deg, #ffeded 20deg 30deg, #a30000 30deg 40deg,
+        #ffeded 40deg 50deg, #a30000 50deg 60deg, #ffeded 60deg 70deg, #a30000 70deg 80deg,
+        #ffeded 80deg 90deg, #a30000 90deg 100deg, #ffeded 100deg 110deg, #a30000 110deg 120deg,
+        #ffeded 120deg 130deg, #a30000 130deg 140deg, #ffeded 140deg 150deg, #a30000 150deg 160deg, 
+        #ffeded 160deg 170deg, #a30000 170deg 180deg, #ffeded 180deg 190deg, #a30000 190deg 200deg,
+        #ffeded 200deg 210deg, #a30000 210deg 220deg,  #ffeded 220deg 230deg, #a30000 230deg 240deg,  
+        #ffeded 240deg 250deg, #a30000 250deg 260deg, #ffeded 260deg 270deg, #a30000 270deg 280deg, 
+        #ffeded 280deg 290deg, #a30000 290deg 300deg, #ffeded 300deg 310deg, #a30000 310deg 320deg, 
+        #ffeded 320deg 330deg, #a30000 330deg 340deg, #ffeded 340deg 350deg, #a30000 350deg 360deg
+    );
+}
+button#stay::before {
+    background: 
+    conic-gradient(
+        #ffeded 0deg 10deg, #800080 10deg 20deg, #ffeded 20deg 30deg, #800080 30deg 40deg,
+        #ffeded 40deg 50deg, #800080 50deg 60deg, #ffeded 60deg 70deg, #800080 70deg 80deg,
+        #ffeded 80deg 90deg, #800080 90deg 100deg, #ffeded 100deg 110deg, #800080 110deg 120deg,
+        #ffeded 120deg 130deg, #800080 130deg 140deg, #ffeded 140deg 150deg, #800080 150deg 160deg, 
+        #ffeded 160deg 170deg, #800080 170deg 180deg, #ffeded 180deg 190deg, #800080 190deg 200deg,
+        #ffeded 200deg 210deg, #800080 210deg 220deg,  #ffeded 220deg 230deg, #800080 230deg 240deg,  
+        #ffeded 240deg 250deg, #800080 250deg 260deg, #ffeded 260deg 270deg, #800080 270deg 280deg, 
+        #ffeded 280deg 290deg, #800080 290deg 300deg, #ffeded 300deg 310deg, #800080 310deg 320deg, 
+        #ffeded 320deg 330deg, #800080 330deg 340deg, #ffeded 340deg 350deg, #800080 350deg 360deg
+    );
+}
+button::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 15;
+    text-shadow: 0 0 2px black;
+    /*clicking on the button should go to the button */
+    pointer-events: none;
+    /*no selecting text on the button */
+    user-select: none;
+    /*no line breaks */
+    white-space: nowrap;
+}
+
+button:active, button:focus {
+    outline: none;
+    transform: none;
+    padding: 0;
+    font-size: 18px;
+}
+button div {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+}
+
+#deal.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+}
+button span {
+    position: absolute;
+    background: white;
+    width: 15px;
+    height: 35px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px white;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
