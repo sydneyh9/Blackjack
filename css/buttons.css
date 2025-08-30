@@ -82,7 +82,7 @@ button#deal::before, button#stay::before {
     content: "";
     position: absolute;
     inset: 0;
-    z-index: 15;
+    z-index: 0;
     border-radius: 50%;
     mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
     -webkit-mask: radial-gradient(circle, transparent 0% 65%, black 65% 100%);
@@ -126,7 +126,7 @@ button::after {
     color: white;
     font-weight: bold;
     font-size: 18px;
-    z-index: 15;
+    z-index: 0;
     text-shadow: 0 0 2px black;
     /*clicking on the button should go to the button */
     pointer-events: none;

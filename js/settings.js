@@ -3,6 +3,15 @@
 export let musicEnabled = true;
 export let soundEffectEnabled = true;
 
+export function playButtonSound() {
+    const buttonSound = document.getElementById("button-sound");
+    if (buttonSound) {
+        buttonSound.currentTime = 0;
+        buttonSound.play().catch(err => {
+            console.log("failed to play button sound", err);
+        });
+    }
+}
 export function initialAudioSettings() {
     const backgroundMusic = document.getElementById('background-music');
     const backgroundMusicSecond = document.getElementById('background-music-second');
@@ -15,6 +24,7 @@ export function initialAudioSettings() {
     const musicVolumeSlider = document.getElementById('music-volume');
     const effectsVolumeSlider = document.getElementById('effects-volume');
 
+
     //handle music volume
     musicVolumeSlider.addEventListener('input', () => {
         const volume = parseFloat(musicVolumeSlider.value);
@@ -23,7 +33,7 @@ export function initialAudioSettings() {
     });
     //handle sound effects volume
     effectsVolumeSlider.addEventListener('input', () => {
-        const volume = parseFloat(EffectsVolumeSlider.value);
+        const volume = parseFloat(effectsVolumeSlider.value);
         buttonSound.volume = volume;
         casino.volume = volume;
     });
@@ -111,7 +121,7 @@ export function initialAudioSettings() {
 
 }
 //function for the player clicking settings
-export function onSettingsClick() {
+export function onSettingsClick(settingsButton) {
     settingsButton.classList.add('spin');
     settingsButton.addEventListener('animationend', () => {
         settingsButton.classList.remove('spin');

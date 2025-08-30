@@ -2,7 +2,7 @@
 import { calculateScore, calculateGameResult } from "./score.js";
 import {initialAudioSettings, soundEffectEnabled, musicEnabled, onSettingsClick} from './settings.js';
 import {initialInstructions} from './instructions.js';
-import { intializeButtons, button, buttonStay } from "./buttons.js";
+import { handleDealClick, handleStayClick } from "./buttons.js";
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const winorlose = document.getElementById('win_or_lose');
     const button = document.getElementById('deal');
     const settingsButton = document.getElementById('settings-button');
+    const buttonSound = document.getElementById("button-sound");
+
 
     //instructions/help
     initialInstructions();
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //initial audio and settings logic
     initialAudioSettings();
 
+    settingsButton.addEventListener("click", () => onSettingsClick(settingsButton));
 
     document.getElementById("settings-button").addEventListener("click", () => {
         const overlay = document.getElementById("settings-overlay");
@@ -42,11 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let current_score = 0;
     let dealer_score = 0;
     let win_or_lose = "";
-    let blackjackState = "start";
+    //Making it so that buttons can see updates
+    let blackjackState = {value: "start"};
 
     function endRound(message) {
         win_or_lose = message;
-        blackjackState = "done";
+        blackjackState.value = "done";
         button.setAttribute('data-label', 'Restart');
         button.disabled = false;
         buttonStay.disabled = true;
@@ -176,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         current_score = 0;
         dealer_score = 0;
         win_or_lose = "";
-        blackjackState = "start";
+        blackjackState.value = "start";
 
         if (yourcards) yourcards.innerHTML = "";
         if (dealercards) dealercards.innerHTML = "";
@@ -201,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //pulls new cards
     function drawCard() {
-        if (blackjackState !== "in-game") {
+        if (blackjackState.value !== "in-game") {
             return;
         }
         let newCard = draw();
@@ -227,8 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //dealer continues to hit until they hit a score of >= 17
     function dealerTurn() {
 
-        if (blackjackState === "done" || dealerStay) return;
-        blackjackState = "dealer-turn";
+        if (blackjackState.value === "done" || dealerStay) return;
+        blackjackState.value = "dealer-turn";
         button.disabled = true;
         buttonStay.disabled = true;
     
@@ -251,10 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (playerStay) {
                 finalizeDealerTurn(); //both stayed, so calculate the results
             } else {
-                    blackjackState = "in-game";
+                    blackjackState.value = "in-game";
                     button.disabled = false;
                     buttonStay.disabled = false;
-                    updateDisplay(blackjackState === "done", false);
+                    updateDisplay(blackjackState.value === "done", false);
             }
         }
     }
@@ -336,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dealercards.innerHTML = '';
         if (dealer_cards.length === 0) {
             dealerscore.textContent = "";
-        } else if (showDealer && blackjackState === "done") {
+        } else if (showDealer && blackjackState.value === "done") {
             dealer_cards.forEach((card, index) => {
                 const cardContainer = document.createElement('div');
                 //only plays if we're not finished the round
@@ -363,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardElement.appendChild(front);
                 cardElement.appendChild(back);
                 cardContainer.appendChild(cardElement);
-                if(animate && index === dealer_cards.length - 1 && blackjackState === "dealer-turn" && blackjackState !== "done") {
+                if(animate && index === dealer_cards.length - 1 && blackjackState.value === "dealer-turn" && blackjackState !== "done") {
                     //swipe in animation triggered
                     cardContainer.classList.add('swipe-in');
                     cardContainer.addEventListener('animationend', () => {
@@ -377,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             //after the dealer's turn is over, show the first card
-            if (blackjackState === "done") {
+            if (blackjackState.value === "done") {
                 const dealerCardElements = dealercards.querySelectorAll('.card');
                 const firstDealerCard = dealerCardElements[0];
                 if (firstDealerCard) {
@@ -438,11 +442,11 @@ document.addEventListener('DOMContentLoaded', () => {
         winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
 
         if (turn) {
-            if (blackjackState === "in-game") {
+            if (blackjackState.value === "in-game") {
                 turn.textContent = "Your turn.";
-            } else if (blackjackState === "dealer-turn") {
+            } else if (blackjackState.value === "dealer-turn") {
                 turn.textContent = "Dealer's turn.";
-            } else if (blackjackState === "done") {
+            } else if (blackjackState.value === "done") {
                 turn.textContent = "Game over.";
             } else {
                 turn.textContent = "";
@@ -451,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    //function for the deal button click
+    /*//function for the deal button click
     function onButtonClick() {
 
         //if the sound effects are enabled, fun wheel spin sound for buttons
@@ -495,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
+*/
     //function for starting the game
     function startGame() {
         if (musicEnabled) {
@@ -527,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardLabels.forEach(label => {
             label.style.display = 'block';
         });
-        blackjackState = "in-game";
+        blackjackState.value = "in-game";
         button.setAttribute('data-label', 'Deal');
         button.disabled = false;
         buttonStay.disabled = false;
@@ -549,9 +553,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //listener for button
-    button.addEventListener('click', onButtonClick);
-    buttonStay.addEventListener('click', onStayClick);
-    settingsButton.addEventListener('click', onSettingsClick);
+    function setPlayerStay(value) {
+        playerStay = value;
+    }
+
+    //button listeners for buttons.js
+    button.addEventListener( "click", handleDealClick({
+        blackjackState,
+        startCountDown,
+        drawCard,
+        resetGame,
+    }));
+
+    buttonStay.addEventListener("click", handleStayClick({
+        blackjackState,
+        dealerTurn,
+        setPlayerStay,
+    }));
+
+    settingsButton.addEventListener("click", onSettingsClick);
 
     //Initialize First Round
     resetGame();
