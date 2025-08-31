@@ -2,9 +2,26 @@
 
 export let musicEnabled = true;
 export let soundEffectEnabled = true;
+export let backgroundMusic;
+export let backgroundMusicSecond;
+export let casino;
+export let buttonSound;
 
+export function getBackgroundMusic() {
+    return backgroundMusic;
+}
+
+export function getCasino() {
+    return casino;
+}
+
+export function isMusicEnabled() {
+    return musicEnabled;
+}
+export function isSoundEffectEnabled() {
+    return soundEffectEnabled;
+}
 export function playButtonSound() {
-    const buttonSound = document.getElementById("button-sound");
     if (buttonSound) {
         buttonSound.currentTime = 0;
         buttonSound.play().catch(err => {
@@ -13,10 +30,10 @@ export function playButtonSound() {
     }
 }
 export function initialAudioSettings() {
-    const backgroundMusic = document.getElementById('background-music');
-    const backgroundMusicSecond = document.getElementById('background-music-second');
-    const buttonSound = document.getElementById('button-sound');
-    const casino = document.getElementById('casino');
+    backgroundMusic = document.getElementById('background-music');
+    backgroundMusicSecond = document.getElementById('background-music-second');
+    buttonSound = document.getElementById('button-sound');
+    casino = document.getElementById('casino');
     const toggleMusicButton = document.getElementById('toggle-music');
     const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
     const settingsButton = document.getElementById('settings-button');
@@ -73,11 +90,7 @@ export function initialAudioSettings() {
     //buttons for the user to turn off music and ambience if they want
     toggleMusicButton.addEventListener('click', () => {
 
-       /* //don't allow toggling music before the game starts 
-        if (blackjackState === "start") {
-                console.log("Music can't be toggled until the game starts.");
-                return;
-            }*/
+        //don't allow toggling music before the game starts 
         musicEnabled = !musicEnabled;
     
         toggleMusicButton.classList.toggle('active', musicEnabled);

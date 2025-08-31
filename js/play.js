@@ -1,13 +1,18 @@
 //play.js
 import { calculateScore, calculateGameResult } from "./score.js";
-import {initialAudioSettings, soundEffectEnabled, musicEnabled, onSettingsClick} from './settings.js';
+//import {initialAudioSettings, soundEffectEnabled, musicEnabled, onSettingsClick, backgroundMusic, casino} from './settings.js';
 import {initialInstructions} from './instructions.js';
 import { handleDealClick, handleStayClick } from "./buttons.js";
+import {startCountDown} from './utils/startCountdown.js';
+import * as Settings from './settings.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
     const gameInformation = document.getElementById('game_information');
     const turn = document.getElementById('turn');
+    const toggleMusicButton = document.getElementById('toggle-music');
+    const toggleSoundEffectButton = document.getElementById('toggle-sound-effect');
     const buttonStay = document.getElementById('stay');
     const yourcards = document.getElementById('your_cards');
     const currentscore = document.getElementById('current_score');
@@ -23,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initialInstructions();
 
     //initial audio and settings logic
-    initialAudioSettings();
+    Settings.initialAudioSettings();
 
-    settingsButton.addEventListener("click", () => onSettingsClick(settingsButton));
+    settingsButton.addEventListener("click", () => Settings.onSettingsClick(settingsButton));
 
     document.getElementById("settings-button").addEventListener("click", () => {
         const overlay = document.getElementById("settings-overlay");
@@ -48,6 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     //Making it so that buttons can see updates
     let blackjackState = {value: "start"};
 
+    startCountDown({
+        countdown,
+        button,
+        buttonStay,
+        gameInformation,
+        startGame
+    });
+
     function endRound(message) {
         win_or_lose = message;
         blackjackState.value = "done";
@@ -57,56 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay(true, false);
     }
 
-    function startCountDown() {
-        let timeLeft = 3;
-        countdown.textContent = `${timeLeft}`;
-        countdown.style.visibility = 'visible';
-        countdown.style.opacity = '0.6';
-
-        button.disabled = true;
-        console.log("Disabling button for countdown");
-        buttonStay.disabled = true;
-
-        //buttons shouldn't be available during countdown
-        button.style.display = 'none';
-        buttonStay.style.display = 'none';
-
-        //hide the game information until the countdown ends
-        if (gameInformation) gameInformation.style.visibility = 'hidden';
-        //timer for countdown set up
-        const timerId = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-                countdown.textContent = `${timeLeft}`;
-            } else {
-                clearInterval(timerId);
-                countdown.textContent = "Let's play!";
-                setTimeout(() => {
-                    countdown.style.opacity = '0';
-                    setTimeout(() => {
-                    countdown.style.visibility = 'hidden';
-                    countdown.textContent = "";
-                    countdown.style.opacity = '0.6';
-
-                    //unhide game information
-                    if (gameInformation) {
-                        console.log("Game information visible");
-                        gameInformation.style.visibility = 'visible';
-                    }
-
-                    //show and center deal button after countdown finishes
-                    button.style.display = 'inline-block';
-                    buttonStay.style.display = 'inline-block';
-                    button.classList.add('centered');
-                    button.disabled = false;
-                    buttonStay.disabled = false;
-                    //start the game and undisable the buttons
-                    startGame();
-                }, 300);
-            }, 1000);
-        }
-        }, 1000);
-    }
     //my card deck
     function createDeck() {
         //funtion to create a new deck out of the following values to use for a new round
@@ -153,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         //resetting game function for every new round
-        function resetGame(isRestart = true) {
+        function resetGame(isRestart = true, shouldStartCountdown = false) {
             const gameInformation = document.getElementById('game_information');
             if (isRestart) {
                 if(gameInformation) gameInformation.style.visibility = 'hidden';
@@ -169,13 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
         cards = createDeck();
         your_cards = [];
         dealer_cards = [];
-        first_card = 0;
-        second_card = 0;
+       // first_card = 0;
+       // second_card = 0;
         dealer_first_card = 0;
         playerStay = false;
         dealerStay = false;
-        toggleMusicButton.disabled = true;
-        toggleSoundEffectButton.disabled = true;
+       // toggleMusicButton.disabled = true;
+        //toggleSoundEffectButton.disabled = true;
         dealer_second_card = 0;
         current_score = 0;
         dealer_score = 0;
@@ -200,9 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
             buttonStay.style.visibility = 'hidden';
         }
         updateDisplay();
-        startCountDown();
+        if (shouldStartCountdown){
+            startCountDown({
+                countdown,
+                button,
+                buttonStay,
+                gameInformation,
+                startGame
+        });
     }
-
+}
     //pulls new cards
     function drawCard() {
         if (blackjackState.value !== "in-game") {
@@ -455,67 +425,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /*//function for the deal button click
-    function onButtonClick() {
-
-        //if the sound effects are enabled, fun wheel spin sound for buttons
-        if (soundEffectEnabled) {
-            buttonSound.play().catch(err => {
-                console.log("Failed to play button sound:", err);
-            });
-        }
-        //fun spin animation for when buttons are clicked
-        button.classList.add('spin');
-        button.addEventListener('animationend', () => {
-            button.classList.remove('spin');
-        }, { once: true });
-
-        if(blackjackState === "start") {
-            startCountDown();
-        } else if (blackjackState === "in-game") {
-            drawCard();
-        } else if (blackjackState === "done") {
-            resetGame(true);
-        }
-    }
-
-    //function for the player to have a stay option
-    function onStayClick() {
-        //if sound effects enabled, fun wheel spin sound for buttons
-        if (soundEffectEnabled) {
-            buttonSound.play().catch(err => {
-                console.log("Failed to play button sound:", err);
-            });
-        }
-        //fun spin animation for when buttons are clicked
-        buttonStay.classList.add('spin');
-        buttonStay.addEventListener('animationend', () => {
-            buttonStay.classList.remove('spin');
-        }, { once: true });
-        console.log("Stay clicked, state is:", blackjackState);
-        if (blackjackState === "in-game") {
-            playerStay = true;
-            dealerTurn();
-        }
-    }
-
-*/
     //function for starting the game
     function startGame() {
-        if (musicEnabled) {
-            backgroundMusic.play().catch(err => {
+        if (Settings.isMusicEnabled()) {
+            Settings.getBackgroundMusic()?.play().catch(err => {
                 console.log("Background music is not playing: ", err);
             });
         } else {
-            backgroundMusic.pause();
+            Settings.getBackgroundMusic()?.pause();
         }
 
-        if (soundEffectEnabled) {
-            casino.play().catch(err => {
+        if (Settings.isSoundEffectEnabled()) {
+            Settings.casino.play().catch(err => {
                 console.log("Background ambience is not playing: ", err);
             });
         } else {
-            casino.pause();
+            Settings.casino.pause();
         }
         const resultBox = document.getElementById('result-box');
         if(resultBox) {
@@ -560,10 +485,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //button listeners for buttons.js
     button.addEventListener( "click", handleDealClick({
         blackjackState,
-        startCountDown,
-        drawCard,
-        resetGame,
-    }));
+        startCountDown: () => resetGame(true, true),
+        drawCard, 
+        resetGame
+        }));
 
     buttonStay.addEventListener("click", handleStayClick({
         blackjackState,
@@ -571,9 +496,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setPlayerStay,
     }));
 
-    settingsButton.addEventListener("click", onSettingsClick);
-
-    //Initialize First Round
-    resetGame();
+    settingsButton.addEventListener("click", Settings.onSettingsClick);
 
 });

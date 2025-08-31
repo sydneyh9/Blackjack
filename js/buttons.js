@@ -1,6 +1,6 @@
 //buttons.js
 import { soundEffectEnabled, playButtonSound } from "./settings.js";
-
+import { startCountDown} from './utils/startCountdown.js';
 //Spin animation
 function animateButton(button) {
     button.classList.add("spin");
@@ -8,14 +8,14 @@ function animateButton(button) {
 }
 
 //Deal button
-export function handleDealClick({blackjackState, startCountdown, drawCard, resetGame}) {
+export function handleDealClick({blackjackState, startCountDown, drawCard, resetGame}) {
     return function (e) {
         if (soundEffectEnabled) {
             playButtonSound();
         }
         animateButton(e.currentTarget);
         if (blackjackState.value === "start") {
-            startCountdown();
+            startCountDown();
         } else if (blackjackState.value === "in-game") {
             drawCard();
         } else if (blackjackState.value === "done") {
