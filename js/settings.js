@@ -11,9 +11,15 @@ const toggleSoundBtn = document.getElementById('toggle-sound-effect');
 const musicVolumeSlider = document.getElementById('music-volume');
 const soundVolumeSlider = document.getElementById('effects-volume');
 
+toggleMusicBtn.setAttribute('aria-pressed', 'true');
+toggleMusicBtn.textContent = "Music On";
+
+toggleSoundBtn.setAttribute('aria-pressed','true');
+toggleSoundBtn.textContent = "Sound Effects On";
+
 toggleMusicBtn.addEventListener('click', () => {
     const isEnabled = toggleMusicBtn.getAttribute('aria-pressed') === 'true';
-    toggleMusic(isEnabled);
+    toggleMusic(!isEnabled);
     toggleMusicBtn.setAttribute('aria-pressed', (!isEnabled).toString());
     toggleMusicBtn.textContent = !isEnabled ? "Music On" : "Music Off";
 });
@@ -44,5 +50,11 @@ helpButton.addEventListener('click', () => {
 settingsOverlay.addEventListener('click', (e) => {
     if (e.target.id === 'settings-overlay') {
         settingsOverlay.classList.remove('show');
+    }
+});
+
+instructionsOverlay.addEventListener('click', (e) => {
+    if (e.target === instructionsOverlay) {
+        instructionsOverlay.style.display = 'none';
     }
 });
