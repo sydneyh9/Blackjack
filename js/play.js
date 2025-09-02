@@ -1,7 +1,7 @@
 //play.js
 
 import { createDeck } from "./deck.js";
-import { resetGame, startGame, drawCard, dealerTurn, blackjackState, playerStay } from "./game.js";
+import { resetGame, startGame, drawCard, dealerTurn, blackjackState, playerStay, gameState } from "./game.js";
 import { updateDisplay, startCountDown, showInstructions } from "./ui.js";
 import {playButtonSound} from './audio.js';
 import './settings.js';
@@ -25,7 +25,7 @@ closeInstructionsBtn.addEventListener("click", () => {
 
 dealBtn.addEventListener("click", () => {
     playButtonSound();
-    if (blackjackState === "start") {
+    if (gameState.blackjackState === "start") {
         //prepare deck
         resetGame(createDeck, () => { dealBtn.style.display = "block";});
         dealBtn.disabled = true;
@@ -36,9 +36,9 @@ dealBtn.addEventListener("click", () => {
             stayBtn.disabled = false;
             toggleMusic(true);
     });
-    } else if (blackjackState === "in-game") {
+    } else if (gameState.blackjackState === "in-game") {
         drawCard();
-    } else if (blackjackState === "done") {
+    } else if (gameState.blackjackState === "done") {
         resetGame(createDeck, updateDisplay);
         startCountDown(() => startGame());
     }
@@ -46,10 +46,11 @@ dealBtn.addEventListener("click", () => {
 
 stayBtn.addEventListener("click", () => {
     playButtonSound();
-    if (blackjackState === "in-game") {
-        playerStay = true;
+    if (gameState.blackjackState === "in-game") {
+        gameState.playerStay = true;
         dealerTurn();
         stayBtn.disabled = true;
+        updateDisplay(true,true);
     }
 });
 
