@@ -13,6 +13,21 @@ export let playerStay = false;
 export let dealerStay = false;
 export let win_or_lose = "";
 
+export function startGame() {
+    blackjackState = "in-game";
+
+    //gives two cards to the dealer and two to the player
+    dealer_cards.push(draw(cards), draw(cards));
+    your_cards.push(draw(cards), draw(cards));
+
+    //reset the scores
+    current_score = calculateScore(your_cards);
+    dealer_score = calculateScore(dealer_cards);
+
+    //update the board: hiding the dealer's first card and animate deal button
+    updateDisplay(false, true);
+}
+
 export function resetGame(deckCreator, toggleButtons) {
     cards = deckCreator();
     your_cards = [];

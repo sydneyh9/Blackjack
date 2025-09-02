@@ -2,11 +2,11 @@
 
 /*Instructions overlay style */
 #instructions-overlay {
-    display: none;
+    display: flex;
 }
 
 
-#instructions-overlay.show {
+#instructions-overlay{
     justify-content: center;
     align-items: center;
     display: flex;
