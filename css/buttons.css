@@ -2,7 +2,7 @@
 
 /*Button styling */
 button#deal .inner {
-    background: radial-gradient(circle at center, #a30000 100%);
+    /*background: radial-gradient(circle at center, #a30000 100%);*/
     z-index: 1;
 }
 

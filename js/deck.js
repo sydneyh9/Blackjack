@@ -1,5 +1,5 @@
 //deck.js
-
+  //my card deck
 export function createDeck() {
     const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
     const ranks = [
@@ -17,24 +17,19 @@ export function createDeck() {
         { rank: 'Q', value: 10 },
         { rank: 'K', value: 10 }
     ];
-    const newDeck = [];
+    const deck = [];
     //deck is now constructed of suits and ranks like typical blackjack
     for (let suit of suits) {
-        for (let rankObject of ranks) {
-            newDeck.push({
-                suit: suit,
-                rank: rankObject.rank,
-                value: rankObject.value
-            });
+        for (let rank of ranks) {
+            deck.push({ suit: suit, rank: rank.rank, value: rank.value });
         }
     }
-    return newDeck;
+    return deck;
 }
 
+//pulls a random card from the pile and removes it from the deck as per house rules
 export function draw(deck) {
-    if (deck.length === 0) {
-        return null;
-    }
+    if (deck.length === 0) return null;
     const index = Math.floor(Math.random() * deck.length);
     return deck.splice(index, 1)[0];
 }

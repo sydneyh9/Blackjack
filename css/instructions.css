@@ -2,26 +2,21 @@
 
 /*Instructions overlay style */
 #instructions-overlay {
-    display: flex;
-}
-
-
-#instructions-overlay{
+    display: none;
     justify-content: center;
     align-items: center;
-    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     background-color: rgba(0,0,0,0.7);
-    justify-content: center;
-    align-items: center;
-    display: flex;
     z-index: 9998;
 }
-
+#instructions-overlay.show {
+    display: flex;
+    animation: fadeIn 0.25s ease forwards;
+}
 /*help button style */
 /*help button styling */
 #help-button {
@@ -81,6 +76,7 @@
     font-size: 35px;
     font-family: 'Georgia', serif;
     font-weight: bold;
+    pointer-events: none;
 }
 
 .instructions-box::before {
@@ -130,7 +126,7 @@
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 #close-instructions:hover {
@@ -159,4 +155,9 @@
         height: 40px;
         font-size: 14px;
     }
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
