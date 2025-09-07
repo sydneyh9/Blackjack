@@ -60,7 +60,6 @@
     background-image: radial-gradient(circle at center, rgba(255,255,255,0.05) 2px, transparent 3px), repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 10px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 10px),
     linear-gradient(to bottom, #a30000, #660000);
     background-size: 20px 20px, 10px 10px, 10px 10px, 100% 100%; /*dots, diagonal lines, cross lines, and base */
-    /*background-blend-mode: overlay;*/
 }
 .card-label {
     font-family: 'Neonderthaw', cursive;
@@ -145,4 +144,9 @@
     .black-title, .jack-title {
         font-size: 3rem;
     }
+}
+
+.dealer-card {
+    pointer-events: none;
+    cursor: default;
 }

@@ -2,12 +2,10 @@
 
 /*Button styling */
 button#deal .inner {
-    /*background: radial-gradient(circle at center, #a30000 100%);*/
     z-index: 1;
 }
 
 button#stay .inner {
-    background: radial-gradient(circle at center, #800080 100%);
     z-index: 10;
 }
 

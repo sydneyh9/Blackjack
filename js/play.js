@@ -1,6 +1,15 @@
 //play.js
 import { draw, createDeck } from './deck.js';
 document.addEventListener('DOMContentLoaded', () => {
+    let cards = [];
+    let your_cards = [];
+    let dealer_cards = [];
+    let current_score = 0;
+    let dealer_score = 0;
+    let win_or_lose = "";
+    let blackjackState = "start";
+    let playerStay = false;
+    let dealerStay = false;
     const countdown = document.getElementById('countdown');
     //basic game elements declarations
     const gameInformation = document.getElementById('game_information');
@@ -158,14 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
             casino.pause();
         }
     });
-    let cards = [];
-    let your_cards = [];
-    let playerStay = false;
-    let dealer_cards = [];
-    let current_score = 0;
-    let dealer_score = 0;
-    let win_or_lose = "";
-    let blackjackState = "start";
 
     function endRound(message) {
         win_or_lose = message;
@@ -240,14 +241,10 @@ function resetGame(isRestart = true) {
     cards = createDeck();
     your_cards = [];
     dealer_cards = [];
-    first_card = 0;
-    second_card = 0;
-    dealer_first_card = 0;
     playerStay = false;
     dealerStay = false;
     toggleMusicButton.disabled = true;
     toggleSoundEffectButton.disabled = true;
-    dealer_second_card = 0;
     current_score = 0;
     dealer_score = 0;
     win_or_lose = "";
@@ -306,11 +303,11 @@ function dealerTurn() {
     buttonStay.disabled = true;
     
     //add up the dealer_score
-    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+    dealer_score = calculateScore(dealer_cards);
     //if the dealer's score is less than 17, it'll automatically draw another card
 
      if(dealer_score < 17) {
-            let card = draw();
+            let card = draw(cards);
             dealer_cards.push(card);
             //update the display for the dealer cards
             updateDisplay(true,true);
@@ -335,7 +332,7 @@ function dealerTurn() {
 //play the dealer card draw animation
 //setting the drawing the next card for a 2 second delay
 function finalizeDealerTurn() {
-    dealer_score = dealer_cards.reduce((a,b) => a + b, 0);
+    dealer_score = calculateScore(dealer_cards);
 
     updateDisplay(true,true);
 
@@ -529,7 +526,7 @@ function updateDisplay(showDealer = false, animate = false) {
 
             cardContainer.appendChild(cardElement);
             if (index == 0) {
-                cardElement.classList.add('flipped');
+                cardElement.classList.add('flipped', 'dealer-card');
             }
             if (animate) {
                 cardContainer.classList.add('swipe-in');
@@ -549,10 +546,17 @@ function updateDisplay(showDealer = false, animate = false) {
     if (turn) {
         if (blackjackState === "in-game") {
             turn.textContent = "Your turn.";
+            button.disabled = false;
+            buttonStay.disabled = false;
+            buttonStay.style.visibility = 'visible';
         } else if (blackjackState === "dealer-turn") {
             turn.textContent = "Dealer's turn.";
+            button.disabled = true;
+            buttonStay.disabled = true;
         } else if (blackjackState === "done") {
             turn.textContent = "Game over.";
+            button.disabled = false;
+            buttonStay.disabled = true;
         } else {
             turn.textContent = "";
         }
@@ -650,7 +654,7 @@ function startGame() {
     your_cards.push(draw(cards), draw(cards));
 
     //update scores
-    current_score = first_card + second_card;
+    current_score = calculateScore(your_cards);
 
     updateDisplay(false, true);
 
@@ -662,6 +666,7 @@ buttonStay.addEventListener('click', onStayClick);
 settingsButton.addEventListener('click', onSettingsClick);
 
 //Initialize First Round
-resetGame();
-
+setTimeout(() => {
+    resetGame();
+}, 0);
 });
