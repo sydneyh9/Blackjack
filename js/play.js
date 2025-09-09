@@ -3,10 +3,12 @@ import { draw, createDeck } from './deck.js';
 import { playButtonSound, startGameAudio } from './audio.js';
 import { UserManager } from './user.js';
 import { InstructionsManager } from './instructions.js';
+import {SettingsManager} from './settings.js';
 document.addEventListener('DOMContentLoaded', () => {
     const userManager = new UserManager();
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
+    const settingsManager = new SettingsManager();
 
     //login logic
     document.getElementById("login-button").addEventListener("click", () => {
@@ -14,9 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userManager.login(username)) {
             currentUser = username;
             document.getElementById("login-container").style.display = "none";
-            alert(`Welcome, ${username}!`);
+            alert(`${settingsManager.t('welcome')}, ${username}!`);
         }
     });
+
 
 
     let cards = [];
@@ -42,38 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const dealercards = document.getElementById('dealer_cards');
     const dealerscore = document.getElementById('dealer_score');
     const winorlose = document.getElementById('win_or_lose');
-    const settingsButton = document.getElementById('settings-button');
-    const settingsMenu = document.getElementById('settings-menu');
 
     button.classList.add('centered');
-
-    //toggle visibility of the settings menu
-    settingsButton.addEventListener('click', () => {
-        settingsMenu.classList.toggle('show');
-    });
-
-    //if user clicks outside of the settings box, it disappears and goes back to main game
-    document.addEventListener('click', (event) => {
-        if (!settingsButton.contains(event.target) && !settingsMenu.contains(event.target)) {
-            settingsMenu.classList.remove('show');
-        }
-    });
-
-    document.getElementById("settings-button").addEventListener("click", () => {
-        const overlay = document.getElementById("settings-overlay");
-        overlay.classList.toggle("show");
-    });
-
-    document.getElementById("settings-overlay").addEventListener("click", (e) => {
-        if (e.target.id === "settings-overlay") {
-            e.target.classList.remove("show");
-        }
-    });
 
     function endRound(message) {
         win_or_lose = message;
         blackjackState = "done";
-        button.setAttribute('data-label', 'Restart');
+        button.setAttribute('data-label', settingsManager.t('deal'));
         button.disabled = false;
         buttonStay.disabled = true;
         updateDisplay(true, false);
@@ -107,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 countdown.textContent = `${timeLeft}`;
             } else {
                 clearInterval(timerId);
-                countdown.textContent = "Let's play!";
+                countdown.textContent = settingsManager.t('deal');
                 setTimeout(() => {
                     countdown.style.opacity = '0';
                     countdown.style.visibility = 'hidden';
@@ -189,7 +167,7 @@ function drawCard() {
     current_score = calculateScore(your_cards);
     if (current_score > 21) {
         //end the round and reveal the dealer's cards
-        endRound("You went over. You Lose!");
+        endRound(settingsManager.t('over21'));
         //round is over, reveal the dealer's cards
         finalizeDealerTurn();
         return;
@@ -258,22 +236,22 @@ function finalizeDealerTurn() {
 function calculateGameResult() {
     if (dealer_score > 21 && current_score > 21) {
         if (current_score < dealer_score) {
-            endRound("You both went over but you have the better hand! You win!");
+            endRound(settingsManager.t('bothOverPlayerWins'));
         } else {
-            endRound("You both went over but the dealer has the better hand! Dealer wins.");
+            endRound(settingsManager.t('bothOverDealerWins'));
         }
     } else if (dealer_score > 21 && current_score <= 21) {
-        endRound("Dealer went over. You win!");
+        endRound(settingsManager.t('dealerOver21'));
     } else if (current_score > 21 && dealer_score <= 21) {
-        endRound("You went over! Dealer wins.");
+        endRound(settingsManager.t('over21'));
     } else if (dealer_score === current_score) {
-        endRound("Looks like you tied. It's a draw.");
+        endRound(settingsManager.t('tie'));
     } else if (current_score == 21) {
-        endRound("A perfect 21. You win!");
+        endRound(settingsManager.t('perfect21'));
     }  else if (dealer_score > current_score) {
-        endRound("Oh no! The dealer has a better hand. Dealer wins.");
+        endRound(settingsManager.t('dealerWins'));
     } else {
-        endRound("You have a better hand! You win!");
+        endRound(settingsManager.t('playerWins'));
     }
 }
 //function for handling whether the Ace is treated as a 1 or 11 value      
@@ -343,7 +321,7 @@ function updateDisplay(showDealer = false, animate = false) {
         yourcards.appendChild(cardContainer);
     });
     current_score = calculateScore(your_cards);
-    currentscore.textContent = `Current Score: ${current_score}`;
+    currentscore.textContent = `${settingsManager.t('currentScore')}: ${current_score}`;
     //empty container to house dealer cards animation
     dealercards.innerHTML = '';
     if (dealer_cards.length === 0) {
@@ -398,7 +376,7 @@ function updateDisplay(showDealer = false, animate = false) {
         }
         //calculate and display dealer's score
         dealer_score = calculateScore(dealer_cards);
-        dealerscore.textContent = `Dealer's Score: ${dealer_score}`;
+        dealerscore.textContent = `${settingsManager.t('dealerScore')}: ${dealer_score}`;
     } else {
 
         //creates dealer cards images and only shows the second card onward
@@ -445,22 +423,22 @@ function updateDisplay(showDealer = false, animate = false) {
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
         const visibleScore = calculateScore(visibleCards);
-        dealerscore.textContent = `Dealer's Score: ??? + ${visibleScore}`;
+        dealerscore.textContent = `${settingsManager.t('dealerScore')}: ??? + ${visibleScore}`;
     }
     winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
 
     if (turn) {
         if (blackjackState === "in-game") {
-            turn.textContent = "Your turn.";
+            turn.textContent = settingsManager.t('yourTurn');
             button.disabled = false;
             buttonStay.disabled = false;
             buttonStay.style.visibility = 'visible';
         } else if (blackjackState === "dealer-turn") {
-            turn.textContent = "Dealer's turn.";
+            turn.textContent = settingsManager.t('dealerTurn');
             button.disabled = true;
             buttonStay.disabled = true;
         } else if (blackjackState === "done") {
-            turn.textContent = "Game over.";
+            turn.textContent = settingsManager.t('gameOver');
             button.disabled = false;
             buttonStay.disabled = true;
         } else {
@@ -487,7 +465,7 @@ function onButtonClick() {
         drawCard();
     } else if (blackjackState === "done") {
         startCountDown();
-        button.setAttribute('data-label', 'Deal');
+        button.setAttribute('data-label', settingsManager.t('deal'));
         blackjackState = "start";
     }
 }
@@ -507,14 +485,6 @@ function onStayClick() {
     }
 }
 
-//function for the player clicking settings
-function onSettingsClick() {
-    settingsButton.classList.add('spin');
-    settingsButton.addEventListener('animationend', () => {
-        settingsButton.classList.remove('spin');
-    }, { once: true});
-}
-
 //function for starting the game
 function startGame() {
     startGameAudio();
@@ -529,7 +499,7 @@ function startGame() {
         label.style.display = 'block';
     });
     blackjackState = "in-game";
-    button.setAttribute('data-label', 'Deal');
+    button.setAttribute('data-label', settingsManager.t('deal'));
     button.disabled = false;
     buttonStay.disabled = false;
     toggleMusicButton.disabled = false;
@@ -549,7 +519,6 @@ function startGame() {
 //listener for button
 button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
-settingsButton.addEventListener('click', onSettingsClick);
 
 //Initialize First Round
 resetGame();
