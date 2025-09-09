@@ -2,9 +2,11 @@
 import { draw, createDeck } from './deck.js';
 import { playButtonSound, startGameAudio } from './audio.js';
 import { UserManager } from './user.js';
+import { InstructionsManager } from './instructions.js';
 document.addEventListener('DOMContentLoaded', () => {
     const userManager = new UserManager();
     let currentUser = null;
+    const instructionsManager = new InstructionsManager();
 
     //login logic
     document.getElementById("login-button").addEventListener("click", () => {
@@ -24,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let dealer_score = 0;
     let win_or_lose = "";
     let blackjackState = "start";
-    let gameOver = true;
     let playerStay = false;
     let dealerStay = false;
     const countdown = document.getElementById('countdown');
@@ -43,26 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const winorlose = document.getElementById('win_or_lose');
     const settingsButton = document.getElementById('settings-button');
     const settingsMenu = document.getElementById('settings-menu');
-    const instructionsOverlay = document.getElementById('instructions-overlay');
-    const closeInstructionsButton = document.getElementById('close-instructions');
 
     button.classList.add('centered');
-    
-    //show theh instructions when the page loads
-    instructionsOverlay.style.display = 'flex';
 
-    //hide it when the user clicks the close button
-    closeInstructionsButton.addEventListener('click', () => {
-        instructionsOverlay.style.display = 'none';
-    });
-
-    //when clicking help button, open instructions
-    document.getElementById("help-button").addEventListener("click", () => {
-        const instructions = document.getElementById("instructions-overlay");
-        if (instructions) {
-            instructions.style.display = instructions.style.display === "flex" ? "none" : "flex";
-        }
-    });
     //toggle visibility of the settings menu
     settingsButton.addEventListener('click', () => {
         settingsMenu.classList.toggle('show');
@@ -72,15 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         if (!settingsButton.contains(event.target) && !settingsMenu.contains(event.target)) {
             settingsMenu.classList.remove('show');
-        }
-    });
-
-    //if the user clicks outside of the instructions, it disappears and goes back to main game
-    //if user clicks outside of the settings box, it disappears and goes back to main game
-    instructionsOverlay.addEventListener('click', (event) => {
-        const instructionsBox = document.querySelector('.instructions-box');
-        if(instructionsOverlay.style.display === 'flex' && !instructionsBox.contains(event.target)) {
-            instructionsOverlay.style.display = 'none';
         }
     });
 
