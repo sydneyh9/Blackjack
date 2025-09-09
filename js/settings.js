@@ -24,7 +24,31 @@ export class SettingsManager {
                 dealerWins: "Dealer wins.",
                 playerWins: "You win!",
                 bothOverPlayerWins: "You both went over but you have the better hand! You win!",
-                bothOverDealerWins: "You both went over but the dealer has the better hand! Dealer wins."
+                bothOverDealerWins: "You both went over but the dealer has the better hand! Dealer wins.",
+                yourCards: "Your Cards",
+                dealerCards: "Dealer's Cards",
+                settings: "Settings",
+                instructionsTitle: "Welcome to Blackjack!",
+                audioControls: "Audio Controls",
+                musicOn: "Music On",
+                musicOff: "MusicOff",
+                soundEffectsOn: "Sound Effects On",
+                soundEffectsOff: "Sound Effects Off",
+                musicVolume: "Music Volume",
+                soundVolume: "Sound Effects Volume",
+                instructionsObjective: "Objective:",
+                instructionsObjectiveText: "Beat the dealer by getting a hand as close to 21 as possible, without going over",
+                instructionsRules: "Rules:",
+                instructionsRule1: "If both dealer and player go over 21, the better hand wins.",
+                instructionsRule2: "You may only draw one card per turn.",
+                instructionsRule3: "Only one deck of 52 is used.",
+                instructionsRule4: "The dealer's first card is hidden.",
+                instructionsRule5: "The Ace may be used as either 1 or 11 as per the dealer or player's needs.",
+                ruleDeal: "Click Deal to start a new game.",
+                ruleStay: "Click Stay to end your turn and let the dealer play.",
+                ruleKeepScore: "Keep a close eye on your score!",
+                letsPlay: "Let's Play!"
+
             },
             es: {
                 welcome: "Bienvenido",
@@ -42,7 +66,30 @@ export class SettingsManager {
                 dealerWins: "El dealer gana.",
                 playerWins: "¡Ganas!",
                 bothOverPlayerWins: "¡Ambos se pasaron, pero tu mano es mejor! ¡Ganas!",
-                bothOverDealerWins: "¡Ambos se pasaron, per la mano del dealer es mejor! Dealer gana."
+                bothOverDealerWins: "¡Ambos se pasaron, per la mano del dealer es mejor! Dealer gana.",
+                yourCards: "Tus cartas",
+                dealerCards: "Cartas del dealer",
+                settings: "Configuración",
+                instructionsTitle: "¡Bienvenido a Blackjack!",
+                instructionsObjective: "Objectivo",
+                audioControls: "Controles de Audio",
+                musicOn: "Música Activada",
+                musicOff: "Música Desactivada",
+                soundEffectsOff: "Efectos de Sonido Desactivados",
+                soundEffectsOn: "Efectos de Sonido Activados",
+                musicVolume: "Volumen de Música",
+                soundVolume: "Volumen de Efectos",
+                instructionsObjectiveText: "Gana al dealer obteniendo una mano lo más cerca posible de 21 sin pasarte.",
+                instructionsRules: "Reglas:",
+                instructionsRule1: "Si el dealer y el jugador se pasan de 21, gana la mejor mano.",
+                instructionsRule2: "Solo puedes sacar una carta por turno.",
+                instructionsRule3: "Se utiliza solo un mazo de 52 cartas.",
+                instructionsRule4: "La primera carta del dealer está oculta.",
+                instructionsRule5: "El As puede valer 1 u 11 según lo necesite el dealer o el jugador.",
+                ruleDeal: "Haz clic en Repartir para comenzar un juego nuevo.",
+                ruleStay: "Haz clic en Plantarse para terminar tu turno y dejar que el dealer juegue.",
+                ruleKeepScore: "!Mantén un ojo en tu puntuación!",
+                letsPlay: "!Juguemos!"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -60,7 +107,30 @@ export class SettingsManager {
                 dealerWins: "Le croupier gagne.",
                 playerWins: "Vous gagnez !",
                 bothOverPlayerWins: "Vous avez tous les deux dépassé 21 mais votre main est meilleure ! Vous gagnez !",
-                bothOverDealerWins: "Vous avez tous les deux dépassé 21 mais le croupier a la meilleure main ! Le croupier gagne."
+                bothOverDealerWins: "Vous avez tous les deux dépassé 21 mais le croupier a la meilleure main ! Le croupier gagne.",
+                yourCards: "Vos cartes",
+                dealerCards: "Cartes du croupier",
+                settings: "Paramètres",
+                instructionsTitle: "Bienvenue au Blackjack !",
+                audioControls: "Contrôles Audio",
+                musicOn: "Musique Activée",
+                musicOff: "Musique Désactivée",
+                soundEffectsOn: "Effets Sonores Activés",
+                soundEffectsOff: "Effets Sonores Désactivés",
+                musicVolume: "Volume de la Musique",
+                soundVolume: "Volume des Effets",
+                instructionsObjective: "Objectif :",
+                instructionsObjectiveText: "Battez le croupier en obtenant une main la plus proche de 21 sans dépasser.",
+                instructionsRules: "Règles :",
+                instructionsRule1: "Si le croupier et le joueur dépassent 21, la meilleure main gagne.",
+                instructionsRule2: "Vous ne pouvez tirer qu'une seule carte par tour.",
+                instructionsRule3: "Un seul jeu de 52 cartes est utilisé.",
+                instructionsRule4: "La première carte du croupier est cachée.",
+                instructionsRule5: "L'As peut être utilisé comme 1 ou 11 selon le besoin du croupier ou du joueur.",
+                ruleDeal: "Cliquez sur Distribuer pour commencer une nouvelle partie.",
+                ruleStay: "Cliquez sur Rester pour terminer votre tour et laisser le croupier jouer.",
+                ruleKeepScore: "Surveillez attentivement votre score !",
+                letsPlay: "Jouons !"
             }
         };
         this.init();
@@ -92,6 +162,9 @@ export class SettingsManager {
 
         //add language toggle button
         this.createLanguageButton();
+
+        //update all the text to the current language
+        this.updateText();
     }
 
     animateButton(){
@@ -124,5 +197,57 @@ export class SettingsManager {
     t(key) {
         //translation helper
         return this.translations[this.currentLanguage][key] || key;
+    }
+    updateText() {
+        //update settings button
+        this.settingsButton.textContent = this.t('settings');
+
+        //update audio controls
+        const audioLabel = document.getElementById('audio-controls-label');
+        if (audioLabel) audioLabel.textContent = this.t('audioControls');
+
+        const toggleMusic = document.getElementById('toggle-music');
+        if (toggleMusic) {
+            toggleMusic.textContent = toggleMusic.classList.contains('active') ? this.t('musicOn') : this.t('musicOff');
+        }
+
+        const toggleSound = document.getElementById('toggle-sound-effect');
+        if (toggleSound) {
+            toggleSound.textContent = toggleSound.classList.contains('active') ? this.t('soundEffectsOn') : this.t('soundEffectsOff');
+        }
+
+        const musicVolumeLabel = document.querySelector('label[for="music-volume"]');
+        if (musicVolumeLabel) musicVolumeLabel.textContent = this.t('musicVolume');
+
+        const soundVolumeLabel = document.querySelector('label[for="effects-volume"]');
+        if (soundVolumeLabel) soundVolumeLabel.textContent = this.t('soundVolume');
+
+        //instructions overlay
+        const instrOverlay = document.querySelector('#instructions-overlay');
+        if (instrOverlay) {
+            const title = instrOverlay.querySelector('h2')
+            title && (title.textContent = this.t('instructionsTitle'));
+            const objectiveText = instrOverlay.querySelector('.instructions-objective-text');
+            objectiveText && (objectiveText.textContent = this.t('instructionsObjectiveText'));
+
+            const h4 = instrOverlay.querySelector('h4');
+            h4 && (h4.textContent = this.t('instructionsRules'));
+
+            const rules = instrOverlay.querySelectorAll('ul li');
+            if (rules.length >= 3) {
+                rules[0].textContent = this.t('ruleDeal');
+                rules[1].textContent = this.t('ruleStay');
+                rules[2].textContent = this.t('ruleKeepScore');
+            }
+
+            const closeBtn = instrOverlay.querySelector('#close-instructions');
+            if (closeBtn) closeBtn.textContent = this.t('letsPlay');
+        }
+        //Card labels
+        const yourLabel = document.querySelector('.card-row .card-label strong');
+        if (yourLabel) yourLabel.textContent = this.t('yourCards');
+        const dealerLabel = document.querySelectorAll('.card-row .card-label strong')[1];
+        if (dealerLabel) dealerLabel.textContent = this.t('dealerCards');
+
     }
 }

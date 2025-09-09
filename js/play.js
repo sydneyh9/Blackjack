@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.setAttribute('data-label', settingsManager.t('deal'));
         button.disabled = false;
         buttonStay.disabled = true;
-        updateDisplay(true, false);
+        updateDisplay(true, true);
 
         //save scores for loggin-in user
         if (currentUser) {
@@ -282,6 +282,10 @@ function updateDisplay(showDealer = false, animate = false) {
         'Clubs': '♣️',
         'Spades': '♠️'
     };
+
+    //update card labels dynamically
+    document.querySelectorAll('.card-label')[0].innerHTML = `<strong>${settingsManager.t('yourCards')}</strong>`;
+    document.querySelectorAll('.card-label')[1].innerHTML = `<strong>${settingsManager.t('dealerCards')}</strong>`;
 
     //create the cards based on what is drawn
     your_cards.forEach((card, index) => {
