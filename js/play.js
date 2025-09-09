@@ -1,7 +1,22 @@
 //play.js
 import { draw, createDeck } from './deck.js';
 import { playButtonSound, startGameAudio } from './audio.js';
+import { UserManager } from './user.js';
 document.addEventListener('DOMContentLoaded', () => {
+    const userManager = new UserManager();
+    let currentUser = null;
+
+    //login logic
+    document.getElementById("login-button").addEventListener("click", () => {
+        const username = document.getElementById("username-input").value;
+        if (userManager.login(username)) {
+            currentUser = username;
+            document.getElementById("login-container").style.display = "none";
+            alert(`Welcome, ${username}!`);
+        }
+    });
+
+
     let cards = [];
     let your_cards = [];
     let dealer_cards = [];
@@ -9,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dealer_score = 0;
     let win_or_lose = "";
     let blackjackState = "start";
+    let gameOver = true;
     let playerStay = false;
     let dealerStay = false;
     const countdown = document.getElementById('countdown');
@@ -86,6 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
         button.disabled = false;
         buttonStay.disabled = true;
         updateDisplay(true, false);
+
+        //save scores for loggin-in user
+        if (currentUser) {
+            userManager.addScore(message, current_score, dealer_score);
+        }
     }
 
     function startCountDown() {
