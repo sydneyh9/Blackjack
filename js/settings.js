@@ -47,7 +47,8 @@ export class SettingsManager {
                 ruleDeal: "Click Deal to start a new game.",
                 ruleStay: "Click Stay to end your turn and let the dealer play.",
                 ruleKeepScore: "Keep a close eye on your score!",
-                letsPlay: "Let's Play!"
+                letsPlay: "Let's Play!",
+                results: "Results:"
 
             },
             es: {
@@ -89,7 +90,8 @@ export class SettingsManager {
                 ruleDeal: "Haz clic en Repartir para comenzar un juego nuevo.",
                 ruleStay: "Haz clic en Plantarse para terminar tu turno y dejar que el dealer juegue.",
                 ruleKeepScore: "!Mantén un ojo en tu puntuación!",
-                letsPlay: "!Juguemos!"
+                letsPlay: "!Juguemos!",
+                results: "Resultados:"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -130,7 +132,8 @@ export class SettingsManager {
                 ruleDeal: "Cliquez sur Distribuer pour commencer une nouvelle partie.",
                 ruleStay: "Cliquez sur Rester pour terminer votre tour et laisser le croupier jouer.",
                 ruleKeepScore: "Surveillez attentivement votre score !",
-                letsPlay: "Jouons !"
+                letsPlay: "Jouons !",
+                results: "Résultats:"
             }
         };
         this.init();
@@ -200,7 +203,23 @@ export class SettingsManager {
     }
     updateText() {
         //update settings button
-        this.settingsButton.textContent = this.t('settings');
+        this.settingsButton.setAttribute('data-label', this.t('settings'));
+        this.settingsButton.setAttribute('aria-label', this.t('settings'));
+
+        //deal and stay button updates
+        const dealBtn = document.getElementById('deal');
+        if (dealBtn) {
+            dealBtn.setAttribute('aria-label', this.t('deal'));
+            dealBtn.setAttribute('data-label', this.t('deal'));
+            dealBtn.querySelector('.inner').textContent = this.t('deal');
+        }
+
+        const stayBtn = document.getElementById('stay');
+        if (stayBtn) {
+            stayBtn.setAttribute('aria-label', this.t('stay'));
+            stayBtn.setAttribute('data-label', this.t('stay'));
+            stayBtn.querySelector('.inner').textContent = this.t('stay');
+        }
 
         //update audio controls
         const audioLabel = document.getElementById('audio-controls-label');
@@ -227,11 +246,20 @@ export class SettingsManager {
         if (instrOverlay) {
             const title = instrOverlay.querySelector('h2')
             title && (title.textContent = this.t('instructionsTitle'));
-            const objectiveText = instrOverlay.querySelector('.instructions-objective-text');
-            objectiveText && (objectiveText.textContent = this.t('instructionsObjectiveText'));
+            const objectiveHeading = instrOverlay.querySelector('h3');
+            objectiveHeading && (objectiveHeading.textContent = this.t('instructionsObjective'));
 
-            const h4 = instrOverlay.querySelector('h4');
-            h4 && (h4.textContent = this.t('instructionsRules'));
+            const ruleParagraphs = instrOverlay.querySelectorAll('.instructions-box > p');
+            if (ruleParagraphs.length >= 5) {
+                ruleParagraphs[1].textContent = this.t('instructionsRule1');
+                ruleParagraphs[2].textContent = this.t('instructionsRule2');
+                ruleParagraphs[3].textContent = this.t('instructionsRule3');
+                ruleParagraphs[4].textContent = this.t('instructionsRule4');
+                ruleParagraphs[5].textContent = this.t('instructionsRule5');
+            }
+
+            const rulesHeading = instrOverlay.querySelector('h4');
+            rulesHeading && (rulesHeading.textContent = this.t('instructionsRules')); 
 
             const rules = instrOverlay.querySelectorAll('ul li');
             if (rules.length >= 3) {
@@ -249,5 +277,8 @@ export class SettingsManager {
         const dealerLabel = document.querySelectorAll('.card-row .card-label strong')[1];
         if (dealerLabel) dealerLabel.textContent = this.t('dealerCards');
 
+        //results label
+        const resultsLabel = document.getElementById('results');
+        if (resultsLabel) resultsLabel.textContent = this.t('results') || "Results:";
     }
 }

@@ -142,7 +142,7 @@ function resetGame(isRestart = true) {
         winorlose.textContent = "";
     }
     if (button) {
-        button.setAttribute('data-label', 'Deal');
+        button.setAttribute('data-label', settingsManager.t('deal'));
         button.disabled = false;
     }
     if (buttonStay) {
