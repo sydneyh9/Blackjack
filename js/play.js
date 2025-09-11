@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
     const settingsManager = new SettingsManager();
-
+ 
     //login logic
     document.getElementById("login-button").addEventListener("click", () => {
         const username = document.getElementById("username-input").value;

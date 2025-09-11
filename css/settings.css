@@ -71,6 +71,10 @@
     color: white;
     font-weight: bold;
     font-size: 14px;
+    max-width: 70%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
     z-index: 2;
     text-shadow: 0 0 2px black;
     pointer-events: none;
@@ -84,22 +88,26 @@
     background: white;
     color: black;
     display: flex;
+    flex-direction: column;
     font-family: 'Georgia', serif;
-    padding: 60px 40px;
+    padding: 40px 30px;
     border-radius: 16px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     position: relative;
-    width: 300px;
-    height: 450px;
+    width: auto;
+    min-width: 300px;
+    max-width: 400px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    align-items: center;
     z-index: 9999;
     border: 3px solid black;
-    flex-direction: column;
     pointer-events: auto;
     opacity: 1;
     transform: none;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
+    justify-content: flex-start;
+    gap: 20px;
 }
 
 #settings-menu::before,
@@ -291,4 +299,70 @@ input[type="range"]::-ms-thumb {
     background-color: #1f1f1f;
     color: #ffd700;
     transition: all 0.3s ease;
+}
+
+/*Language buttons */
+#language-options {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#language-options .lang-btn {
+    padding: 6px 10px;
+    font-size: clamp(10px,2vw,13px);
+    font-family: 'Georgia', serif;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: #f5f5f5;
+    color: #222;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    min-width: auto;
+    max-width: 100px;
+    max-height: 50px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#language-options .lang-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+#language-options .lang-btn.active {
+    background: #ffd700;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 6px #ffd700;
+    animation: button-glow 2s ease-in-out infinite;
+}
+
+/*mobile queries to make sure that the screen adjusts */
+@media (max-width: 480px), (max-height: 700px) {
+    #settings-menu {
+        width: 95%;
+        max-width: none;
+        padding: 20px;
+        gap: 15px;
+    }
+    #settings-menu button {
+        width: 120px;
+        height: 60px;
+        font-size: 14px;
+    }
+    #language-options .lang-btn {
+        font-size: 11px;
+        padding: 4px 8px;
+        max-width: 80px;
+    }
+    #audio-controls-label {
+        font-size: 16px;
+    }
 }

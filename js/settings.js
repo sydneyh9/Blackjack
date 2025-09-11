@@ -31,7 +31,7 @@ export class SettingsManager {
                 instructionsTitle: "Welcome to Blackjack!",
                 audioControls: "Audio Controls",
                 musicOn: "Music On",
-                musicOff: "MusicOff",
+                musicOff: "Music Off",
                 soundEffectsOn: "Sound Effects On",
                 soundEffectsOff: "Sound Effects Off",
                 musicVolume: "Music Volume",
@@ -48,7 +48,8 @@ export class SettingsManager {
                 ruleStay: "Click Stay to end your turn and let the dealer play.",
                 ruleKeepScore: "Keep a close eye on your score!",
                 letsPlay: "Let's Play!",
-                results: "Results:"
+                results: "Results:",
+                language: "Language"
 
             },
             es: {
@@ -91,7 +92,8 @@ export class SettingsManager {
                 ruleStay: "Haz clic en Plantarse para terminar tu turno y dejar que el dealer juegue.",
                 ruleKeepScore: "!Mantén un ojo en tu puntuación!",
                 letsPlay: "!Juguemos!",
-                results: "Resultados:"
+                results: "Resultados:",
+                language: "Idioma"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -133,7 +135,8 @@ export class SettingsManager {
                 ruleStay: "Cliquez sur Rester pour terminer votre tour et laisser le croupier jouer.",
                 ruleKeepScore: "Surveillez attentivement votre score !",
                 letsPlay: "Jouons !",
-                results: "Résultats:"
+                results: "Résultats:",
+                language: "Langue"
             }
         };
         this.init();
@@ -178,15 +181,38 @@ export class SettingsManager {
     }
 
     createLanguageButton() {
-        this.languageButton = document.createElement('button');
-        this.languageButton.id = 'language-toggle';
-        this.languageButton.textContent = 'Language';
-        this.languageButton.style.marginTop = '10px';
-        this.settingsMenu.appendChild(this.languageButton);
+        //heading
+        const langHeading = document.createElement('h4');
+        langHeading.textContent = 'Language';
+        langHeading.style.marginTop = '15px';
+        this.settingsMenu.appendChild(langHeading);
 
-        this.languageButton.addEventListener('click', () => {
-            this.cycleLanguage();
+        //container for buttons
+        const langContainer = document.createElement('div');
+        langContainer.id = 'language-options';
+        langContainer.style.display = 'flex';
+        langContainer.style.gap = '10px';
+        langContainer.style.marginTop = '5px';
+
+        //languages available
+        const availableLangs = { en: "English", es: "Español", fr: "Français"};
+
+        Object.entries(availableLangs).forEach(([code, label]) => {
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            btn.dataset.lang = code;
+            btn.classList.add('lang-btn');
+            if (code === this.currentLanguage) btn.classList.add('active');
+
+            btn.addEventListener('click', () => {
+                this.currentLanguage = code;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.updateText();
+            });
+            langContainer.appendChild(btn);
         });
+        this.settingsMenu.appendChild(langContainer);
     }
 
     cycleLanguage() {
@@ -280,5 +306,9 @@ export class SettingsManager {
         //results label
         const resultsLabel = document.getElementById('results');
         if (resultsLabel) resultsLabel.textContent = this.t('results') || "Results:";
+
+        //update language heading
+        const langHeading = this.settingsMenu.querySelector('h4');
+        if (langHeading) langHeading.textContent = this.t('language') || 'Language';
     }
 }

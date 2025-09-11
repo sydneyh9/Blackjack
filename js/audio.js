@@ -15,13 +15,15 @@ const effectsVolumeSlider = document.getElementById('effects-volume');
 //volume control sliders
  //handle music volume
  musicVolumeSlider.addEventListener('input', () => {
+    if (!musicEnabled) return;
     const volume = parseFloat(musicVolumeSlider.value);
     backgroundMusic.volume = volume;
     backgroundMusicSecond.volume = volume;
 });
    //handle sound effects volume
    effectsVolumeSlider.addEventListener('input', () => {
-    const volume = parseFloat(EffectsVolumeSlider.value);
+    if (!soundEffectEnabled) return;
+    const volume = parseFloat(effectsVolumeSlider.value);
     buttonSound.volume = volume;
     casino.volume = volume;
 });
