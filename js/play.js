@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
     const settingsManager = new SettingsManager();
+
+    //refresh UI for screen readers
+    settingsManager.onScreenReaderToggle = (enabled) => {
+        updateDisplay(true, false);
+    };
     //login logic
     document.getElementById("login-button").addEventListener("click", () => {
         const username = document.getElementById("username-input").value;
@@ -48,6 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     button.classList.add('centered');
 
+    function announceAction(message) {
+        if (!settingsManager.screenReaderEnabled) return;
+        const announcer = document.getElementById('turn');
+        announcer.textContent = '';
+        setTimeout(() => { announcer.textContent = message; }, 100);
+    }
+
     turn.addEventListener('languageChanged', () => {
         if (!turn) return;
         if (blackjackState === "in-game") {
@@ -73,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentUser) {
             userManager.addScore(message, current_score, dealer_score);
         }
+        //announce action
+        announceAction(message);
     }
 
     function startCountDown() {
@@ -84,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         button.disabled = true;
         buttonStay.disabled = true;
+        if (settingsManager.screenReaderEnabled && timeLeft === 0) {
+            announceAction("Let's Play");
+        }
 
         //buttons shouldn't be available during countdown
         button.style.display = 'none';
@@ -177,6 +194,10 @@ function drawCard() {
         return;
     }
     your_cards.push(newCard);
+
+    //If Sreen Reader Enabled: announce action
+    announceAction(`You drew ${newCard.rank} of ${newCard.suit}. Your score is now ${current_score}.`);
+
     current_score = calculateScore(your_cards);
     if (current_score > 21) {
         //end the round and reveal the dealer's cards
@@ -206,11 +227,14 @@ function dealerTurn() {
      if(dealer_score < 17) {
             let card = draw(cards);
             dealer_cards.push(card);
+
             //update the display for the dealer cards
             updateDisplay(true,true);
             //animate and then continue dealer turn
             //waits before the player gets their turn again to reduce abruptness
             setTimeout(() => {
+                            //If Screen Reader Enabled: announce card
+            announceAction(`Dealer drew ${card.rank} of ${card.suit}. Dealer's score is now ${calculateScore(dealer_cards)}.`);
                 dealerTurn(); //continue dealer's turn
             }, 1000); //delay next card draw by a second
     } else {
@@ -298,10 +322,22 @@ function updateDisplay(showDealer = false, animate = false) {
             }, { once: true });
         }
         yourcards.appendChild(cardContainer);
+        if (settingsManager.screenReaderEnabled) {
+            cardElement.setAttribute('role', 'listitem');
+            cardElement.setAttribute('aria-label', `${card.rank} of ${card.suit}`);
+        } else {
+            cardElement.removeAttribute('aria-label');
+        }
     });
     current_score = calculateScore(your_cards);
     currentscore.dataset.value = current_score;
     currentscore.textContent = `${settingsManager.t('currentScore')}: ${current_score}`;
+    if (settingsManager.screenReaderEnabled) {
+        currentscore.setAttribute('aria-label', `Your current score is ${current_score}`);
+        currentscore.setAttribute('aria-live', 'polite');
+    } else {
+        currentscore.removeAttribute('aria-label');
+    }
     //empty container to house dealer cards animation
     dealercards.innerHTML = '';
     if (dealer_cards.length === 0) {
@@ -406,8 +442,25 @@ function updateDisplay(showDealer = false, animate = false) {
         const visibleScore = calculateScore(visibleCards);
         dealerscore.dataset.value =  visibleScore;
         dealerscore.textContent = `${settingsManager.t('dealerScore')}: ??? + ${visibleScore}`;
+        if (settingsManager.screenReaderEnabled) {
+            if (showDealer && blackjackState === "done") {
+                dealerscore.setAttribute('aria-label', `Dealer's current score is ${dealer_score}`);
+                dealerscore.setAttribute('aria-live', 'polite');
+            } else {
+                dealerscore.setAttribute('aria-label', `Dealer's visible score is ${visibleScore}`);
+            }
+        } else {
+            dealerscore.removeAttribute('aria-label');
+        }
     }
     winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';
+    if (settingsManager.screenReaderEnabled) {
+        winorlose.setAttribute('role', 'status');
+        winorlose.setAttribute('aria-live', 'assertive');
+    } else {
+        winorlose.removeAttribute('role');
+        winorlose.removeAttribute('aria-live');
+    }
 
     if (turn) {
         if (blackjackState === "in-game") {

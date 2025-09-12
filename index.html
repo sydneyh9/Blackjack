@@ -24,9 +24,10 @@
     <div class="table-trim bottom"></div>
     <div class="arc-decoration"></div>
 
-    <div id="countdown" class="countdown-overlay"></div>
-    <div id="turn"></div>
+    <div id="countdown" class="countdown-overlay" aria-live="assertive"></div>
+    <div id="turn" aria-live="assertive" aria-atomic="true"></div>
     <div class="main-game-container">
+        <div id="sr-announcer" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
         <div class="button-container"> 
             <button id="deal" aria-label="Deal card" data-label="Deal" title="Click to deal cards"><div class="inner"></div></button>
             <button id="stay" aria-label="Stay" data-label="Stay" title="Click to stay"><div class="inner"></div></button>
@@ -78,6 +79,12 @@
                         <label for="effects-volume"> Sound Effects Volume </label>
                         <input type="range" id="effects-volume" min="0" max="1" step="0.1" title="Adjust sound effects volume">
                     </div>
+                </div>
+                <div id="accessibility-controls">
+                    <h6> Accessibility </h6>
+                    <button id="toggle-screen-reader" aria-pressed="false" title="Enable screen reader support">
+                        Screen Reader Off
+                    </button>
                 </div>
             </div>
         </div>

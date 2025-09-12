@@ -7,6 +7,7 @@ export class SettingsManager {
         this.settingsOverlay = document.getElementById('settings-overlay');
         this.languageButton = null;
         this.currentLanguage = 'en';
+        this.screenReaderEnabled = false;
         this.translations = {
             en: {
                 welcome: "Welcome",
@@ -195,11 +196,24 @@ export class SettingsManager {
             }
         });
 
-        //add language toggle button
+        //Language toggle button
         this.createLanguageButton();
 
         //update all the text to the current language
         this.updateText();
+
+        //Screen reader toggle
+        const screenReaderBtn = document.getElementById('toggle-screen-reader');
+        if (screenReaderBtn) {
+            screenReaderBtn.addEventListener('click', () => {
+                this.screenReaderEnabled = !this.screenReaderEnabled;
+                screenReaderBtn.setAttribute('aria-pressed', this.screenReaderEnabled);
+                screenReaderBtn.textContent = this.screenReaderEnabled ? 'Screen Reader On' : 'Screen Reader Off';
+
+                //trigger refresh for labels
+                if (typeof this.onScreenReaderToggle === 'function') this.onScreenReaderToggle(this.screenReaderEnabled);
+            });
+        }
     }
 
     animateButton(){
