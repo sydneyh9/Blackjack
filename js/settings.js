@@ -356,5 +356,13 @@ export class SettingsManager {
             const score = dealerScoreEl.dataset.value || "";
             dealerScoreEl.textContent = `${this.t('dealerScore')}: ${score}`;
         }
+        //update turn text
+        const turnEl = document.getElementById('turn');
+        if (turnEl) {
+            //update the turn text based on changing languages
+            const event = new Event('languageChanged');
+            turnEl.dispatchEvent(event);
+        }
+
     }
 }

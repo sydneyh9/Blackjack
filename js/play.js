@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
     let cards = [];
     let your_cards = [];
     let dealer_cards = [];
@@ -48,6 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const winorlose = document.getElementById('win_or_lose');
 
     button.classList.add('centered');
+
+    turn.addEventListener('languageChanged', () => {
+        if (!turn) return;
+        if (blackjackState === "in-game") {
+            turn.textContent = settingsManager.t('yourTurn');
+        } else if (blackjackState === "dealer-turn") {
+            turn.textContent = settingsManager.t('dealerTurn');
+        } else if (blackjackState === "done") {
+            turn.textContent = settingsManager.t('gameOver');
+        } else {
+            turn.textContent = "";
+        }
+    });
 
     function endRound(message) {
         win_or_lose = message;
