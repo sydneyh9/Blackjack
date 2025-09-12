@@ -344,5 +344,17 @@ export class SettingsManager {
         if (typeof applyTooltips === 'function') {
             applyTooltips(this);
         }
+        
+        //update scores
+        const currentScoreEl = document.getElementById('current_score');
+        if (currentScoreEl) {
+            const score = currentScoreEl.dataset.value || "";
+            currentScoreEl.textContent = `${this.t('currentScore')}: ${score}`;
+        }
+        const dealerScoreEl = document.getElementById('dealer_score');
+        if (dealerScoreEl) {
+            const score = dealerScoreEl.dataset.value || "";
+            dealerScoreEl.textContent = `${this.t('dealerScore')}: ${score}`;
+        }
     }
 }

@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
     const settingsManager = new SettingsManager();
- 
     //login logic
     document.getElementById("login-button").addEventListener("click", () => {
         const username = document.getElementById("username-input").value;
@@ -228,10 +227,10 @@ function finalizeDealerTurn() {
     if (firstDealerCard) {
             firstDealerCard.classList.remove('flipped');
             setTimeout(() => {
-                calculateGameResult();
+                calculateGameResult(current_score, dealer_score, settingsManager, endRound);
             }, 650);
     } else {
-        calculateGameResult();
+        calculateGameResult(current_score, dealer_score, settingsManager, endRound);
     }
 }
 
@@ -289,6 +288,7 @@ function updateDisplay(showDealer = false, animate = false) {
         yourcards.appendChild(cardContainer);
     });
     current_score = calculateScore(your_cards);
+    currentscore.dataset.value = current_score;
     currentscore.textContent = `${settingsManager.t('currentScore')}: ${current_score}`;
     //empty container to house dealer cards animation
     dealercards.innerHTML = '';
@@ -344,6 +344,7 @@ function updateDisplay(showDealer = false, animate = false) {
         }
         //calculate and display dealer's score
         dealer_score = calculateScore(dealer_cards);
+        dealerscore.dataset.value = dealer_score;
         dealerscore.textContent = `${settingsManager.t('dealerScore')}: ${dealer_score}`;
     } else {
 
@@ -391,6 +392,7 @@ function updateDisplay(showDealer = false, animate = false) {
         //hides the first card in the dealer's cards from the player
         const visibleCards = dealer_cards.slice(1);
         const visibleScore = calculateScore(visibleCards);
+        dealerscore.dataset.value =  visibleScore;
         dealerscore.textContent = `${settingsManager.t('dealerScore')}: ??? + ${visibleScore}`;
     }
     winorlose.textContent = win_or_lose ? `${win_or_lose}` : '';

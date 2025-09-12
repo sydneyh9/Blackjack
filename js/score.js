@@ -17,22 +17,22 @@ export function calculateScore(hand) {
     return score;
 }
 
-export function calculateGameResult() {
-    if (dealer_score > 21 && current_score > 21) {
-        if (current_score < dealer_score) {
+export function calculateGameResult(currentScore, dealerScore, settingsManager, endRound) {
+    if (dealerScore > 21 && currentScore > 21) {
+        if (currentScore < dealerScore) {
             endRound(settingsManager.t('bothOverPlayerWins'));
         } else {
             endRound(settingsManager.t('bothOverDealerWins'));
         }
-    } else if (dealer_score > 21 && current_score <= 21) {
+    } else if (dealerScore > 21 && currentScore <= 21) {
         endRound(settingsManager.t('dealerOver21'));
-    } else if (current_score > 21 && dealer_score <= 21) {
+    } else if (currentScore > 21 && dealerScore <= 21) {
         endRound(settingsManager.t('over21'));
-    } else if (dealer_score === current_score) {
+    } else if (dealerScore === currentScore) {
         endRound(settingsManager.t('tie'));
-    } else if (current_score == 21) {
+    } else if (currentScore == 21) {
         endRound(settingsManager.t('perfect21'));
-    }  else if (dealer_score > current_score) {
+    }  else if (dealerScore > currentScore) {
         endRound(settingsManager.t('dealerWins'));
     } else {
         endRound(settingsManager.t('playerWins'));
