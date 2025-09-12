@@ -5,6 +5,7 @@ import { UserManager } from './user.js';
 import { InstructionsManager } from './instructions.js';
 import {SettingsManager} from './settings.js';
 import { calculateGameResult, calculateScore } from './score.js';
+import {applyTooltips} from './tooltips.js';
 document.addEventListener('DOMContentLoaded', () => {
     const userManager = new UserManager();
     let currentUser = null;
@@ -414,7 +415,6 @@ function updateDisplay(showDealer = false, animate = false) {
         
     }
 }
-
 //function for the deal button click
 function onButtonClick() {
     //if the sound effects are enabled, fun wheel spin sound for buttons
@@ -489,4 +489,6 @@ buttonStay.addEventListener('click', onStayClick);
 
 //Initialize First Round
 resetGame();
+
+applyTooltips(settingsManager);
 });

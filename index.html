@@ -28,8 +28,8 @@
     <div id="turn"></div>
     <div class="main-game-container">
         <div class="button-container"> 
-            <button id="deal" aria-label="Deal card" data-label="Deal"><div class="inner"></div></button>
-            <button id="stay" aria-label="Stay" data-label="Stay"><div class="inner"></div></button>
+            <button id="deal" aria-label="Deal card" data-label="Deal" title="Click to deal cards"><div class="inner"></div></button>
+            <button id="stay" aria-label="Stay" data-label="Stay" title="Click to stay"><div class="inner"></div></button>
         </div>
         <div id="game_information" class="game-layout">
             <div class="cards-section" aria-live="polite" aria-atomic="true">
@@ -63,25 +63,25 @@
         </div>
     </div>
     <div id="settings-container">
-        <button id="settings-button" data-label="settings">
+        <button id="settings-button" data-label="settings" title="Open game settings">
         </button>
         <div id="settings-overlay">
             <div id="settings-menu">
                 <h2 id="audio-controls-label"> Audio Controls </h2>
                 <div id="audio-controls">
-                    <button id="toggle-music" aria-pressed="false"> Music On </button>
-                    <button id="toggle-sound-effect" aria-pressed="false"> Sound Effects On </button>
+                    <button id="toggle-music" aria-pressed="false" title="Toggle background music"> Music On </button>
+                    <button id="toggle-sound-effect" aria-pressed="false" title="Toggle sound effects"> Sound Effects On </button>
 
                     <div class="volume-controls">
                         <label for="music-volume"> Music Volume </label>
-                        <input type="range" id="music-volume" min="0" max="1" step="0.1">
+                        <input type="range" id="music-volume" min="0" max="1" step="0.1" title="Adjust music volume">
                         <label for="effects-volume"> Sound Effects Volume </label>
-                        <input type="range" id="effects-volume" min="0" max="1" step="0.1">
+                        <input type="range" id="effects-volume" min="0" max="1" step="0.1" title="Adjust sound effects volume">
                     </div>
                 </div>
             </div>
         </div>
-        <button id="help-button"> ? </button>
+        <button id="help-button" title="View game instructions"> ? </button>
         <div id="instructions-overlay" class="overlay">
             <div class="instructions-box">
                 <h2> Welcome to Blackjack!</h2>
@@ -103,8 +103,8 @@
             </div>
         </div>
         <div id="login-container">
-            <input type="text" id="username-input" placeholder="Enter username">
-            <button id="login-button">Login</button>
+            <input type="text" id="username-input" placeholder="Enter username" title="Enter your username here">
+            <button id="login-button" title="Login with this username">Login</button>
         </div>
     </div>
     <script type="module" src="js/play.js"></script>

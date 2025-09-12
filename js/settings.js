@@ -1,5 +1,5 @@
 //settings.js
-
+import {applyTooltips} from './tooltips.js';
 export class SettingsManager {
     constructor() {
         this.settingsButton = document.getElementById('settings-button');
@@ -49,8 +49,17 @@ export class SettingsManager {
                 ruleKeepScore: "Keep a close eye on your score!",
                 letsPlay: "Let's Play!",
                 results: "Results:",
-                language: "Language"
-
+                language: "Language",
+                tooltipDeal: "Click to deal a new card",
+                tooltipStay: "Click to stay",
+                tooltipSettings: "Open game settings",
+                tooltipHelp: "Open instructions",
+                tooltipLogin: "Log in with your username",
+                tooltipUsername: "Enter your username",
+                tooltipMusic: "Toggle background music",
+                tooltipSound: "Toggle sound effects",
+                tooltipMusicVolume: "Adjust music volume",
+                tooltipEffectsVolume: "Adjust sound effects volume"
             },
             es: {
                 welcome: "Bienvenido",
@@ -93,7 +102,17 @@ export class SettingsManager {
                 ruleKeepScore: "!Mantén un ojo en tu puntuación!",
                 letsPlay: "!Juguemos!",
                 results: "Resultados:",
-                language: "Idioma"
+                language: "Idioma",
+                tooltipDeal: "Haz clic para repartir una carta nueva",
+                tooltipStay: "Haz clic para plantarte",
+                tooltipSettings: "Abrir configuración del juego",
+                tooltipHelp: "Abrir instrucciones",
+                tooltipLogin: "Inicia sesión con tu nombre de usuario",
+                tooltipUsername: "Introduce tu nombre de usuario",
+                tooltipMusic: "Activar o desactivar la música",
+                tooltipSound: "Activar o desactivar los efectos de sonido",
+                tooltipMusicVolume: "Ajustar volumen de la música",
+                tooltipEffectsVolume: "Ajustar volumen de los efectos de sonido"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -136,7 +155,17 @@ export class SettingsManager {
                 ruleKeepScore: "Surveillez attentivement votre score !",
                 letsPlay: "Jouons !",
                 results: "Résultats:",
-                language: "Langue"
+                language: "Langue",
+                tooltipDeal: "Cliquez pour distribuer une nouvelle carte",
+                tooltipStay: "Cliquez pour rester",
+                tooltipSettings: "Ouvrir les paramètres du jeu",
+                tooltipHelp: "Ouvrir les instructions",
+                tooltipLogin: "Connectez-vous avec votre nom d'utilisateur",
+                tooltipUsername: "Entrez votre nom d'utilisateur",
+                tooltipMusic: "Activer ou désactiver la musique",
+                tooltipSound: "Activer ou désactiver les effets sonores",
+                tooltipMusicVolume: "Régler le volume de la musique",
+                tooltipEffectsVolume: "Régler le volume des effets sonores"
             }
         };
         this.init();
@@ -310,5 +339,10 @@ export class SettingsManager {
         //update language heading
         const langHeading = this.settingsMenu.querySelector('h4');
         if (langHeading) langHeading.textContent = this.t('language') || 'Language';
+
+        //update tooltips
+        if (typeof applyTooltips === 'function') {
+            applyTooltips(this);
+        }
     }
 }
