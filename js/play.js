@@ -55,9 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function announceAction(message) {
         if (!settingsManager.screenReaderEnabled) return;
-        const announcer = document.getElementById('turn');
+        const announcer = document.getElementById('sr-announcer');
         announcer.textContent = '';
-        setTimeout(() => { announcer.textContent = message; }, 100);
+        setTimeout(() => { announcer.textContent = message; }, 50);
     }
 
     turn.addEventListener('languageChanged', () => {
