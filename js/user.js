@@ -35,7 +35,20 @@ export class UserManager {
     getUserScores(username = this.currentUser) {
         return this.users[username]?.scores || [];
     }
+
+    getWinStreak(username = this.currentUser) {
+        const scores = this.getUserScores(username);
+        let streak = 0;
+        for (let i = scores.length - 1; i >= 0; i--) {
+            if (scores[i].result.toLowerCase().includes("win")) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+        return streak;
+    }
     _save() {
-        localStorage.getItem(STORAGE_KEY, JSON.stringify(this.users));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users));
     }
 }

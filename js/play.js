@@ -22,10 +22,69 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userManager.login(username)) {
             currentUser = username;
             document.getElementById("login-container").style.display = "none";
+
+            userMenuButton.style.display = "inline-block";
             alert(`${settingsManager.t('welcome')}, ${username}!`);
         }
     });
 
+    const loginContainer = document.getElementById('login-container');
+    const loginButton = document.getElementById('login-button');
+    const usernameInput = document.getElementById('username-input');
+    const userMenuButton = document.getElementById('user-menu-button');
+    const userMenuOverlay = document.getElementById('user-menu-overlay');
+    const closeUserMenu = document.getElementById('close-user-menu');
+    const userWinStreak = document.getElementById('user-win-streak');
+    const userHistory = document.getElementById('user-history');
+    const logoutButton = document.getElementById('logout-button');
+
+    loginButton.addEventListener('click', () => {
+        const username = usernameInput.value.trim();
+        if(username) {
+            loginContainer.style.display  = 'none';
+            userMenuButton.style.display = 'block';
+            userMenuButton.setAttribute('data-label', username);
+        } else {
+            alert("Please enter a username to login!");
+        }
+    });
+
+    function refreshUserMenu() {
+        if (!currentUser) return;
+        const scores = userManager.getUserScores(currentUser);
+        const streak = userManager.getWinStreak(currentUser);
+
+        userWinStreak.textContent = `Win Streak: ${streak}`;
+        userHistory.innerHTML = "";
+
+        scores.slice().reverse().forEach(s => {
+            const li = document.createElement("li");
+            li.textContent = `[${new Date(s.timestamp).toLocaleString()}] ${s.result} (You: ${s.playerScore}, Dealer: ${s.dealerScore})`;
+            userHistory.appendChild(li);
+        });
+    }
+
+    userMenuButton.addEventListener("click", () => {
+        refreshUserMenu();
+        userMenuOverlay.style.display = "flex";
+    });
+
+    closeUserMenu.addEventListener("click", () => {
+        userMenuOverlay.style.display = "none";
+    });
+
+    logoutButton.addEventListener("click", () => {
+        userManager.logout();
+        currentUser = null;
+
+        //hide user menu & button
+        userMenuOverlay.style.display = "none";
+        userMenuButton.style.display = "none";
+        //show login again
+        document.getElementById('login-container').style.display = "block";
+
+        alert("You have been logged out.");
+    });
 
     let cards = [];
     let your_cards = [];
@@ -84,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //save scores for loggin-in user
         if (currentUser) {
             userManager.addScore(message, current_score, dealer_score);
+            refreshUserMenu();
         }
         //announce action
         announceAction(message);
