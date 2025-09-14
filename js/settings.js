@@ -29,6 +29,7 @@ export class SettingsManager {
                 yourCards: "Your Cards",
                 dealerCards: "Dealer's Cards",
                 settings: "Settings",
+                userMenu: "User Menu",
                 instructionsTitle: "Welcome to Blackjack!",
                 audioControls: "Audio Controls",
                 musicOn: "Music On",
@@ -82,6 +83,7 @@ export class SettingsManager {
                 yourCards: "Tus cartas",
                 dealerCards: "Cartas del dealer",
                 settings: "Configuración",
+                userMenu: "Menú de Usuario",
                 instructionsTitle: "¡Bienvenido a Blackjack!",
                 instructionsObjective: "Objectivo",
                 audioControls: "Controles de Audio",
@@ -135,6 +137,7 @@ export class SettingsManager {
                 yourCards: "Vos cartes",
                 dealerCards: "Cartes du croupier",
                 settings: "Paramètres",
+                userMenu: "Menu Utilisateur",
                 instructionsTitle: "Bienvenue au Blackjack !",
                 audioControls: "Contrôles Audio",
                 musicOn: "Musique Activée",
@@ -376,6 +379,11 @@ export class SettingsManager {
             //update the turn text based on changing languages
             const event = new Event('languageChanged');
             turnEl.dispatchEvent(event);
+        }
+        const userMenuBtn = document.getElementById('user-menu-button');
+        if (userMenuBtn) {
+            userMenuBtn.setAttribute('aria-label', this.t('userMenu'));
+            userMenuBtn.setAttribute('data-label', this.t('userMenu'));
         }
 
     }

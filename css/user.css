@@ -228,11 +228,9 @@
 
 #user-controls {
     position: fixed;
-    bottom: 90px;
     right: 20px;
     display: flex;
     flex-direction: column;
-    gap: 80px;
     z-index: 1000;
 }
 #user-menu-button {
@@ -242,6 +240,7 @@
     background: radial-gradient(circle at center, #000000 100%);
     overflow: hidden;
     z-index: 1000;
+    margin-bottom: 140px;
     display: block !important;
     position: relative;
     width: 80px;
@@ -274,11 +273,11 @@
 
 #side-menu {
     position: fixed;
-    bottom: 120px;
+    bottom: 150px;
     right: 20px;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 12px;
     background: rgba(0,0,0,0.7);
     padding: 15px;
     border-radius: 12px;
