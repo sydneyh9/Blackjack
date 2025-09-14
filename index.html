@@ -9,6 +9,7 @@
     <audio id="background-music-second" src="sounds/jazz2.mp3"></audio>
     <audio id="casino" src="sounds/casino.mp3" loop preload="auto"></audio>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/user.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/cards.css">
@@ -64,16 +65,21 @@
         </div>
     </div>
     <div id="settings-container">
-        <button id="settings-button" data-label="settings" aria-label="Open game settings" title="Open game settings">
-        </button>
         <div id="login-container">
             <input type="text" id="username-input" placeholder="Enter username" title="Enter your username here">
             <button id="login-button" title="Login with this username"> Login </button>
         </div>
+        <button id="hamburger-button" aria-label="Open menu" title="Open menu"> ≣ </button>
+        <div id="side-menu">
+            <button id="settings-button" data-label="settings" aria-label="Open game settings" title="Open game settings"></button>
+                <button id="user-menu-button" aria-label="View user profile" title="View user profile" style="display:none;">
+                    <div class="inner"></div>
+                </button>
+        </div>
         <!-- User Menu Button-->
-        <button id="user-menu-button" aria-label="View user profile" title="View user profile" style="display:none;">
-            <div class="inner"></div>
-        </button>
+         <div id="user-controls">
+            <button id="logout-button" style="display:none;"> Logout </button>
+         </div>
         <div id="user-menu-overlay" class="overlay">
             <div id="user-menu">
                     <h2 id="user-menu-title"> Player Profile </h2>
@@ -81,7 +87,6 @@
                     <h3> Game History </h3>
                     <ul id="user-history"></ul>
                     <div class="user-menu-actions">
-                        <button id="logout-button"> Logout </button>
                         <button id="close-user-menu"> Close </button>
                     </div>
             </div>
@@ -103,7 +108,7 @@
                 <div id="accessibility-controls">
                     <h3 class="settings-subtitle">Accessibility </h3>
                     <button id="toggle-screen-reader" aria-pressed="false" class="settings-button" title="Enable screen reader support">
-                        Screen Reader: Off
+                        Screen Reader Off
                     </button>
                 </div>
             </div>

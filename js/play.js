@@ -16,17 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsManager.onScreenReaderToggle = (enabled) => {
         updateDisplay(true, false);
     };
-    //login logic
-    document.getElementById("login-button").addEventListener("click", () => {
-        const username = document.getElementById("username-input").value;
-        if (userManager.login(username)) {
-            currentUser = username;
-            document.getElementById("login-container").style.display = "none";
-
-            userMenuButton.style.display = "inline-block";
-            alert(`${settingsManager.t('welcome')}, ${username}!`);
-        }
-    });
 
     const loginContainer = document.getElementById('login-container');
     const loginButton = document.getElementById('login-button');
@@ -37,17 +26,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const userWinStreak = document.getElementById('user-win-streak');
     const userHistory = document.getElementById('user-history');
     const logoutButton = document.getElementById('logout-button');
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const sideMenu = document.getElementById('side-menu');
 
+    hamburgerButton.addEventListener('click', () => {
+        sideMenu.classList.toggle('show');
+    });
+
+    //login/logout logic
     loginButton.addEventListener('click', () => {
         const username = usernameInput.value.trim();
-        if(username) {
+        if(userManager.login(username)) {
+            currentUser = username;
             loginContainer.style.display  = 'none';
-            userMenuButton.style.display = 'block';
+            userMenuButton.style.display = 'inline-block';
             userMenuButton.setAttribute('data-label', username);
-        } else {
-            alert("Please enter a username to login!");
+
+            alert(`${settingsManager.t('welcome')}, ${username}!`);
         }
     });
+
+    logoutButton.addEventListener("click", () => {
+        userManager.logout();
+        currentUser = null;
+
+        //hide user menu & button
+        userMenuOverlay.style.display = "none";
+        userMenuButton.style.display = "none";
+        logoutButton.style.display = "none";
+        loginContainer.style.display = "block";
+        //show login again
+        document.getElementById('login-container').style.display = "block";
+
+        alert("You have been logged out.");
+    });
+
 
     function refreshUserMenu() {
         if (!currentUser) return;
@@ -73,18 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         userMenuOverlay.style.display = "none";
     });
 
-    logoutButton.addEventListener("click", () => {
-        userManager.logout();
-        currentUser = null;
-
-        //hide user menu & button
-        userMenuOverlay.style.display = "none";
-        userMenuButton.style.display = "none";
-        //show login again
-        document.getElementById('login-container').style.display = "block";
-
-        alert("You have been logged out.");
-    });
 
     let cards = [];
     let your_cards = [];

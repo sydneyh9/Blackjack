@@ -67,7 +67,6 @@ html, body {
     min-width: 70px;
     user-select: none;
 }
-
 .cards-and-buttons {
     display: flex;
     flex-direction: column;
