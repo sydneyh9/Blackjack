@@ -29,7 +29,7 @@ export class SettingsManager {
                 yourCards: "Your Cards",
                 dealerCards: "Dealer's Cards",
                 settings: "Settings",
-                userMenu: "User Menu",
+                userMenu: "User",
                 instructionsTitle: "Welcome to Blackjack!",
                 audioControls: "Audio Controls",
                 musicOn: "Music On",
@@ -83,7 +83,7 @@ export class SettingsManager {
                 yourCards: "Tus cartas",
                 dealerCards: "Cartas del dealer",
                 settings: "Configuración",
-                userMenu: "Menú de Usuario",
+                userMenu: "Usuario",
                 instructionsTitle: "¡Bienvenido a Blackjack!",
                 instructionsObjective: "Objectivo",
                 audioControls: "Controles de Audio",
@@ -137,7 +137,7 @@ export class SettingsManager {
                 yourCards: "Vos cartes",
                 dealerCards: "Cartes du croupier",
                 settings: "Paramètres",
-                userMenu: "Menu Utilisateur",
+                userMenu: "Utilisateur",
                 instructionsTitle: "Bienvenue au Blackjack !",
                 audioControls: "Contrôles Audio",
                 musicOn: "Musique Activée",
@@ -320,7 +320,10 @@ export class SettingsManager {
             title && (title.textContent = this.t('instructionsTitle'));
             const objectiveHeading = instrOverlay.querySelector('h3');
             objectiveHeading && (objectiveHeading.textContent = this.t('instructionsObjective'));
-
+            const objectiveText = instrOverlay.querySelector('.instructions-box > p');
+            if (objectiveText) {
+                objectiveText.textContent = this.t('instructionsObjectiveText');
+            }
             const ruleParagraphs = instrOverlay.querySelectorAll('.instructions-box > p');
             if (ruleParagraphs.length >= 5) {
                 ruleParagraphs[1].textContent = this.t('instructionsRule1');

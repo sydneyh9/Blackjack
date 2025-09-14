@@ -86,6 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
         userMenuOverlay.style.display = "none";
     });
 
+    //close the user menu when clicking the overlay
+    document.getElementById('user-menu-overlay').addEventListener('click',function(e) {
+        if (e.target === this) {
+            this.style.display = "none";
+        }
+    });
+
 
     let cards = [];
     let your_cards = [];
