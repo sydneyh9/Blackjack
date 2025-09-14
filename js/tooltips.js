@@ -11,6 +11,7 @@ export function applyTooltips(settingsManager) {
         toggleSound: settingsManager.t('tooltipSound') || "Toggle sound effects",
         musicVolume: settingsManager.t('tooltipMusicVolume') || "Adjust music volume",
         effectsVolume: settingsManager.t('tooltipEffectsVolume')|| "Adjust sound effect volume",
+        closeMenu: settingsManager.t('tooltipCloseMenu') || "Click to close the menu"
     };
     document.getElementById('deal')?.setAttribute('title', tooltips.deal);
     document.getElementById('stay')?.setAttribute('title', tooltips.stay);
@@ -22,4 +23,5 @@ export function applyTooltips(settingsManager) {
     document.getElementById('toggle-sound-effect')?.setAttribute('title', tooltips.toggleSound);
     document.getElementById('music-volume')?.setAttribute('title', tooltips.musicVolume);
     document.getElementById('effects-volume')?.setAttribute('title', tooltips.effectsVolume);
+    document.getElementById('close-user-menu')?.setAttribute('title', tooltips.closeMenu);
 }

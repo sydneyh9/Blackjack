@@ -1,5 +1,6 @@
 //settings.js
 import {applyTooltips} from './tooltips.js';
+import { UserManager } from './user.js';
 export class SettingsManager {
     constructor() {
         this.settingsButton = document.getElementById('settings-button');
@@ -61,7 +62,12 @@ export class SettingsManager {
                 tooltipMusic: "Toggle background music",
                 tooltipSound: "Toggle sound effects",
                 tooltipMusicVolume: "Adjust music volume",
-                tooltipEffectsVolume: "Adjust sound effects volume"
+                tooltipEffectsVolume: "Adjust sound effects volume",
+                userMenuTitle: "Player Profile",
+                winStreak: "Win Streak: 0",
+                gameHistory: "Game History",
+                closeMenu: "Close Menu",
+                tooltipCloseMenu: "Click to close the menu"
             },
             es: {
                 welcome: "Bienvenido",
@@ -115,7 +121,12 @@ export class SettingsManager {
                 tooltipMusic: "Activar o desactivar la música",
                 tooltipSound: "Activar o desactivar los efectos de sonido",
                 tooltipMusicVolume: "Ajustar volumen de la música",
-                tooltipEffectsVolume: "Ajustar volumen de los efectos de sonido"
+                tooltipEffectsVolume: "Ajustar volumen de los efectos de sonido",
+                userMenuTitle: "Perfil del Jugador",
+                winStreak: "Racha de Victorias: 0",
+                gameHistory: "Historial de Juegos",
+                closeMenu: "Cerrar Menú",
+                tooltipCloseMenu: "Haz click para cerrar el menú"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -169,7 +180,12 @@ export class SettingsManager {
                 tooltipMusic: "Activer ou désactiver la musique",
                 tooltipSound: "Activer ou désactiver les effets sonores",
                 tooltipMusicVolume: "Régler le volume de la musique",
-                tooltipEffectsVolume: "Régler le volume des effets sonores"
+                tooltipEffectsVolume: "Régler le volume des effets sonores",
+                userMenuTitle: "Profil du Joueur",
+                winStreak: "Série de Victories: 0",
+                gameHistory: "Historique des Parties",
+                closeMenu: "Fermer le Menu",
+                tooltipCloseMenu: "Cliquez pour fermer le menu"
             }
         };
         this.init();
@@ -383,11 +399,34 @@ export class SettingsManager {
             const event = new Event('languageChanged');
             turnEl.dispatchEvent(event);
         }
+        //update user menu button
         const userMenuBtn = document.getElementById('user-menu-button');
         if (userMenuBtn) {
             userMenuBtn.setAttribute('aria-label', this.t('userMenu'));
             userMenuBtn.setAttribute('data-label', this.t('userMenu'));
         }
+        //update close menu button
+        const closeMenuBtn = document.getElementById('close-user-menu');
+        if (closeMenuBtn) {
+            closeMenuBtn.textContent = this.t('closeMenu');
+            closeMenuBtn.setAttribute('aria-label', this.t('closeMenu'));
+        }
+        //update user menu title
+        const userMenuTitleEl = document.getElementById('user-menu-title');
+        if (userMenuTitleEl) {
+            userMenuTitleEl.textContent = this.t('userMenuTitle');
+        }
 
+        //update win streak
+        const winStreakEl = document.getElementById('user-win-streak');
+        if (winStreakEl) {
+            const wins = winStreakEl.dataset.value || "0";
+            winStreakEl.textContent = `${this.t('winStreak').replace(/\d+$/, wins)}`;
+        }
+        //update game history title
+        const gameHistoryTitleEl = document.getElementById('game-history');
+        if (gameHistoryTitleEl) {
+            gameHistoryTitleEl.textContent = this.t('gameHistory');
+        }
     }
 }
