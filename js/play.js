@@ -7,7 +7,7 @@ import {SettingsManager} from './settings.js';
 import { calculateGameResult, calculateScore } from './score.js';
 import {applyTooltips} from './tooltips.js';
 document.addEventListener('DOMContentLoaded', () => {
-    const userManager = new UserManager();
+    const userManager = new UserManager((key) => settingsManager.t(key));
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
     const settingsManager = new SettingsManager();
@@ -28,6 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logout-button');
     const hamburgerButton = document.getElementById('hamburger-button');
     const sideMenu = document.getElementById('side-menu');
+    const passwordInput = document.getElementById('password-input');
+    const signupButton = document.getElementById('signup-button');
+
+    //SignUp
+    signupButton.addEventListener('click', () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        const result = userManager.signup(username, password);
+        alert(result.message);
+    });
 
     hamburgerButton.addEventListener('click', () => {
         sideMenu.classList.toggle('show');
@@ -36,13 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
     //login/logout logic
     loginButton.addEventListener('click', () => {
         const username = usernameInput.value.trim();
-        if(userManager.login(username)) {
+        const password = passwordInput.value.trim();
+        const result = userManager.login(username, password);
+        if(result.success) {
             currentUser = username;
             loginContainer.style.display  = 'none';
             userMenuButton.style.display = 'inline-block';
             userMenuButton.setAttribute('data-label', username);
-
-            alert(`${settingsManager.t('welcome')}, ${username}!`);
+            alert(result.message);
+        } else {
+            alert(result.message);
         }
     });
 
@@ -58,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //show login again
         document.getElementById('login-container').style.display = "block";
 
-        alert("You have been logged out.");
+        alert(settingsManager.t('logoutMessage'));
     });
 
 
@@ -67,12 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const scores = userManager.getUserScores(currentUser);
         const streak = userManager.getWinStreak(currentUser);
 
-        userWinStreak.textContent = `Win Streak: ${streak}`;
+        userWinStreak.textContent = `${settingsManager.t('winStreak')}: ${streak}`;
         userHistory.innerHTML = "";
 
         scores.slice().reverse().forEach(s => {
             const li = document.createElement("li");
-            li.textContent = `[${new Date(s.timestamp).toLocaleString()}] ${s.result} (You: ${s.playerScore}, Dealer: ${s.dealerScore})`;
+            const template = settingsManager.t('historyEntry');
+            const formatted = template.replace('{time}', new Date(s.timestamp).toLocaleString()).replace('{result}', s.result).replace('{player}', s.playerScore).replace('{dealer}', s.dealerScore);
+            li.textContent = formatted;
             userHistory.appendChild(li);
         });
     }

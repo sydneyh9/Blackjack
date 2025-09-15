@@ -64,10 +64,21 @@ export class SettingsManager {
                 tooltipMusicVolume: "Adjust music volume",
                 tooltipEffectsVolume: "Adjust sound effects volume",
                 userMenuTitle: "Player Profile",
-                winStreak: "Win Streak: 0",
+                winStreak: "Win Streak",
                 gameHistory: "Game History",
                 closeMenu: "Close Menu",
-                tooltipCloseMenu: "Click to close the menu"
+                tooltipCloseMenu: "Click to close the menu",
+                usernamePlaceholder: "Enter username",
+                passwordPlaceholder: "Enter password",
+                signup: "Sign Up",
+                logout: "Logout",
+                signupSuccess: "Signup successful.",
+                signupExists: "Username already exists.",
+                signupRequired: "Username and password required.",
+                loginRequired: "Username and password required.",
+                loginInvalid: "Invalid username or password.",
+                logoutMessage: "You have been logged out.",
+                historyEntry: "[{time} {result} (You: {player}, Dealer: {dealer})"
             },
             es: {
                 welcome: "Bienvenido",
@@ -123,10 +134,21 @@ export class SettingsManager {
                 tooltipMusicVolume: "Ajustar volumen de la música",
                 tooltipEffectsVolume: "Ajustar volumen de los efectos de sonido",
                 userMenuTitle: "Perfil del Jugador",
-                winStreak: "Racha de Victorias: 0",
+                winStreak: "Racha de Victorias",
                 gameHistory: "Historial de Juegos",
                 closeMenu: "Cerrar Menú",
-                tooltipCloseMenu: "Haz click para cerrar el menú"
+                tooltipCloseMenu: "Haz click para cerrar el menú",
+                usernamePlaceholder: "Introduce tu nombre de usuario",
+                passwordPlaceholder: "Introduce tu contraseña",
+                signup: "Registrarse",
+                logout: "Cerrar sesión",
+                signupSuccess: "Registro exitoso.",
+                signupExists: "El nombre de usuario ya existe.",
+                signupRequired: "Se require nombre de usuario y contraseña.",
+                loginRequired: "Se requiere nombre de usuario y contraseña.",
+                loginInvalid: "Nombre de usuario o contraseña inválidos.",
+                logoutMessage: "Has cerrado sesión.",
+                historyEntry: "[{time}] {result} (Tú: {player}, Dealer: {dealer})"
             },
             fr: {
                 welcome: "Bienvenue",
@@ -182,10 +204,21 @@ export class SettingsManager {
                 tooltipMusicVolume: "Régler le volume de la musique",
                 tooltipEffectsVolume: "Régler le volume des effets sonores",
                 userMenuTitle: "Profil du Joueur",
-                winStreak: "Série de Victories: 0",
+                winStreak: "Série de Victories",
                 gameHistory: "Historique des Parties",
                 closeMenu: "Fermer le Menu",
-                tooltipCloseMenu: "Cliquez pour fermer le menu"
+                tooltipCloseMenu: "Cliquez pour fermer le menu",
+                usernamePlaceholder: "Entrez votre nom d'utilisateur",
+                passwordPlaceholder: "Entrez votre mot de passe",
+                signup: "S'inscrire",
+                logout: "Déconnexion",
+                signupSuccess: "Inscription réussie",
+                signupExists: "Le nom d'utilisateur existe déjà.",
+                signupRequired: "Nom d'utilisateur et mot de passe requis.",
+                loginRequired: "Nom d'utilisateur et mot de passe requis.",
+                loginInvalid: "Nom d'utilisateur et mot de passe invalide.",
+                logoutMessage: "Vous vous êtes déconnecté.",
+                historyEntry: "[{time}] {result} (Vous: {player}, Croupier: {dealer})"
             }
         };
         this.init();
@@ -427,6 +460,23 @@ export class SettingsManager {
         const gameHistoryTitleEl = document.getElementById('game-history');
         if (gameHistoryTitleEl) {
             gameHistoryTitleEl.textContent = this.t('gameHistory');
+        }
+        //username update
+        const usernameInput = document.getElementById('username-input');
+        if (usernameInput) usernameInput.setAttribute('placeholder', this.t('tooltipUsername'));
+
+        //login update
+        const  signupBtn = document.getElementById('signup-button');
+        if (signupBtn) signupBtn.textContent = this.t('signup') || "Sign Up";
+
+        //logout button update
+        const logoutBtn = document.getElementById('logout-button');
+        if (logoutBtn) logoutBtn.textContent = this.t('logout') || "Logout"; 
+        
+        const helpBtn = document.getElementById('help-button');
+        if (helpBtn) {
+            helpBtn.setAttribute('aria-label', this.t('tooltipHelp'));
+            helpBtn.setAttribute('title', this.t('tooltipHelp'));
         }
     }
 }
