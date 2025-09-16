@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser = username;
             loginContainer.style.display  = 'none';
             userMenuButton.style.display = 'inline-block';
-            userMenuButton.setAttribute('data-label', username);
             alert(result.message);
         } else {
             alert(result.message);
@@ -90,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert(settingsManager.t('logoutMessage'));
     });
 
-
+    //keep the user menu refreshed with scores, win streak, and language changes
     function refreshUserMenu() {
         if (!currentUser) return;
         const scores = userManager.getUserScores(currentUser);
@@ -108,11 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //user menu click logic
     userMenuButton.addEventListener("click", () => {
         refreshUserMenu();
         userMenuOverlay.style.display = "flex";
     });
 
+    //close user menu click logic
     closeUserMenu.addEventListener("click", () => {
         userMenuOverlay.style.display = "none";
     });
@@ -151,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     button.classList.add('centered');
 
+    //function to announce actions
     function announceAction(message) {
         if (!settingsManager.screenReaderEnabled) return;
         const announcer = document.getElementById('sr-announcer');
