@@ -22,7 +22,6 @@
 <body>
     <h1 class="black-title"> BLACK </h1>
     <h1 class="jack-title"> JACK </h1>
-    <div class="table-trim bottom"></div>
     <div class="arc-decoration"></div>
 
     <div id="countdown" class="countdown-overlay" aria-live="assertive"></div>
@@ -65,12 +64,14 @@
         </div>
     </div>
     <div id="settings-container">
+        <div class="table-trim bottom">
         <div id="login-container">
             <input type="text" id="username-input" placeholder="Enter username" title="Enter your username here">
             <input type="password" id="password-input" placeholder="Enter password" title="Enter your password here">
             <button id="login-button" title="Login with this username"> Login </button>
             <button id="signup-button" title="Create new account"> Sign Up</button>
         </div>
+    </div>
         <button id="hamburger-button" aria-label="Open menu" title="Open menu"> ≣ </button>
         <div id="side-menu">
             <button id="settings-button" data-label="settings" aria-label="Open game settings" title="Open game settings"></button>
