@@ -71,6 +71,7 @@ export class SettingsManager {
                 usernamePlaceholder: "Enter username",
                 passwordPlaceholder: "Enter password",
                 signup: "Sign Up",
+                login: "Login",
                 logout: "Logout",
                 signupSuccess: "Signup successful.",
                 signupExists: "Username already exists.",
@@ -141,6 +142,7 @@ export class SettingsManager {
                 usernamePlaceholder: "Introduce tu nombre de usuario",
                 passwordPlaceholder: "Introduce tu contraseña",
                 signup: "Registrarse",
+                login: "Iniciar sesión",
                 logout: "Cerrar sesión",
                 signupSuccess: "Registro exitoso.",
                 signupExists: "El nombre de usuario ya existe.",
@@ -211,6 +213,7 @@ export class SettingsManager {
                 usernamePlaceholder: "Entrez votre nom d'utilisateur",
                 passwordPlaceholder: "Entrez votre mot de passe",
                 signup: "S'inscrire",
+                login: "Connexion",
                 logout: "Déconnexion",
                 signupSuccess: "Inscription réussie",
                 signupExists: "Le nom d'utilisateur existe déjà.",
@@ -462,14 +465,27 @@ export class SettingsManager {
         if (gameHistoryTitleEl) {
             gameHistoryTitleEl.textContent = this.t('gameHistory');
         }
-        //username update
+        //username language update
         const usernameInput = document.getElementById('username-input');
         if (usernameInput) usernameInput.setAttribute('placeholder', this.t('tooltipUsername'));
 
-        //login update
-        const  signupBtn = document.getElementById('signup-button');
-        if (signupBtn) signupBtn.textContent = this.t('signup') || "Sign Up";
+        //password language update
+        const passwordInput = document.getElementById('password-input');
+        if (passwordInput) passwordInput.setAttribute('placeholder', this.t('passwordPlaceholder'));
 
+        //signup button language update
+        const  signupBtn = document.getElementById('signup-button');
+        if (signupBtn) {
+            signupBtn.textContent = this.t('signup') || "Sign Up";
+            signupBtn.setAttribute('title', this.t('signup'));
+        }
+
+        //login button language update
+        const loginBtn = document.getElementById('login-button');
+        if (loginBtn) {
+            loginBtn.textContent = this.t('login') || "Login";
+            loginBtn.setAttribute('title', this.t('tooltipLogin'));
+        }
         //logout button update
         const logoutBtn = document.getElementById('logout-button');
         if (logoutBtn) logoutBtn.textContent = this.t('logout') || "Logout"; 
