@@ -621,6 +621,14 @@ function onButtonClick() {
     }
 }
 
+//function for the user button to spin when clicked
+function onUserClick() {
+    userMenuButton.classList.add('spin');
+    userMenuButton.addEventListener('animationend', () => {
+        userMenuButton.classList.remove('spin');
+    }, {once: true});
+}
+
 //function for the player to have a stay option
 function onStayClick() {
     //if sound effects enabled, fun wheel spin sound for buttons
@@ -671,6 +679,7 @@ function startGame() {
 //listener for button
 button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
+userMenuButton.addEventListener('click', onUserClick);
 
 //read any button/input label when hovered
 document.querySelectorAll('button, input, li, p, h4, h3, h2, ul, [role="listitem"]').forEach(el => {
