@@ -258,9 +258,10 @@ export class SettingsManager {
         const screenReaderBtn = document.getElementById('toggle-screen-reader');
         if (screenReaderBtn) {
             screenReaderBtn.addEventListener('click', () => {
-                this.screenReaderEnabled = !this.screenReaderEnabled;
-                screenReaderBtn.setAttribute('aria-pressed', this.screenReaderEnabled);
-                screenReaderBtn.textContent = this.screenReaderEnabled ? 'Screen Reader On' : 'Screen Reader Off';
+                const isActive = screenReaderBtn.classList.toggle('active');
+                this.screenReaderEnabled = isActive;
+                screenReaderBtn.setAttribute('aria-pressed', isActive);
+                screenReaderBtn.textContent = isActive ? 'Screen Reader On' : 'Screen Reader Off';
 
                 //trigger refresh for labels
                 if (typeof this.onScreenReaderToggle === 'function') this.onScreenReaderToggle(this.screenReaderEnabled);

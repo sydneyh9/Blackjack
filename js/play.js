@@ -23,6 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = settingsManager.currentLanguage === 'es' ? 'es-ES' :
         settingsManager.currentLanguage === 'fr' ? 'fr-FR' : 'en-US';
+
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang === utterance.lang);
+        if (voice) {
+            utterance.voice = voice;
+        }
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utterance);
     }
@@ -665,7 +671,7 @@ button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
 
 //read any button/input label when hovered
-document.querySelectorAll('button, input, li, p, h4, h3, [role="listitem"]').forEach(el => {
+document.querySelectorAll('button, input, li, p, h4, h3, h2, ul, [role="listitem"]').forEach(el => {
     el.addEventListener('mouseenter', () => {
         if (settingsManager.screenReaderEnabled) {
             let label = el.getAttribute('aria-label') || el.getAttribute('title') || el.textContent;
