@@ -17,6 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay(true, false);
     };
 
+    //screen reader 
+    function speak(text) {
+        if (!text) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = settingsManager.currentLanguage === 'es' ? 'es-ES' :
+        settingsManager.currentLanguage === 'fr' ? 'fr-FR' : 'en-US';
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
+
     const loginContainer = document.getElementById('login-container');
     const loginButton = document.getElementById('login-button');
     const usernameInput = document.getElementById('username-input');
@@ -139,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!settingsManager.screenReaderEnabled) return;
         const announcer = document.getElementById('sr-announcer');
         announcer.textContent = '';
-        setTimeout(() => { announcer.textContent = message; }, 50);
+        setTimeout(() => { announcer.textContent = message; speak(message)}, 50);
     }
 
     turn.addEventListener('languageChanged', () => {
@@ -181,9 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         button.disabled = true;
         buttonStay.disabled = true;
-        if (settingsManager.screenReaderEnabled && timeLeft === 0) {
-            announceAction("Let's Play");
-        }
 
         //buttons shouldn't be available during countdown
         button.style.display = 'none';
@@ -198,6 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 countdown.textContent = `${timeLeft}`;
             } else {
                 clearInterval(timerId);
+                if (settingsManager.screenReaderEnabled) {
+                    announceAction(settingsManager.t('letsPlay'));
+                }
                 countdown.textContent = settingsManager.t('deal');
                 setTimeout(() => {
                     countdown.style.opacity = '0';
@@ -278,10 +288,11 @@ function drawCard() {
     }
     your_cards.push(newCard);
 
+    current_score = calculateScore(your_cards);
+
     //If Sreen Reader Enabled: announce action
     announceAction(`You drew ${newCard.rank} of ${newCard.suit}. Your score is now ${current_score}.`);
 
-    current_score = calculateScore(your_cards);
     if (current_score > 21) {
         //end the round and reveal the dealer's cards
         endRound(settingsManager.t('over21'));
@@ -477,6 +488,7 @@ function updateDisplay(showDealer = false, animate = false) {
         dealer_score = calculateScore(dealer_cards);
         dealerscore.dataset.value = dealer_score;
         dealerscore.textContent = `${settingsManager.t('dealerScore')}: ${dealer_score}`;
+
     } else {
 
         //creates dealer cards images and only shows the second card onward
@@ -562,7 +574,21 @@ function updateDisplay(showDealer = false, animate = false) {
         } else {
             turn.textContent = "";
         }
-        
+    }
+    if (settingsManager.screenReaderEnabled) {
+        let spoken = [currentscore.textContent];
+        if (showDealer && blackjackState === "done") {
+            spoken.push(dealerscore.textContent);
+        } else if (dealerscore.dataset.value) {
+            spoken.push(`Dealer's visible score: ${dealerscore.dataset.value}`);
+        }
+        if (winorlose.textContent) {
+            spoken.push(winorlose.textContent);
+        }
+        if (turn.textContent) {
+            spoken.push(turn.textContent);
+        }
+        speak(spoken.join(". "));
     }
 }
 //function for the deal button click
@@ -633,9 +659,20 @@ function startGame() {
 
 }
 
+
 //listener for button
 button.addEventListener('click', onButtonClick);
 buttonStay.addEventListener('click', onStayClick);
+
+//read any button/input label when hovered
+document.querySelectorAll('button, input, li, p, h4, h3, [role="listitem"]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        if (settingsManager.screenReaderEnabled) {
+            let label = el.getAttribute('aria-label') || el.getAttribute('title') || el.textContent;
+            speak(label.trim());
+        }
+    });
+});
 
 //Initialize First Round
 resetGame();
