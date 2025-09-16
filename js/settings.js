@@ -79,6 +79,7 @@ export class SettingsManager {
                 loginRequired: "Username and password required.",
                 loginInvalid: "Invalid username or password.",
                 logoutMessage: "You have been logged out.",
+                openMenu: "Open Menu",
                 historyEntry: "[{time} {result} (You: {player}, Dealer: {dealer})"
             },
             es: {
@@ -122,6 +123,7 @@ export class SettingsManager {
                 ruleStay: "Haz clic en Plantarse para terminar tu turno y dejar que el dealer juegue.",
                 ruleKeepScore: "!Mantén un ojo en tu puntuación!",
                 letsPlay: "!Juguemos!",
+                openMenu: "Abrir menú",
                 results: "Resultados:",
                 language: "Idioma",
                 tooltipDeal: "Haz clic para repartir una carta nueva",
@@ -195,6 +197,7 @@ export class SettingsManager {
                 letsPlay: "Jouons !",
                 results: "Résultats:",
                 language: "Langue",
+                openMenu: "Ouvrir le menu",
                 tooltipDeal: "Cliquez pour distribuer une nouvelle carte",
                 tooltipStay: "Cliquez pour rester",
                 tooltipSettings: "Ouvrir les paramètres du jeu",
@@ -424,6 +427,7 @@ export class SettingsManager {
             const score = currentScoreEl.dataset.value || "";
             currentScoreEl.textContent = `${this.t('currentScore')}: ${score}`;
         }
+
         const dealerScoreEl = document.getElementById('dealer_score');
         if (dealerScoreEl) {
             const score = dealerScoreEl.dataset.value || "";
@@ -452,6 +456,7 @@ export class SettingsManager {
         const userMenuTitleEl = document.getElementById('user-menu-title');
         if (userMenuTitleEl) {
             userMenuTitleEl.textContent = this.t('userMenuTitle');
+            userMenuTitleEl.setAttribute('title', this.t('userMenuTitle'));
         }
 
         //update win streak
@@ -467,11 +472,17 @@ export class SettingsManager {
         }
         //username language update
         const usernameInput = document.getElementById('username-input');
-        if (usernameInput) usernameInput.setAttribute('placeholder', this.t('tooltipUsername'));
+        if (usernameInput) {
+            usernameInput.setAttribute('placeholder', this.t('tooltipUsername'));
+            usernameInput.setAttribute('title', this.t('tooltipUsername'));
+        }
 
         //password language update
         const passwordInput = document.getElementById('password-input');
-        if (passwordInput) passwordInput.setAttribute('placeholder', this.t('passwordPlaceholder'));
+        if (passwordInput) {
+            passwordInput.setAttribute('placeholder', this.t('passwordPlaceholder'));
+            passwordInput.setAttribute('title', this.t('passwordPlaceholder'));
+        }
 
         //signup button language update
         const  signupBtn = document.getElementById('signup-button');
@@ -488,7 +499,10 @@ export class SettingsManager {
         }
         //logout button update
         const logoutBtn = document.getElementById('logout-button');
-        if (logoutBtn) logoutBtn.textContent = this.t('logout') || "Logout"; 
+        if (logoutBtn) {
+            logoutBtn.textContent = this.t('logout') || "Logout";
+            logoutBtn.setAttribute('title', this.t('logout')); 
+        }
         
         const helpBtn = document.getElementById('help-button');
         if (helpBtn) {

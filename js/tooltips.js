@@ -11,7 +11,10 @@ export function applyTooltips(settingsManager) {
         toggleSound: settingsManager.t('tooltipSound') || "Toggle sound effects",
         musicVolume: settingsManager.t('tooltipMusicVolume') || "Adjust music volume",
         effectsVolume: settingsManager.t('tooltipEffectsVolume')|| "Adjust sound effect volume",
-        closeMenu: settingsManager.t('tooltipCloseMenu') || "Click to close the menu"
+        closeMenu: settingsManager.t('tooltipCloseMenu') || "Click to close the menu",
+        password: settingsManager.t('passwordPlaceholder') || "Enter your password",
+        usermenu: settingsManager.t('userMenuTitle') || "User Menu",
+        openmenu: settingsManager.t('openMenu') || "Open Menu"
     };
     document.getElementById('deal')?.setAttribute('title', tooltips.deal);
     document.getElementById('stay')?.setAttribute('title', tooltips.stay);
@@ -24,4 +27,7 @@ export function applyTooltips(settingsManager) {
     document.getElementById('music-volume')?.setAttribute('title', tooltips.musicVolume);
     document.getElementById('effects-volume')?.setAttribute('title', tooltips.effectsVolume);
     document.getElementById('close-user-menu')?.setAttribute('title', tooltips.closeMenu);
+    document.getElementById('password-input')?.setAttribute('title', tooltips.password);
+    document.getElementById('user-menu-button')?.setAttribute('title', tooltips.usermenu);
+    document.getElementById('hamburger-button')?.setAttribute('title', tooltips.openmenu);
 }
