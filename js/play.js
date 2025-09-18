@@ -7,10 +7,10 @@ import {SettingsManager} from './settings.js';
 import { calculateGameResult, calculateScore } from './score.js';
 import {applyTooltips} from './tooltips.js';
 document.addEventListener('DOMContentLoaded', () => {
+    const settingsManager = new SettingsManager();
     const userManager = new UserManager((key) => settingsManager.t(key));
     let currentUser = null;
     const instructionsManager = new InstructionsManager();
-    const settingsManager = new SettingsManager();
 
     //refresh UI for screen readers
     settingsManager.onScreenReaderToggle = (enabled) => {
@@ -48,10 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupButton = document.getElementById('signup-button');
 
     //SignUp
-    signupButton.addEventListener('click', () => {
+    signupButton.addEventListener('click', async () => {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        const result = userManager.signup(username, password);
+        const result = await userManager.signup(username, password);
         alert(result.message);
     });
 
@@ -60,14 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     //login/logout logic
-    loginButton.addEventListener('click', () => {
+    loginButton.addEventListener('click', async () => {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        const result = userManager.login(username, password);
+        const result = await userManager.login(username, password);
         if(result.success) {
             currentUser = username;
+            //hide login button
             loginContainer.style.display  = 'none';
             userMenuButton.style.display = 'inline-block';
+            userMenuButton.setAttribute('data-label', username);
+            //show logout button
+            logoutButton.style.display = 'inline-block';
             alert(result.message);
         } else {
             alert(result.message);

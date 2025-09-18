@@ -1,38 +1,56 @@
 //user.js
 const STORAGE_KEY = "blackjack_users";
+const CURRENT_USER_KEY = "blackjack_current_user";
 
 export class UserManager {
     constructor(translator) {
-        this.users = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-        this.currentUser = null;
         this.t = translator;
+        //get the saved users from localStorage
+        const savedUsers = localStorage.getItem(STORAGE_KEY);
+        this.users = savedUsers ? JSON.parse(savedUsers) : {};
+        this.currentUser = localStorage.getItem(CURRENT_USER_KEY) || null;
     }
-    signup(username, password) {
+    //password security
+    async hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    async signup(username, password) {
+        //if the username and password don't exist already
         if (!username || !password) return { success: false, message: this.t('signupRequired')};
+        //if it does exist
         if (this.users[username]) {
             return { success: false, message: this.t('signupExists')};
         }
 
+        const hashedPassword = await this.hashPassword(password);
+
         //create new user profile
         this.users[username] = {
-            password: password,
-            scores: []
-        };
-        this._save();
-        return { success: true, message: this.t('signupSucess')};
+            password: hashedPassword,
+            scores: [],
+            streak: 0 };
+            //make sure the users information still exists
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users));
+        return { success: true, message: this.t('signupSuccess')};
     }
     //login logic
-    login(username, password) {
+    async login(username, password) {
         //if there is no username or password with that username
         if (!username || !password) return { success: false, message: this.t('loginRequired')};
         const user = this.users[username];
         //check if username and password are correct
-        if (!user || user.password !== password) {
+        const hashedPassword = await this.hashPassword(password);
+        if (!user || user.password !== hashedPassword) {
             return { success: false, message: this.t('loginInvalid')};
         }
+
         //else, log in successfully
         this.currentUser = username;
-        this._save();
+        localStorage.setItem(CURRENT_USER_KEY, username);
         return { success: true, message: `${this.t('welcome')}, ${username}!`};
         }
         logout() {
@@ -46,7 +64,8 @@ export class UserManager {
                 dealerScore,
                 timestamp: new Date().toISOString()
             });
-            this._save();
+            //make sure the scores are saved
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users));
         }
 
         getUserScores(username = this.currentUser) {
@@ -64,8 +83,5 @@ export class UserManager {
                 }
             }
             return streak;
-        }
-        _save() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users));
         }
     }
