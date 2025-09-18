@@ -58,6 +58,7 @@ export class SettingsManager {
                 tooltipSettings: "Open game settings",
                 tooltipHelp: "Open instructions",
                 tooltipLogin: "Log in with your username",
+                tooltipLogout: "Log out of your user account",
                 tooltipUsername: "Enter your username",
                 tooltipMusic: "Toggle background music",
                 tooltipSound: "Toggle sound effects",
@@ -72,6 +73,9 @@ export class SettingsManager {
                 passwordPlaceholder: "Enter password",
                 signup: "Sign Up",
                 login: "Login",
+                screenReaderOn: "Screen Reader On",
+                screenReaderOff: "Screen Reader Off",
+                screenReader: "Enable screen reader support",
                 logout: "Logout",
                 signupSuccess: "Signup successful.",
                 signupExists: "Username already exists.",
@@ -131,6 +135,7 @@ export class SettingsManager {
                 tooltipSettings: "Abrir configuración del juego",
                 tooltipHelp: "Abrir instrucciones",
                 tooltipLogin: "Inicia sesión con tu nombre de usuario",
+                tooltipLogout: "Cerrar sesión de usuario",
                 tooltipUsername: "Introduce tu nombre de usuario",
                 tooltipMusic: "Activar o desactivar la música",
                 tooltipSound: "Activar o desactivar los efectos de sonido",
@@ -139,6 +144,9 @@ export class SettingsManager {
                 userMenuTitle: "Perfil del Jugador",
                 winStreak: "Racha de Victorias",
                 gameHistory: "Historial de Juegos",
+                screenReaderOn: "Lector de pantalla Activados",
+                screenReaderOff: "Lector de pantalla Desactivados",
+                screenReader: "Habilitar la compatibilidad con el lector de pantalla",
                 closeMenu: "Cerrar Menú",
                 tooltipCloseMenu: "Haz click para cerrar el menú",
                 usernamePlaceholder: "Introduce tu nombre de usuario",
@@ -175,9 +183,12 @@ export class SettingsManager {
                 dealerCards: "Cartes du croupier",
                 settings: "Paramètres",
                 userMenu: "Utilisateur",
+                screenReaderOn: "Lecteur d'écran Activés",
+                screenReaderOff: "Lecteur d'écran Désactivés",
                 instructionsTitle: "Bienvenue au Blackjack !",
                 audioControls: "Contrôles Audio",
                 musicOn: "Musique Activée",
+                screenReader: "Activer la prise en charge du lecteur d'écran",
                 musicOff: "Musique Désactivée",
                 soundEffectsOn: "Effets Sonores Activés",
                 soundEffectsOff: "Effets Sonores Désactivés",
@@ -203,6 +214,7 @@ export class SettingsManager {
                 tooltipSettings: "Ouvrir les paramètres du jeu",
                 tooltipHelp: "Ouvrir les instructions",
                 tooltipLogin: "Connectez-vous avec votre nom d'utilisateur",
+                tooltipLogout: "Déconnectez-vois de votre compte utilisateur",
                 tooltipUsername: "Entrez votre nom d'utilisateur",
                 tooltipMusic: "Activer ou désactiver la musique",
                 tooltipSound: "Activer ou désactiver les effets sonores",
@@ -445,6 +457,11 @@ export class SettingsManager {
         if (userMenuBtn) {
             userMenuBtn.setAttribute('aria-label', this.t('userMenu'));
             userMenuBtn.setAttribute('data-label', this.t('userMenu'));
+        }
+
+        const screenReaderBtn = document.getElementById('toggle-screen-reader');
+        if (screenReaderBtn) {
+            screenReaderBtn.textContent = screenReaderBtn.classList.contains('active') ? this.t('screenReaderOff') : this.t('screenReaderOn');
         }
         //update close menu button
         const closeMenuBtn = document.getElementById('close-user-menu');

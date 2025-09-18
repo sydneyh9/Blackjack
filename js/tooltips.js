@@ -6,6 +6,7 @@ export function applyTooltips(settingsManager) {
         settings: settingsManager.t('tooltipSettings') || "Change game settings",
         help: settingsManager.t('tooltipHelp') || "View Instructions",
         login: settingsManager.t('tooltipLogin') || "Log in with your username",
+        logout: settingsManager.t('tooltipLogout') || "Log out of your user account",
         username: settingsManager.t('tooltipUsername') || "Enter your username",
         toggleMusic: settingsManager.t('tooltipMusic') || "Toggle background music",
         toggleSound: settingsManager.t('tooltipSound') || "Toggle sound effects",
@@ -14,7 +15,8 @@ export function applyTooltips(settingsManager) {
         closeMenu: settingsManager.t('tooltipCloseMenu') || "Click to close the menu",
         password: settingsManager.t('passwordPlaceholder') || "Enter your password",
         usermenu: settingsManager.t('userMenuTitle') || "User Menu",
-        openmenu: settingsManager.t('openMenu') || "Open Menu"
+        openmenu: settingsManager.t('openMenu') || "Open Menu",
+        screenReaderSupport: settingsManager.t('screenReader') || "Enable screen reader support"
     };
     document.getElementById('deal')?.setAttribute('title', tooltips.deal);
     document.getElementById('stay')?.setAttribute('title', tooltips.stay);
@@ -30,4 +32,6 @@ export function applyTooltips(settingsManager) {
     document.getElementById('password-input')?.setAttribute('title', tooltips.password);
     document.getElementById('user-menu-button')?.setAttribute('title', tooltips.usermenu);
     document.getElementById('hamburger-button')?.setAttribute('title', tooltips.openmenu);
+    document.getElementById('logout-button')?.setAttribute('title', tooltips.logout);
+    document.getElementById('toggle-screen-reader')?.setAttribute('title', tooltips.screenReaderSupport);
 }
