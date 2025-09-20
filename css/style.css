@@ -13,6 +13,7 @@ body {
 html, body {
     height: 100%;
 }
+
 .main-game-container {
     display: flex;
     flex-direction: column;
@@ -88,10 +89,10 @@ body::before{
 .black-title, .jack-title {
     animation: glow 3s ease-in-out infinite;
     position: absolute;
-    top: 0;
+    top: 10px;
     transform: none;
     font-family: 'Neonderthaw', cursive;
-    font-size: 5rem;
+    font-size: clamp(2rem, 8vw, 5rem);
     font-weight: normal;
     color: #ffd700;
     letter-spacing: 0.15em;
@@ -134,14 +135,15 @@ body::before{
 
 /*dashed border arcs */
 .arc-decoration {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
-    width: 500px;
-    height: 200px;
-    border: 2px dashed rgba(255,215, 0, 0.25);
+    width: 50vw;
+    height: 20vh;
+    border: 4px dashed rgba(255,215, 0, 0.25);
     border-radius: 50% / 25%;
-    transform: translate(-50%, -50%);
+    /*transform: translate(-50%, -50%);*/
+    transform: translateX(-50%);
     z-index: 0;
     pointer-events: none;
 }
@@ -297,5 +299,91 @@ body::before{
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #0a0a0a;
+    }
+}
+
+/*Tablet resizing */
+@media(max-width: 768px) {
+    .black-title,
+    .jack-title {
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        top: 5px;
+    }
+    .button-container {
+        margin-top: 60px;
+    }
+
+    .game-layout {
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    #score-box, #result-box {
+        max-width: 100%;
+        width: 90%;
+    }
+
+    .your_cards_container,
+    .dealer_cards_container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #login-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    #login-container input,
+    #login-container button {
+        flex: 1 1 45%;
+        min-width: 120px;
+    }
+
+    .arc-decoration {
+        width: 60vw;
+        height: 15vh;
+    }
+}
+
+/*Mobile resizing */
+@media(max-width: 480px) {
+    .black-title,
+    .jack-title {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+        top: 2px;
+    }
+
+    .button-container {
+        margin-top: 80px;
+        gap: 20px;
+    }
+    .card-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #results,
+    #win_or_lose {
+        font-size: 0.9rem;
+    }
+
+    #user-menu {
+        min-width: 260px;
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .user-menu-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #logout-button,
+    #close-user-menu {
+        max-width: 100%;
     }
 }
