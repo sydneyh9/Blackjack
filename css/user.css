@@ -69,10 +69,18 @@
 }
 
 #user-win-streak {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin: 10px 0;
-    color: #333;
+    color: #000;
     font-weight: bold;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    padding: 6px 12px;
+    display: inline-block;
 }
 
 #user-menu h3 {
@@ -199,10 +207,10 @@
 }
 
 #login-container {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    z-index: 11;
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
+    z-index: 1000;
     display: flex;
     flex-direction: row;
     gap: 8px;
@@ -236,6 +244,17 @@
     background-color: #333;
 }
 
+#game-history {
+    font-size: 1.2rem;
+    color: #b30000;
+    font-weight: bold;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: #fff;
+    padding: 6px 12px;
+    display: inline-block;
+}
 #user-controls {
     position: fixed;
     right: 20px;

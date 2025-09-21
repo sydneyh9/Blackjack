@@ -20,18 +20,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1 class="black-title"> BLACK </h1>
-    <h1 class="jack-title"> JACK </h1>
+    <div class="header-container">
+        <div class="title-container">
+            <h1 class="black-title"> BLACK </h1>
+            <h1 class="jack-title"> JACK </h1>
+        </div>
+        <div class="turn-and-buttons">
+            <div id="turn" aria-live="assertive" aria-atomic="true"></div>
+            <div class="button-container"> 
+                <button id="deal" aria-label="Deal card" data-label="Deal" title="Click to deal cards"><div class="inner"></div></button>
+                <button id="stay" aria-label="Stay" data-label="Stay" title="Click to stay"><div class="inner"></div></button>
+            </div> 
+        </div>
+    </div>
     <div class="arc-decoration"></div>
 
     <div id="countdown" class="countdown-overlay" aria-live="assertive"></div>
-    <div id="turn" aria-live="assertive" aria-atomic="true"></div>
     <div class="main-game-container">
         <div id="sr-announcer" role="status" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
-        <div class="button-container"> 
-            <button id="deal" aria-label="Deal card" data-label="Deal" title="Click to deal cards"><div class="inner"></div></button>
-            <button id="stay" aria-label="Stay" data-label="Stay" title="Click to stay"><div class="inner"></div></button>
-        </div>
         <div id="game_information" class="game-layout">
             <div class="cards-section" aria-live="polite" aria-atomic="true">
                 <div class="card-row">

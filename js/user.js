@@ -55,6 +55,7 @@ export class UserManager {
         }
         logout() {
             this.currentUser = null;
+            localStorage.removeItem(CURRENT_USER_KEY);
         }
         addScore(result, playerScore, dealerScore) {
             if (!this.currentUser) return;
@@ -66,6 +67,7 @@ export class UserManager {
             });
             //make sure the scores are saved
             localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users));
+            localStorage.setItem(CURRENT_USER_KEY, this.currentUser);
         }
 
         getUserScores(username = this.currentUser) {

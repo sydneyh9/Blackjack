@@ -129,6 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    //close the side menu when clicking anywhere on the screen
+    document.addEventListener('click', (e) => {
+        const sideMenuIsOpen = sideMenu.classList.contains('show');
+
+        //only do this when the side menu is already open
+        if (sideMenuIsOpen){
+            if (!sideMenu.contains(e.target) && e.target !== hamburgerButton) {
+                sideMenu.classList.remove('show');
+            }
+        }
+    });
+
 
     let cards = [];
     let your_cards = [];
@@ -194,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         announceAction(message);
     }
 
+    //function to start the countdown after the deal button is pressed
     function startCountDown() {
         resetGame(true);
         let timeLeft = 3;
@@ -220,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (settingsManager.screenReaderEnabled) {
                     announceAction(settingsManager.t('letsPlay'));
                 }
-                countdown.textContent = settingsManager.t('deal');
+                countdown.textContent = settingsManager.t('letsPlay');
                 setTimeout(() => {
                     countdown.style.opacity = '0';
                     countdown.style.visibility = 'hidden';
@@ -570,6 +583,7 @@ function updateDisplay(showDealer = false, animate = false) {
     }
 
     if (turn) {
+        //show the different turn states at various points in the game
         if (blackjackState === "in-game") {
             turn.textContent = settingsManager.t('yourTurn');
             button.disabled = false;
@@ -650,6 +664,7 @@ function onStayClick() {
 
 //function for starting the game
 function startGame() {
+    //start the music
     startGameAudio();
     button.classList.remove('centered');
     buttonStay.style.visibility = 'visible';
@@ -663,6 +678,7 @@ function startGame() {
     });
     blackjackState = "in-game";
     button.setAttribute('data-label', settingsManager.t('deal'));
+    //beginning of new round, buttons should be enabled
     button.disabled = false;
     buttonStay.disabled = false;
     toggleMusicButton.disabled = false;
@@ -674,7 +690,7 @@ function startGame() {
 
     //update scores
     current_score = calculateScore(your_cards);
-
+    //update display
     updateDisplay(false, true);
 
 }
@@ -698,5 +714,6 @@ document.querySelectorAll('button, input, li, p, h4, h3, h2, ul, [role="listitem
 //Initialize First Round
 resetGame();
 
+//apply tooltips
 applyTooltips(settingsManager);
 });
