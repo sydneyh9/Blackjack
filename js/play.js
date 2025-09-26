@@ -17,6 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay(true, false);
     };
 
+    //screen reader 
+    function speak(text) {
+        if (!text) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = settingsManager.currentLanguage === 'es' ? 'es-ES' :
+        settingsManager.currentLanguage === 'fr' ? 'fr-FR' : 'en-US';
+
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang === utterance.lang);
+        if (voice) {
+            utterance.voice = voice;
+        }
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
 
     const loginContainer = document.getElementById('login-container');
     const loginButton = document.getElementById('login-button');
@@ -153,6 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     button.classList.add('centered');
 
+    //function to announce actions
+    function announceAction(message) {
+        if (!settingsManager.screenReaderEnabled) return;
+        const announcer = document.getElementById('sr-announcer');
+        announcer.textContent = '';
+        setTimeout(() => { announcer.textContent = message; speak(message)}, 50);
+    }
 
     turn.addEventListener('languageChanged', () => {
         if (!turn) return;
@@ -366,27 +388,7 @@ function finalizeDealerTurn() {
         calculateGameResult(current_score, dealer_score, settingsManager, endRound);
     }
 }
-const elements = {
-    yourcards: document.getElementById('your_cards'),
-    dealercards: document.getElementById('dealer_cards'),
-    currentscore: document.getElementById('current_score'),
-    dealerscore: document.getElementById('dealer_score'),
-    winorlose: document.getElementById('win_or_lose'),
-    turn: document.getElementById('turn')
-};
 
-updateDisplay({
-    your_cards,
-    dealer_cards,
-    current_score,
-    dealer_score,
-    win_or_lose,
-    blackjackState,
-    settingsManager,
-    elements,
-    animate: true,
-    showDealer: false
-});
 //updating the display 
 function updateDisplay(showDealer = false, animate = false) {
     //empty container to house cards animation
@@ -615,7 +617,6 @@ function updateDisplay(showDealer = false, animate = false) {
         speak(spoken.join(". "));
     }
 }
-
 //function for the deal button click
 function onButtonClick() {
     //if the sound effects are enabled, fun wheel spin sound for buttons
